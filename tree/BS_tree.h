@@ -66,22 +66,6 @@ void delete_tree(Tree_ptr root);
 int put_value(Tree_ptr root, long value);
 
 
-// Example:
-//    We have tree of the following structure (numbers represent contained values)
-//    2 -> 1
-//      -> 3
-//    and we execute the following code:
-//
-//        Tree_ptr parent, node;
-//        node = find_node(value, 1, &parent);
-//
-//    If value == 1, then node == &1 and parent == &2.
-//    If value == 4, then node == NULL and parent == &3.
-//    If value == 2, then node == &2 and parent == NULL.
-//
-//    If we do not need the parent, we execute it as follows:
-//
-//        node = find_node(value, 0).
 /**
  * Searches for the node that contains the given value in the valid tree. If the tree is not valid, the result may not
  * be correct. <br>

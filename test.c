@@ -23,7 +23,7 @@ int main() {
     test_copy_tree();
     test_extremal_values_valid();
     test_extremal_values_general();
-//    test_validity();
+    test_validity();
     test_equality();
 
     return 0;

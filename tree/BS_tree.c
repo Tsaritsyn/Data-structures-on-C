@@ -237,10 +237,14 @@ char tree_valid(Tree_ptr_c root) {
     if (root == NULL)
         return 1;
 
-    if (root->left != NULL && root->left->value > root->value)
+//    the tree is not valid if minimal value of the right subtree is less than the node value
+    Tree_ptr min_right = min_node_general(root->right);
+    if (min_right != NULL && min_right->value <= root->value)
         return 0;
 
-    if (root->right != NULL && root->right->value < root->value)
+//    the same if maximal value of the left subtree exceeds the node value
+    Tree_ptr max_left = max_node_general(root->left);
+    if (max_left != NULL && max_left->value >= root->value)
         return 0;
 
     return (char)(tree_valid(root->left) && tree_valid(root->right));
