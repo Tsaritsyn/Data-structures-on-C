@@ -1152,4 +1152,109 @@ void test_remove(void) {
 }
 
 
+void test_equivalency(void) {
+    printf("\nEquivalency check test started.\n");
+
+    printf("Testing special cases...\n");
+
+    assert(trees_equivalent(NULL, NULL) == 1);
+    printf("Subtest 1 passed.\n");
+
+    Tree_ptr root1 = new_node(1);
+    Tree_ptr root2 = new_node(1);
+    assert(trees_equivalent(root1, root2) == 1);
+    assert(trees_equivalent(root2, root1) == 1);
+    delete_tree(root2);
+    printf("Subtest 2 passed.\n");
+
+    root2 = new_node(2);
+    assert(trees_equivalent(root1, root2) == 0);
+    assert(trees_equivalent(root2, root1) == 0);
+    delete_tree(root2);
+    printf("Subtest 3 passed.\n");
+
+    delete_tree(root1);
+
+    printf("Testing simple trees...\n");
+
+    long array1[] = {1, 2, 3, 4, 5};
+
+    root1 = new_tree(array1, 5);
+    assert(trees_equivalent(root1, NULL) == 0);
+    assert(trees_equivalent(NULL, root1) == 0);
+    printf("Subtest 4 passed.\n");
+
+    long array2[] = {5, 4, 3, 2, 1};
+    root2 = new_tree(array2, 5);
+    assert(trees_equivalent(root1, root2) == 1);
+    assert(trees_equivalent(root2, root1) == 1);
+    delete_tree(root2);
+    printf("Subtest 5 passed.\n");
+
+    long array3[] = {2, 4, 3, 1, 5};
+    root2 = new_tree(array3, 5);
+    assert(trees_equivalent(root1, root2) == 0);
+    assert(trees_equivalent(root2, root1) == 0);
+    delete_tree(root2);
+    printf("Subtest 6 passed.\n");
+
+    long array4[] = {-1, 2, 3, 4, 5};
+    root2 = new_tree(array4, 5);
+    assert(trees_equivalent(root1, root2) == 0);
+    assert(trees_equivalent(root2, root1) == 0);
+    delete_tree(root2);
+    delete_tree(root1);
+    printf("Subtest 5 passed.\n");
+
+    printf("Testing complex trees...\n");
+
+    long big_array[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
+    root1 = new_tree(big_array, sizeof(big_array) / sizeof(long));
+
+    long big_array1[] = {1, 4, 18, 573, -2, -3564, -8, 9005, 1463, -8, 1746, 245, 83};
+    root2 = new_tree(big_array1, sizeof(big_array1) / sizeof(long));
+    assert(trees_equivalent(root1, root2) == 1);
+    assert(trees_equivalent(root2, root1) == 1);
+    delete_tree(root2);
+    printf("Subtest 6 passed.\n");
+
+    long big_array2[] = {573, 18, 4, 1, -2, -3564, -8, 9005, 1463, -8, 1746, 245, 83};
+    root2 = new_tree(big_array2, sizeof(big_array2) / sizeof(long));
+    assert(trees_equivalent(root1, root2) == 1);
+    assert(trees_equivalent(root2, root1) == 1);
+    delete_tree(root2);
+    printf("Subtest 7 passed.\n");
+
+    long big_array3[] = {4, 1, 18, 573, -2, -3564, -8, 9005, 1463, -8, 1746, 245, 83};
+    root2 = new_tree(big_array3, sizeof(big_array3) / sizeof(long));
+    assert(trees_equivalent(root1, root2) == 0);
+    assert(trees_equivalent(root2, root1) == 0);
+    delete_tree(root2);
+    printf("Subtest 8 passed.\n");
+
+    long big_array4[] = {1, 4, 18, 573, 3, -2, -3564, -8, 9005, 1463, -8, 1746, 245, 83};
+    root2 = new_tree(big_array4, sizeof(big_array4) / sizeof(long));
+    assert(trees_equivalent(root1, root2) == 0);
+    assert(trees_equivalent(root2, root1) == 0);
+    delete_tree(root2);
+    printf("Subtest 9 passed.\n");
+
+    long big_array5[] = {1, 4, 18, 573, -3564, -8, 9005, 1463, -8, 1746, 245, 83};
+    root2 = new_tree(big_array5, sizeof(big_array5) / sizeof(long));
+    assert(trees_equivalent(root1, root2) == 0);
+    assert(trees_equivalent(root2, root1) == 0);
+    delete_tree(root2);
+    printf("Subtest 10 passed.\n");
+
+    long big_array6[] = {1, 3, 18, 573, -2, -3564, -8, 9005, 1463, -8, 1746, 245, 83};
+    root2 = new_tree(big_array6, sizeof(big_array6) / sizeof(long));
+    assert(trees_equivalent(root1, root2) == 0);
+    assert(trees_equivalent(root2, root1) == 0);
+    delete_tree(root2);
+    printf("Subtest 10 passed.\n");
+
+    printf("Test passed.\n");
+}
+
+
 #endif //MY_CLIB_TEST_BS_TREE_H

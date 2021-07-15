@@ -153,6 +153,7 @@ char tree_valid(Tree_ptr_c root);
 
 /**
  * We call two trees equivalent if they are both valid, contain the same set of values and have the same size and depth.
+ * Both trees are assumed to be valid, otherwise the result may be any.
  *
  * @return 1 if two trees are equivalent and 0 otherwise
  */

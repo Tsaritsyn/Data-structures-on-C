@@ -26,6 +26,7 @@ int main() {
     test_validity();
     test_equality();
     test_remove();
+    test_equivalency();
 
     return 0;
 }

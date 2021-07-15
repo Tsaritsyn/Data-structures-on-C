@@ -285,18 +285,15 @@ Tree_ptr max_node_general(Tree_ptr_c root) {
     if (root == NULL)
         return NULL;
 
-    if (root->left == NULL && root->right == NULL) {
+    if (root->left == NULL && root->right == NULL)
         return (Tree_ptr)root;
-    }
 
     Tree_ptr max_left = max_node_general(root->left), max_right = max_node_general(root->right);
-    if (max_left != NULL && max_right == NULL) {
+    if (max_left != NULL && max_right == NULL)
         return (max_left->value > root->value) ? max_left : (Tree_ptr)root;
-    }
 
-    if (max_left == NULL && max_right != NULL) {
+    if (max_left == NULL && max_right != NULL)
         return (max_right->value > root->value) ? max_right : (Tree_ptr)root;
-    }
 
     if (max_left->value > max_right->value && max_left->value > root->value)
         return max_left;
@@ -380,4 +377,28 @@ void remove_value(Tree_ptr root, long value) {
         else
             replace_with(node, node->right);
     }
+}
+
+
+char trees_equivalent(Tree_ptr_c root1, Tree_ptr_c root2) {
+    if (root1 == NULL && root2 == NULL)
+        return 1;
+
+    if (tree_depth(root1) != tree_depth(root2))
+        return 0;
+
+//    now that we know that at least one is not NULL, start real check
+    size_t size1 = tree_size(root1), size2 = tree_size(root2);
+    if (size1 != size2)
+        return 0;
+
+//    now we know that both trees have the same size, so we can check their values
+    long *values1 = tree_to_array(root1);
+    long *values2 = tree_to_array(root2);
+    size_t i;
+    for (i = 0; i < size1; i++)
+        if (values1[i] != values2[i])
+            return 0;
+
+    return 1;
 }
