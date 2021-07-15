@@ -13,6 +13,7 @@ Tree_ptr new_node(long value) {
     node->left = NULL;
     node->right = NULL;
     node->value = value;
+    return node;
 }
 
 
@@ -136,7 +137,7 @@ void print_tree(Tree_ptr_c root) {
 }
 
 
-static void draw_subtree(const Tree_ptr root, unsigned int depth) {
+static void draw_subtree(Tree_ptr_c root, unsigned int depth) {
     int i;
     for (i = 0; i < depth; i++) {
         printf("  ");
@@ -285,24 +286,14 @@ Tree_ptr max_node_general(Tree_ptr_c root) {
     if (root == NULL)
         return NULL;
 
-    if (root->left == NULL && root->right == NULL)
-        return (Tree_ptr)root;
-
     Tree_ptr max_left = max_node_general(root->left), max_right = max_node_general(root->right);
-    if (max_left != NULL && max_right == NULL)
-        return (max_left->value > root->value) ? max_left : (Tree_ptr)root;
+    Tree_ptr res = (Tree_ptr) root;
+    if (max_left != NULL && max_left->value > res->value)
+        res = max_left;
+    if (max_right != NULL && max_right->value > res->value)
+        res = max_right;
 
-    if (max_left == NULL && max_right != NULL)
-        return (max_right->value > root->value) ? max_right : (Tree_ptr)root;
-
-    if (max_left->value > max_right->value && max_left->value > root->value)
-        return max_left;
-
-    if (max_right->value > max_left->value && max_right->value > root->value)
-        return max_right;
-
-    if (root->value > max_right->value && root->value > max_left->value)
-        return (Tree_ptr)root;
+    return res;
 }
 
 
@@ -406,4 +397,63 @@ char trees_equivalent(Tree_ptr_c root1, Tree_ptr_c root2) {
     free(values1);
     free(values2);
     return res;
+}
+
+/// swaps the node with its right neighbour
+static Tree_ptr turn_left(Tree_ptr node) {
+    if (node->right == NULL) {
+        printf("Error in turn_left: the right node is NULL.\n");
+        return node;
+    }
+
+    Tree_ptr new_node = node->right;
+    node->right = new_node->left;
+    new_node->left = node;
+    return new_node;
+}
+
+
+/// swaps the node with its left neighbour
+static Tree_ptr turn_right(Tree_ptr node) {
+    if (node->left == NULL) {
+        printf("Error in turn_right: the left node is NULL.\n");
+        return node;
+    }
+
+    Tree_ptr new_node = node->left;
+    node->left = new_node->right;
+    new_node->right = node;
+    return new_node;
+}
+
+
+Tree_ptr balance_tree(Tree_ptr root) {
+    if (root == NULL)
+        return NULL;
+
+    unsigned int ld = tree_depth(root->left);
+    unsigned int rd = tree_depth(root->right);
+
+//    it's a leaf or its children are leaves, there is nothing to balance
+    if (ld <= 1 && rd <= 1)
+        return root;
+
+//    rotate the tree until its depths become almost equal
+    if (ld >= rd + 1)
+        while (ld >= rd + 1) {
+            root = turn_right(root);
+            ld--;
+            rd++;
+        }
+    else
+        while (rd >= ld + 1) {
+            root = turn_left(root);
+            rd--;
+            ld++;
+        }
+
+    root->left = balance_tree(root->left);
+    root->right = balance_tree(root->right);
+
+    return root;
 }

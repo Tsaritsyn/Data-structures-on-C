@@ -17,6 +17,12 @@ const char DEBUG_CONF = 0;
 
 #include "../my_clib.h"
 
+
+const long BIG_ARRAY[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
+const long ASCENDING_ARRAY[] = {1, 2, 3, 4, 5};
+const long DESCENDING_ARRAY[] = {-1, -2, -3, -4, -5};
+
+
 void print_tree_size(void) {
     printf("Size of the node is %lu bytes.\n", sizeof(Tree));
 }
@@ -239,57 +245,54 @@ void test_put_value(void) {
 void test_tree_from_array(void) {
     printf("\nTree initialization from array test started.\n");
 
-    long array[] = {0, 1, 2, 3, 4};
 //    we expect the following tree:
-//        0 -> NULL
-//          -> 1 -> NULL
-//               -> 2 -> NULL
-//                    -> 3 -> NULL
-//                         -> 4
-    Tree_ptr root = new_tree(array, 5);
+//        1 -> NULL
+//          -> 2 -> NULL
+//               -> 3 -> NULL
+//                    -> 4 -> NULL
+//                         -> 5
+    Tree_ptr root = new_tree(ASCENDING_ARRAY, 5);
     assert(root != NULL);
-    assert(root->value == 0);
+    assert(root->value == 1);
     assert(root->right != NULL);
     assert(root->left == NULL);
-    assert(root->right->value == 1);
+    assert(root->right->value == 2);
     assert(root->right->right != NULL);
     assert(root->right->left == NULL);
-    assert(root->right->right->value == 2);
+    assert(root->right->right->value == 3);
     assert(root->right->right->right != NULL);
     assert(root->right->right->left == NULL);
-    assert(root->right->right->right->value == 3);
+    assert(root->right->right->right->value == 4);
     assert(root->right->right->right->right != NULL);
     assert(root->right->right->right->left == NULL);
-    assert(root->right->right->right->right->value == 4);
+    assert(root->right->right->right->right->value == 5);
     delete_tree(root);
     printf("Subtest 1 passed.\n");
 
-    long array1[] = {0, -1, -2, -3, -4};
-    //    we expect the following tree:
-//        0 -> -1 -> -2 -> -3 -> -4
+//    we expect the following tree:
+//        -1 -> -2 -> -3 -> -4 -> -5
 //                            -> NULL
 //                      -> NULL
 //                -> NULL
 //          -> NULL
-    root = new_tree(array1, 5);
+    root = new_tree(DESCENDING_ARRAY, 5);
     assert(root != NULL);
-    assert(root->value == 0);
+    assert(root->value == -1);
     assert(root->left != NULL);
     assert(root->right == NULL);
-    assert(root->left->value == -1);
+    assert(root->left->value == -2);
     assert(root->left->left != NULL);
     assert(root->left->right == NULL);
-    assert(root->left->left->value == -2);
+    assert(root->left->left->value == -3);
     assert(root->left->left->left != NULL);
     assert(root->left->left->right == NULL);
-    assert(root->left->left->left->value == -3);
+    assert(root->left->left->left->value == -4);
     assert(root->left->left->left->left != NULL);
     assert(root->left->left->left->right == NULL);
-    assert(root->left->left->left->left->value == -4);
+    assert(root->left->left->left->left->value == -5);
     delete_tree(root);
     printf("Subtest 2 passed.\n");
 
-    long array2[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
 //    we expect the following tree:
 //        1 -> -2 -> -3564 -> NULL
 //                         -> -8 (leaf)
@@ -301,7 +304,7 @@ void test_tree_from_array(void) {
 //                            -> 9005 -> 1463 -> NULL
 //                                            -> 1746 (leaf)
 //                                    -> NULL
-    root = new_tree(array2, sizeof(array2) / sizeof(long));
+    root = new_tree(BIG_ARRAY, sizeof(BIG_ARRAY) / sizeof(long));
     assert(root != NULL);
     assert(root->value == 1);
 //    check that left subtree of 1 starts from -2
@@ -370,7 +373,6 @@ void test_tree_from_array(void) {
 void test_tree_displaying(void) {
     printf("\nTree displaying demonstration started.\n");
 
-    long array[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
 //    we expect the following tree:
 //        1 -> -2 -> -3564 -> NULL
 //                         -> -8 (leaf)
@@ -382,7 +384,7 @@ void test_tree_displaying(void) {
 //                            -> 9005 -> 1463 -> NULL
 //                                            -> 1746 (leaf)
 //                                    -> NULL
-    Tree_ptr root = new_tree(array, sizeof(array) / sizeof(long));
+    Tree_ptr root = new_tree(BIG_ARRAY, sizeof(BIG_ARRAY) / sizeof(long));
     printf("Printing the stored values in the ascending order:\n");
     print_tree(root);
     printf("\n");
@@ -398,33 +400,30 @@ void test_tree_displaying(void) {
 void test_tree_depth_and_size(void) {
     printf("\nTree depth and size test started.\n");
 
-    long array[] = {0, 1, 2, 3, 4};
 //    we expect the following tree:
-//        0 -> NULL
-//          -> 1 -> NULL
-//               -> 2 -> NULL
-//                    -> 3 -> NULL
-//                         -> 4
-    Tree_ptr root = new_tree(array, 5);
+//        1 -> NULL
+//          -> 2 -> NULL
+//               -> 3 -> NULL
+//                    -> 4 -> NULL
+//                         -> 5
+    Tree_ptr root = new_tree(ASCENDING_ARRAY, 5);
     assert(tree_depth(root) == 5);
     assert(tree_size(root) == 5);
     delete_tree(root);
     printf("Subtest 1 passed.\n");
 
-    long array1[] = {0, -1, -2, -3, -4};
-    //    we expect the following tree:
-//        0 -> -1 -> -2 -> -3 -> -4
-//                            -> NULL
-//                      -> NULL
-//                -> NULL
-//          -> NULL
-    root = new_tree(array1, 5);
+//    we expect the following tree:
+//        -1 -> -2 -> -3 -> -4 -> -5
+//                             -> NULL
+//                       -> NULL
+//                 -> NULL
+//           -> NULL
+    root = new_tree(DESCENDING_ARRAY, 5);
     assert(tree_depth(root) == 5);
     assert(tree_size(root) == 5);
     delete_tree(root);
     printf("Subtest 2 passed.\n");
 
-    long array2[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
 //    we expect the following tree:
 //        1 -> -2 -> -3564 -> NULL
 //                         -> -8 (leaf)
@@ -436,7 +435,7 @@ void test_tree_depth_and_size(void) {
 //                            -> 9005 -> 1463 -> NULL
 //                                            -> 1746 (leaf)
 //                                    -> NULL
-    root = new_tree(array2, sizeof(array2) / sizeof(long));
+    root = new_tree(BIG_ARRAY, sizeof(BIG_ARRAY) / sizeof(long));
     assert(tree_depth(root) == 7);
     assert(tree_size(root) == 12);
     delete_tree(root);
@@ -449,38 +448,35 @@ void test_tree_depth_and_size(void) {
 void test_tree2array(void) {
     printf("\nTest tree to array conversion started.\n");
 
-    long array[] = {0, 1, 2, 3, 4};
 //    we expect the following tree:
-//        0 -> NULL
-//          -> 1 -> NULL
-//               -> 2 -> NULL
-//                    -> 3 -> NULL
-//                         -> 4
-    Tree_ptr root = new_tree(array, 5);
+//        1 -> NULL
+//          -> 2 -> NULL
+//               -> 3 -> NULL
+//                    -> 4 -> NULL
+//                         -> 5
+    Tree_ptr root = new_tree(ASCENDING_ARRAY, 5);
     long *res = tree_to_array(root);
     int i;
     for (i = 0; i < 5; i++)
-        assert(res[i] == array[i]);
+        assert(res[i] == ASCENDING_ARRAY[i]);
     delete_tree(root);
     free(res);
     printf("Subtest 1 passed.\n");
 
-    long array1[] = {0, -1, -2, -3, -4};
     //    we expect the following tree:
-//        0 -> -1 -> -2 -> -3 -> -4
+//        -1 -> -2 -> -3 -> -4 -> -5
 //                            -> NULL
 //                      -> NULL
 //                -> NULL
 //          -> NULL
-    root = new_tree(array1, 5);
+    root = new_tree(DESCENDING_ARRAY, 5);
     res = tree_to_array(root);
     for (i = 0; i < 5; i++)
-        assert(res[i] == array1[4-i]);
+        assert(res[i] == DESCENDING_ARRAY[4-i]);
     free(res);
     delete_tree(root);
     printf("Subtest 2 passed.\n");
 
-    long array2[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
 //    we expect the following tree:
 //        1 -> -2 -> -3564 -> NULL
 //                         -> -8 (leaf)
@@ -492,7 +488,7 @@ void test_tree2array(void) {
 //                            -> 9005 -> 1463 -> NULL
 //                                            -> 1746 (leaf)
 //                                    -> NULL
-    root = new_tree(array2, sizeof(array2) / sizeof(long));
+    root = new_tree(BIG_ARRAY, sizeof(BIG_ARRAY) / sizeof(long));
     long valid[] = {-3564, -8, -2, 1, 4, 18, 83, 245, 573, 1463, 1746, 9005};
     res = tree_to_array(root);
     for (i = 0; i < tree_size(root); i++)
@@ -522,34 +518,32 @@ void test_copy_tree() {
     assert(root_copy == NULL);
     printf("Subtest 2 passed\n");
 
-    long array[] = {0, 1, 2, 3, 4};
 //    we expect the following tree:
-//        0 -> NULL
-//          -> 1 -> NULL
-//               -> 2 -> NULL
-//                    -> 3 -> NULL
-//                         -> 4
-    root = new_tree(array, 5);
+//        1 -> NULL
+//          -> 2 -> NULL
+//               -> 3 -> NULL
+//                    -> 4 -> NULL
+//                         -> 5
+    root = new_tree(ASCENDING_ARRAY, 5);
     root_copy = copy_tree(root);
     assert(root_copy != NULL);
-    assert(root_copy->value == 0);
+    assert(root_copy->value == 1);
     assert(root_copy->right != NULL);
     assert(root_copy->left == NULL);
-    assert(root_copy->right->value == 1);
+    assert(root_copy->right->value == 2);
     assert(root_copy->right->right != NULL);
     assert(root_copy->right->left == NULL);
-    assert(root_copy->right->right->value == 2);
+    assert(root_copy->right->right->value == 3);
     assert(root_copy->right->right->right != NULL);
     assert(root_copy->right->right->left == NULL);
-    assert(root_copy->right->right->right->value == 3);
+    assert(root_copy->right->right->right->value == 4);
     assert(root_copy->right->right->right->right != NULL);
     assert(root_copy->right->right->right->left == NULL);
-    assert(root_copy->right->right->right->right->value == 4);
+    assert(root_copy->right->right->right->right->value == 5);
     delete_tree(root);
     delete_tree(root_copy);
     printf("Subtest 3 passed.\n");
 
-    long array2[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
 //    we expect the following tree:
 //        1 -> -2 -> -3564 -> NULL
 //                         -> -8 (leaf)
@@ -561,7 +555,7 @@ void test_copy_tree() {
 //                            -> 9005 -> 1463 -> NULL
 //                                            -> 1746 (leaf)
 //                                    -> NULL
-    root = new_tree(array2, sizeof(array2) / sizeof(long));
+    root = new_tree(BIG_ARRAY, sizeof(BIG_ARRAY) / sizeof(long));
     root_copy = copy_tree(root);
     assert(root_copy != NULL);
     assert(root_copy->value == 1);
@@ -642,39 +636,36 @@ void test_extremal_values_valid(void) {
     delete_tree(root);
     printf("Subtest 2 passed.\n");
 
-    long array[] = {0, 1, 2, 3, 4};
 //    we expect the following tree:
-//        0 -> NULL
-//          -> 1 -> NULL
-//               -> 2 -> NULL
-//                    -> 3 -> NULL
-//                         -> 4
-    root = new_tree(array, 5);
+//        1 -> NULL
+//          -> 2 -> NULL
+//               -> 3 -> NULL
+//                    -> 4 -> NULL
+//                         -> 5
+    root = new_tree(ASCENDING_ARRAY, 5);
     max_node = max_node_valid(root), min_node = min_node_valid(root);
     assert(max_node != NULL);
     assert(min_node != NULL);
-    assert(max_node->value == 4);
-    assert(min_node->value == 0);
+    assert(max_node->value == 5);
+    assert(min_node->value == 1);
     delete_tree(root);
     printf("Subtest 3 passed.\n");
 
-    long array1[] = {0, -1, -2, -3, -4};
     //    we expect the following tree:
-//        0 -> -1 -> -2 -> -3 -> -4
+//        -1 -> -2 -> -3 -> -4 -> -5
 //                            -> NULL
 //                      -> NULL
 //                -> NULL
 //          -> NULL
-    root = new_tree(array1, 5);
+    root = new_tree(DESCENDING_ARRAY, 5);
     max_node = max_node_valid(root), min_node = min_node_valid(root);
     assert(max_node != NULL);
     assert(min_node != NULL);
-    assert(max_node->value == 0);
-    assert(min_node->value == -4);
+    assert(max_node->value == -1);
+    assert(min_node->value == -5);
     delete_tree(root);
     printf("Subtest 4 passed.\n");
 
-    long array2[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
 //    we expect the following tree:
 //        1 -> -2 -> -3564 -> NULL
 //                         -> -8 (leaf)
@@ -686,7 +677,7 @@ void test_extremal_values_valid(void) {
 //                            -> 9005 -> 1463 -> NULL
 //                                            -> 1746 (leaf)
 //                                    -> NULL
-    root = new_tree(array2, sizeof(array2) / sizeof(long));
+    root = new_tree(BIG_ARRAY, sizeof(BIG_ARRAY) / sizeof(long));
     max_node = max_node_valid(root), min_node = min_node_valid(root);
     assert(max_node != NULL);
     assert(min_node != NULL);
@@ -697,6 +688,7 @@ void test_extremal_values_valid(void) {
 
     printf("Test passed.\n");
 }
+
 
 void test_extremal_values_general(void) {
     printf("\nFinding extremal values in general trees test started.\n");
@@ -715,7 +707,6 @@ void test_extremal_values_general(void) {
     delete_tree(root);
     printf("Subtest 2 passed.\n");
 
-    long array[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
 //    we expect the following tree:
 //        1 -> -2 -> -3564 -> NULL
 //                         -> -8 (leaf)
@@ -727,7 +718,7 @@ void test_extremal_values_general(void) {
 //                            -> 9005 -> 1463 -> NULL
 //                                            -> 1746 (leaf)
 //                                    -> NULL
-    root = new_tree(array, sizeof(array) / sizeof(long));
+    root = new_tree(BIG_ARRAY, sizeof(BIG_ARRAY) / sizeof(long));
     max_node = max_node_general(root), min_node = min_node_general(root);
     assert(max_node != NULL);
     assert(min_node != NULL);
@@ -875,7 +866,6 @@ void test_equality(void) {
     delete_tree(root);
     printf("Subtest 2 passed.\n");
 
-    long array1[] = {1, 2, 3, 4, 5};
     long array2[] = {1, 2, 3, 4, -5};
     long array3[] = {1, 2, 3, -4, 5};
     long array4[] = {-1, 2, 3, 4, 5};
@@ -883,8 +873,8 @@ void test_equality(void) {
     long array6[] = {5, 4, 3, 2, 1};
     long array7[] = {-5, -4, -3, -2, -1};
 
-    Tree_ptr root1 = new_tree(array1, 5);
-    Tree_ptr root2 = new_tree(array1, 5);
+    Tree_ptr root1 = new_tree(ASCENDING_ARRAY, 5);
+    Tree_ptr root2 = new_tree(ASCENDING_ARRAY, 5);
     assert(trees_equal(root1, root2) == 1);
     assert(trees_equal(root2, root1) == 1);
     delete_tree(root2);
@@ -936,8 +926,7 @@ void test_remove(void) {
 
     printf("Testing removing existing element from simple trees...\n");
 
-    long array[] = {1, 2, 3, 4, 5};
-    Tree_ptr root = new_tree(array, 5);
+    Tree_ptr root = new_tree(ASCENDING_ARRAY, 5);
 
     Tree_ptr root_copy = copy_tree(root);
     remove_value(root_copy, 1);
@@ -971,8 +960,7 @@ void test_remove(void) {
 
     delete_tree(root);
 
-    long array4[] = {-1, -2, -3, -4, -5};
-    root = new_tree(array4, 5);
+    root = new_tree(DESCENDING_ARRAY, 5);
 
     root_copy = copy_tree(root);
     remove_value(root_copy, -1);
@@ -1032,10 +1020,10 @@ void test_remove(void) {
 
     printf("Testing removing non-existing element from simple trees...\n");
 
-    root = new_tree(array, 5);
+    root = new_tree(ASCENDING_ARRAY, 5);
     root_copy = copy_tree(root);
     remove_value(root_copy, -1);
-    control = new_tree(array, 5);
+    control = new_tree(ASCENDING_ARRAY, 5);
     assert(tree_valid(root_copy) == 1);
     assert(trees_equal(root_copy, control) == 1);
     delete_tree(root_copy);
@@ -1052,8 +1040,7 @@ void test_remove(void) {
 
     printf("Testing complex tree...\n");
 
-    long big_array[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
-    root = new_tree(big_array, sizeof(big_array) / sizeof(long));
+    root = new_tree(BIG_ARRAY, sizeof(BIG_ARRAY) / sizeof(long));
 
     root_copy = copy_tree(root);
     remove_value(root_copy, 1);
@@ -1117,7 +1104,7 @@ void test_remove(void) {
     free(res_array);
     printf("Subtest 17 passed.\n");
 
-//    now we'll delete non-exesting elements
+//    now we'll delete non-existing elements
     long control_array6[] = {-3564, -8, -2, 1, 4, 18, 83, 245, 573, 1463, 1746, 9005};
 
     root_copy = copy_tree(root);
@@ -1194,9 +1181,7 @@ void test_equivalency(void) {
 
     printf("Testing simple trees...\n");
 
-    long array1[] = {1, 2, 3, 4, 5};
-
-    root1 = new_tree(array1, 5);
+    root1 = new_tree(ASCENDING_ARRAY, 5);
     assert(trees_equivalent(root1, NULL) == 0);
     assert(trees_equivalent(NULL, root1) == 0);
     printf("Subtest 4 passed.\n");
@@ -1225,8 +1210,7 @@ void test_equivalency(void) {
 
     printf("Testing complex trees...\n");
 
-    long big_array[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
-    root1 = new_tree(big_array, sizeof(big_array) / sizeof(long));
+    root1 = new_tree(BIG_ARRAY, sizeof(BIG_ARRAY) / sizeof(long));
 
     long big_array1[] = {1, 4, 18, 573, -2, -3564, -8, 9005, 1463, -8, 1746, 245, 83};
     root2 = new_tree(big_array1, sizeof(big_array1) / sizeof(long));
@@ -1275,6 +1259,56 @@ void test_equivalency(void) {
 }
 
 
+void test_balancing(void) {
+    printf("\nTree balancing test started.\n");
+
+    Tree_ptr root = balance_tree(NULL);
+    assert(root == NULL);
+    printf("Subtest 1 passed.\n");
+
+    root = new_node(1);
+    Tree_ptr root_copy = root;
+    root = balance_tree(root);
+    assert(root != NULL);
+    assert(root == root_copy);
+    delete_tree(root);
+    printf("Subtest 2 passed.\n");
+
+    root = new_tree(ASCENDING_ARRAY, 5);
+    root = balance_tree(root);
+    assert(root != NULL);
+    assert(tree_valid(root) == 1);
+    long control_array1[] = {3, 2, 1, 4, 5};
+    Tree_ptr control = new_tree(control_array1, 5);
+    assert(trees_equivalent(root, control) == 1);
+    delete_tree(root);
+    delete_tree(control);
+    printf("Subtest 3 passed.\n");
+
+    root = new_tree(DESCENDING_ARRAY, 5);
+    root = balance_tree(root);
+    assert(root != NULL);
+    assert(tree_valid(root) == 1);
+    long control_array2[] = {-3, -2, -1, -4, -5};
+    control = new_tree(control_array2, 5);
+    assert(trees_equivalent(root, control) == 1);
+    delete_tree(root);
+    delete_tree(control);
+    printf("Subtest 4 passed.\n");
+
+    root = new_tree(BIG_ARRAY, sizeof BIG_ARRAY / sizeof(long));
+    root = balance_tree(root);
+    assert(root != NULL);
+    assert(tree_valid(root) == 1);
+    long control_array3[] = {18, -2, 9005, -3564, 1, 573, -8, 4, 245, 1463, 83, 1746};
+    control = new_tree(control_array3, sizeof control_array3 / sizeof(long));
+    assert(trees_equivalent(root, control) == 1);
+    delete_tree(root);
+    delete_tree(control);
+    printf("Subtest 5 passed.\n");
+
+    printf("Test passed.\n");
+}
 
 
 

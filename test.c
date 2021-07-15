@@ -27,6 +27,7 @@ int main() {
     test_equality();
     test_remove();
     test_equivalency();
+    test_balancing();
 
     return 0;
 }
