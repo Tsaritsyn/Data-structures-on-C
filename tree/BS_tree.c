@@ -22,6 +22,9 @@ Tree_ptr find_node(Tree_ptr_c root, long value, long get_parent, ...) {
 
 //    if we do not need to keep the parent
     if (!get_parent) {
+        if (root == NULL)
+            return NULL;
+
 //        search for the node until we reach the leaves of the tree
         while (node->value != value) {
             if (value < node->value) {
@@ -47,6 +50,11 @@ Tree_ptr find_node(Tree_ptr_c root, long value, long get_parent, ...) {
         Tree_ptr *parent_ptr = (Tree_ptr*)va_arg(ap, unsigned long);
 //        initialize it with null pointer
         *parent_ptr = NULL;
+
+        if (root == NULL) {
+            va_end(ap);
+            return NULL;
+        }
 
 //        search for the node until we reach the leaves of the tree
         while (node->value != value) {
@@ -313,4 +321,63 @@ Tree_ptr min_node_general(Tree_ptr_c root) {
         res = min_right;
 
     return res;
+}
+
+static void replace_with(Tree_ptr node1, Tree_ptr node2) {
+    node1->value = node2->value;
+    node1->left = node2->left;
+    node1->right = node2->right;
+
+    node2->right = NULL;
+    node2->left = NULL;
+    delete_tree(node2);
+}
+
+
+// decreases the counter for the given value; if it reaches zero, removes the corresponding node from the tree
+// returns 0 if the counter has been decreased, 1 if the node has been removed
+// and -1 if the value is not present in the tree
+// will exit with error -2 if try to remove the only value in the tree
+void remove_value(Tree_ptr root, long value) {
+    Tree_ptr parent = NULL;
+    Tree_ptr node = find_node(root, value, 1, &parent);
+
+//    if there is no such value, return -1 and do nothing
+    if (node == NULL)
+        return;
+
+//    if the node has no children, just remove it
+    if (node->left == NULL && node->right == NULL) {
+//        if there is no parent, then the node is a root, and since it has no children, the tree contains of it only,
+//        so we cannot delete it
+        if (parent == NULL)
+            return;
+
+//        otherwise it's simply a leaf
+        delete_tree(node);
+        if (value < parent->value)
+            parent->left = NULL;
+        else
+            parent->right = NULL;
+    }
+//        if both children are present, replace the node with the minimal node of its right subtree
+    else if (node->left != NULL && node->right != NULL) {
+        Tree_ptr min_right = min_node_general(node->right);
+//            transfer right subtree of the min successor to the current node
+        node->right = min_right->right;
+        min_right->right = NULL;
+//            copy the value and the counter
+        node->value = min_right->value;
+
+//            delete the former minimum successor
+        min_right->right = NULL;
+        delete_tree(min_right);
+    }
+//        if the node has only one children, replace the node with it
+    else {
+        if (node->left != NULL)
+            replace_with(node, node->left);
+        else
+            replace_with(node, node->right);
+    }
 }

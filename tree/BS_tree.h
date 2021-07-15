@@ -105,9 +105,9 @@ Tree_ptr find_node(Tree_ptr_c root, long value, long get_parent, ...);
 
 
 /**
- * Deletes the node containing the given value from the tree. If the tree was valid, it is guaranteed to remain valid.
- * Otherwise, the desired value may not be deleted. If it is not present in the tree, then the operation will have no
- * effect.
+ * Deletes the node containing the given value from the tree, while preserving the pointer to the root untouched. If
+ * the tree was valid, it is guaranteed to remain valid. Otherwise, the desired value may not be deleted. If it is not
+ * present in the tree, then the operation will have no effect.
  *
  * @param root pointer to the root of the tree
  * @param value value to be deleted

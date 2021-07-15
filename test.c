@@ -25,6 +25,7 @@ int main() {
     test_extremal_values_general();
     test_validity();
     test_equality();
+    test_remove();
 
     return 0;
 }
