@@ -396,9 +396,14 @@ char trees_equivalent(Tree_ptr_c root1, Tree_ptr_c root2) {
     long *values1 = tree_to_array(root1);
     long *values2 = tree_to_array(root2);
     size_t i;
+    char res = 1;
     for (i = 0; i < size1; i++)
-        if (values1[i] != values2[i])
-            return 0;
+        if (values1[i] != values2[i]) {
+            res = 0;
+            break;
+        }
 
-    return 1;
+    free(values1);
+    free(values2);
+    return res;
 }
