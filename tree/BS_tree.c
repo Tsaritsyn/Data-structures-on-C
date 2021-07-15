@@ -94,7 +94,7 @@ int put_value(Tree_ptr root, long value) {
         return 0;
 
     if (parent == NULL) {
-        printf("Error in put_value: could not find neither node nor its parent.");
+        printf("Error in put_value: could not find neither node containing this value nor its parent.\n");
         return -1;
     }
 
@@ -163,6 +163,11 @@ static void draw_subtree(Tree_ptr_c root, unsigned int depth) {
 
 
 void draw_tree(Tree_ptr_c root) {
+    if (root == NULL) {
+        printf("NULL\n");
+        return;
+    }
+
     printf("root: %ld\n", root->value);
 
     printf("l: ");
@@ -193,10 +198,6 @@ static void extract_values(Tree_ptr_c root, long ** array) {
     if (root == NULL)
         return;
 
-//    printf("All right\n");
-//    printf("%lu %lu\n", *array, *array+1);
-//    printf("%ld %ld\n", **array, *(*array+1));
-
     extract_values(root->left, array);
     *((*array)++) = root->value;
     extract_values(root->right, array);
@@ -204,6 +205,9 @@ static void extract_values(Tree_ptr_c root, long ** array) {
 
 
 long* tree_to_array(Tree_ptr_c root) {
+    if (root == NULL)
+        return NULL;
+
     long *array = (long*) malloc(sizeof(long) * tree_size(root));
     long *buf = array;
 
@@ -311,7 +315,13 @@ Tree_ptr min_node_general(Tree_ptr_c root) {
     return res;
 }
 
+
 static void replace_with(Tree_ptr node1, Tree_ptr node2) {
+    if (node1 == NULL || node2 == NULL) {
+        printf("Error in replace_with: one of the nodes is NULL.\n");
+        return;
+    }
+
     node1->value = node2->value;
     node1->left = node2->left;
     node1->right = node2->right;
@@ -327,10 +337,13 @@ static void replace_with(Tree_ptr node1, Tree_ptr node2) {
 // and -1 if the value is not present in the tree
 // will exit with error -2 if try to remove the only value in the tree
 void remove_value(Tree_ptr root, long value) {
+    if (root == NULL)
+        return;
+
     Tree_ptr parent = NULL;
     Tree_ptr node = find_node(root, value, 1, &parent);
 
-//    if there is no such value, return -1 and do nothing
+//    if there is no such value, do nothing
     if (node == NULL)
         return;
 
@@ -398,6 +411,7 @@ char trees_equivalent(Tree_ptr_c root1, Tree_ptr_c root2) {
     free(values2);
     return res;
 }
+
 
 /// swaps the node with its right neighbour
 static Tree_ptr turn_left(Tree_ptr node) {

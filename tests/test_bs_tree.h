@@ -139,6 +139,11 @@ void test_find_node(void) {
 
 void test_put_value(void) {
     printf("\nPut value test started.\n");
+
+    int res = put_value(NULL, 0);
+    assert(res == -1);
+    printf("Subtest 0 passed.\n");
+
 //    initial tree:
 //        0
     Tree_ptr root = new_node(0);
@@ -146,7 +151,7 @@ void test_put_value(void) {
 //    modified tree:
 //        0 -> NULL
 //          -> 2
-    int res = put_value(root, 2);
+    res = put_value(root, 2);
     assert(res == 1);
     assert(root->right != NULL);
     assert(root->left == NULL);

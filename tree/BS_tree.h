@@ -143,7 +143,8 @@ char trees_equal(Tree_ptr_c root1, Tree_ptr_c root2);
 /**
  * We call a BS tree valid if any node's left subtree, if exists, contains smaller values than the node itself, while
  * right subtree, if exists, contains bigger values than the node itself. Moreover, each value in the tree must be
- * unique.
+ * unique. <br>
+ * NOTE that NULL is a valid tree.
  *
  * @param root pointer to the root of the tree
  * @return 1 if the given tree is a valid BS tree and 0 otherwise
@@ -153,7 +154,8 @@ char tree_valid(Tree_ptr_c root);
 
 /**
  * We call two trees equivalent if they are both valid, contain the same set of values and have the same size and depth.
- * Both trees are assumed to be valid, otherwise the result may be any.
+ * Both trees are assumed to be valid, otherwise the result may be any. <br>
+ * Two NULLs are equivalent to each other, but NULL is not equivalent to not NULL tree.
  *
  * @return 1 if two trees are equivalent and 0 otherwise
  */
