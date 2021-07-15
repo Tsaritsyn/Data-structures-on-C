@@ -267,3 +267,46 @@ Tree_ptr min_node_valid(Tree_ptr_c root) {
         p = p->left;
     return p;
 }
+
+
+Tree_ptr max_node_general(Tree_ptr_c root) {
+    if (root == NULL)
+        return NULL;
+
+    if (root->left == NULL && root->right == NULL) {
+        return (Tree_ptr)root;
+    }
+
+    Tree_ptr max_left = max_node_general(root->left), max_right = max_node_general(root->right);
+    if (max_left != NULL && max_right == NULL) {
+        return (max_left->value > root->value) ? max_left : (Tree_ptr)root;
+    }
+
+    if (max_left == NULL && max_right != NULL) {
+        return (max_right->value > root->value) ? max_right : (Tree_ptr)root;
+    }
+
+    if (max_left->value > max_right->value && max_left->value > root->value)
+        return max_left;
+
+    if (max_right->value > max_left->value && max_right->value > root->value)
+        return max_right;
+
+    if (root->value > max_right->value && root->value > max_left->value)
+        return (Tree_ptr)root;
+}
+
+
+Tree_ptr min_node_general(Tree_ptr_c root) {
+    if (root == NULL)
+        return NULL;
+
+    Tree_ptr min_left = min_node_general(root->left), min_right = min_node_general(root->right);
+    Tree_ptr res = (Tree_ptr) root;
+    if (min_left != NULL && min_left->value < res->value)
+        res = min_left;
+    if (min_right != NULL && min_right->value < res->value)
+        res = min_right;
+
+    return res;
+}

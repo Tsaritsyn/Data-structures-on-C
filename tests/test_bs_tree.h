@@ -692,6 +692,69 @@ void test_extremal_values_valid(void) {
 void test_extremal_values_general(void) {
     printf("\nFinding extremal values in general trees test started.\n");
 
+    printf("Testing special cases and valid trees...\n");
+
+    Tree_ptr max_node = max_node_general(NULL), min_node = min_node_general(NULL);
+    assert(min_node == NULL);
+    assert(max_node == NULL);
+    printf("Subtest 1 passed.\n");
+
+    Tree_ptr root = new_node(1);
+    max_node = max_node_general(root), min_node = min_node_general(root);
+    assert(max_node == root);
+    assert(min_node == root);
+    printf("Subtest 2 passed.\n");
+
+    long array[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};
+//    we expect the following tree:
+//        1 -> -2 -> -3564 -> NULL
+//                         -> -8 (leaf)
+//                -> NULL
+//          -> 4 -> NULL
+//               -> 18 -> NULL
+//                     -> 573 -> 245 -> 83 (leaf)
+//                                   -> NULL
+//                            -> 9005 -> 1463 -> NULL
+//                                            -> 1746 (leaf)
+//                                    -> NULL
+    root = new_tree(array, sizeof(array) / sizeof(long));
+    max_node = max_node_general(root), min_node = min_node_general(root);
+    assert(max_node != NULL);
+    assert(min_node != NULL);
+    assert(max_node->value == 9005);
+    assert(min_node->value == -3564);
+    delete_tree(root);
+    printf("Subtest 3 passed.\n");
+
+    printf("Testing non-valid trees...\n");
+    root = new_node(0);
+    root->right = new_node(-1);
+    root->left = new_node(1);
+    max_node = max_node_general(root), min_node = min_node_general(root);
+    assert(max_node != NULL);
+    assert(min_node != NULL);
+    assert(max_node->value == 1);
+    assert(min_node->value == -1);
+    printf("Subtest 4 passed.\n");
+
+    root->right->right = new_node(2);
+    max_node = max_node_general(root), min_node = min_node_general(root);
+    assert(max_node != NULL);
+    assert(min_node != NULL);
+    assert(max_node->value == 2);
+    assert(min_node->value == -1);
+    printf("Subtest 5 passed.\n");
+
+    root->right->left = new_node(-2);
+    root->left->left = new_node(-2);
+    max_node = max_node_general(root), min_node = min_node_general(root);
+    assert(max_node != NULL);
+    assert(min_node != NULL);
+    assert(max_node->value == 2);
+    assert(min_node->value == -2);
+    printf("Subtest 6 passed.\n");
+
+    delete_tree(root);
     printf("Test passed.\n");
 }
 

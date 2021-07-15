@@ -203,11 +203,13 @@ Tree_ptr max_node_valid(Tree_ptr_c root);
 Tree_ptr min_node_valid(Tree_ptr_c root);
 
 
-/// @return the pointer to the node containing the minimum value with no assumption on the tree
+/// @return the pointer to the node containing the minimum value with no assumption on the tree; if several such nodes
+/// exist, returns any of them
 Tree_ptr min_node_general(Tree_ptr_c root);
 
 
-/// @return the pointer to the node containing the maximum value with no assumption on the tree
+/// @return the pointer to the node containing the maximum value with no assumption on the tree; if several such nodes
+/// exist, returns any of them
 Tree_ptr max_node_general(Tree_ptr_c root);
 
 
