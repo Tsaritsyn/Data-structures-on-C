@@ -2,10 +2,8 @@
 // Created by Mikhail Tsaritsyn on 14.07.2021.
 //
 
-#include "BS_tree.h"
-
-
-#define MAX(a, b) ((a > b) ? a : b)
+#include "../data_structures/BS_tree.h"
+#include "limits.h"
 
 
 Tree_ptr new_node(long value) {
@@ -85,7 +83,7 @@ Tree_ptr find_node(Tree_ptr_c root, long value, long get_parent, ...) {
 }
 
 
-int put_value(Tree_ptr root, long value) {
+int tree_insert_value(Tree_ptr root, long value) {
     Tree_ptr parent = NULL, node = NULL;
     node = find_node(root, value, 1, &parent);
 
@@ -94,7 +92,7 @@ int put_value(Tree_ptr root, long value) {
         return 0;
 
     if (parent == NULL) {
-        printf("Error in put_value: could not find neither node containing this value nor its parent.\n");
+        printf("Error in tree_insert_value: could not find neither node containing this value nor its parent.\n");
         return -1;
     }
 
@@ -120,9 +118,9 @@ void delete_tree(Tree_ptr root) {
 
 Tree_ptr new_tree(const long *array, size_t size) {
     Tree_ptr root = new_node(array[0]);
-    int i;
+    size_t i;
     for (i = 1; i < size; i++)
-        put_value(root, array[i]);
+        tree_insert_value(root, array[i]);
     return root;
 }
 
@@ -138,7 +136,7 @@ void print_tree(Tree_ptr_c root) {
 
 
 static void draw_subtree(Tree_ptr_c root, unsigned int depth) {
-    int i;
+    size_t i;
     for (i = 0; i < depth; i++) {
         printf("  ");
     }
@@ -332,27 +330,23 @@ static void replace_with(Tree_ptr node1, Tree_ptr node2) {
 }
 
 
-// decreases the counter for the given value; if it reaches zero, removes the corresponding node from the tree
-// returns 0 if the counter has been decreased, 1 if the node has been removed
-// and -1 if the value is not present in the tree
-// will exit with error -2 if try to remove the only value in the tree
-void remove_value(Tree_ptr root, long value) {
+int remove_value(Tree_ptr root, long value) {
     if (root == NULL)
-        return;
+        return 0;
 
     Tree_ptr parent = NULL;
     Tree_ptr node = find_node(root, value, 1, &parent);
 
 //    if there is no such value, do nothing
     if (node == NULL)
-        return;
+        return 0;
 
 //    if the node has no children, just remove it
     if (node->left == NULL && node->right == NULL) {
-//        if there is no parent, then the node is a root, and since it has no children, the tree contains of it only,
+//        if there is no parent, then the node is a root, and since it has no children, the tree set_contains of it only,
 //        so we cannot delete it
         if (parent == NULL)
-            return;
+            return 0;
 
 //        otherwise it's simply a leaf
         delete_tree(node);
@@ -381,6 +375,8 @@ void remove_value(Tree_ptr root, long value) {
         else
             replace_with(node, node->right);
     }
+
+    return 1;
 }
 
 
@@ -397,18 +393,16 @@ char trees_equivalent(Tree_ptr_c root1, Tree_ptr_c root2) {
         return 0;
 
 //    now we know that both trees have the same size, so we can check their values
-    long *values1 = tree_to_array(root1);
-    long *values2 = tree_to_array(root2);
+    long *values = tree_to_array(root1);
     size_t i;
     char res = 1;
     for (i = 0; i < size1; i++)
-        if (values1[i] != values2[i]) {
+        if (find_node(root2, values[i], 0) == NULL) {
             res = 0;
             break;
         }
 
-    free(values1);
-    free(values2);
+    free(values);
     return res;
 }
 
@@ -470,4 +464,22 @@ Tree_ptr balance_tree(Tree_ptr root) {
     root->right = balance_tree(root->right);
 
     return root;
+}
+
+
+long max_tree_value(Tree_ptr_c root) {
+    Tree_ptr max_node = max_node_valid(root);
+    if (max_node == NULL)
+        return LONG_MIN;
+
+    return max_node->value;
+}
+
+
+long min_tree_value(Tree_ptr_c root) {
+    Tree_ptr min_node = min_node_valid(root);
+    if (min_node == NULL)
+        return LONG_MAX;
+
+    return min_node->value;
 }

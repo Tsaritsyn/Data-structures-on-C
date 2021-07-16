@@ -140,7 +140,7 @@ void test_find_node(void) {
 void test_put_value(void) {
     printf("\nPut value test started.\n");
 
-    int res = put_value(NULL, 0);
+    int res = tree_insert_value(NULL, 0);
     assert(res == -1);
     printf("Subtest 0 passed.\n");
 
@@ -151,7 +151,7 @@ void test_put_value(void) {
 //    modified tree:
 //        0 -> NULL
 //          -> 2
-    res = put_value(root, 2);
+    res = tree_insert_value(root, 2);
     assert(res == 1);
     assert(root->right != NULL);
     assert(root->left == NULL);
@@ -163,7 +163,7 @@ void test_put_value(void) {
 //    modified tree:
 //        0 -> -1
 //          -> 2
-    res = put_value(root, -1);
+    res = tree_insert_value(root, -1);
     assert(res == 1);
     assert(root->left != NULL);
     assert(root->left->value == -1);
@@ -175,7 +175,7 @@ void test_put_value(void) {
 //        0 -> -1
 //          -> 2 -> 1
 //               -> NULL
-    res = put_value(root, 1);
+    res = tree_insert_value(root, 1);
     assert(res == 1);
     assert(root->right->right == NULL);
     assert(root->right->left != NULL);
@@ -188,7 +188,7 @@ void test_put_value(void) {
 //        0 -> -1
 //          -> 2 -> 1
 //               -> 3
-    res = put_value(root, 3);
+    res = tree_insert_value(root, 3);
     assert(res == 1);
     assert(root->right->right != NULL);
     assert(root->right->right->value == 3);
@@ -200,7 +200,7 @@ void test_put_value(void) {
 //        0 -> -1
 //          -> 2 -> 1
 //               -> 3
-    res = put_value(root, 2);
+    res = tree_insert_value(root, 2);
     assert(res == 0);
     assert(root->value == 0);
     assert(root->left != NULL);
@@ -223,7 +223,7 @@ void test_put_value(void) {
 //        0 -> -1
 //          -> 2 -> 1
 //               -> 3
-    res = put_value(root, 3);
+    res = tree_insert_value(root, 3);
     assert(res == 0);
     assert(root->value == 0);
     assert(root->left != NULL);
@@ -934,9 +934,10 @@ void test_remove(void) {
     Tree_ptr root = new_tree(ASCENDING_ARRAY, 5);
 
     Tree_ptr root_copy = copy_tree(root);
-    remove_value(root_copy, 1);
+    int res = remove_value(root_copy, 1);
     long array1[] = {2, 3, 4, 5};
     Tree_ptr control = new_tree(array1, 4);
+    assert(res == 1);
     assert(tree_valid(root_copy) == 1);
     assert(trees_equal(root_copy, control) == 1);
     delete_tree(root_copy);
@@ -944,7 +945,8 @@ void test_remove(void) {
     printf("Subtest 1 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, 3);
+    res = remove_value(root_copy, 3);
+    assert(res == 1);
     long array2[] = {1, 2, 4, 5};
     control = new_tree(array2, 4);
     assert(tree_valid(root_copy) == 1);
@@ -954,7 +956,8 @@ void test_remove(void) {
     printf("Subtest 2 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, 5);
+    res = remove_value(root_copy, 5);
+    assert(res == 1);
     long array3[] = {1, 2, 3, 4};
     control = new_tree(array3, 4);
     assert(tree_valid(root_copy) == 1);
@@ -968,7 +971,8 @@ void test_remove(void) {
     root = new_tree(DESCENDING_ARRAY, 5);
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, -1);
+    res = remove_value(root_copy, -1);
+    assert(res == 1);
     long array5[] = {-2, -3, -4, -5};
     control = new_tree(array5, 4);
     assert(tree_valid(root_copy) == 1);
@@ -978,7 +982,8 @@ void test_remove(void) {
     printf("Subtest 4 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, -3);
+    res = remove_value(root_copy, -3);
+    assert(res == 1);
     long array6[] = {-1, -2, -4, -5};
     control = new_tree(array6, 4);
     assert(tree_valid(root_copy) == 1);
@@ -988,7 +993,8 @@ void test_remove(void) {
     printf("Subtest 5 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, -5);
+    res = remove_value(root_copy, -5);
+    assert(res == 1);
     long array7[] = {-1, -2, -3, -4};
     control = new_tree(array7, 4);
     assert(tree_valid(root_copy) == 1);
@@ -1002,23 +1008,27 @@ void test_remove(void) {
     printf("Testing special cases...\n");
 
     root = NULL;
-    remove_value(root, 1);
+    res = remove_value(root, 1);
+    assert(res == 0);
     assert(root == NULL);
     printf("Subtest 7 passed.\n");
 
     root = new_node(1);
     root_copy = root;
-    remove_value(root_copy, 1);
+    res = remove_value(root_copy, 1);
+    assert(res == 0);
     assert(root == root_copy);
     printf("Subtest 8 passed.\n");
 
     root_copy = root;
-    remove_value(root, 2);
+    res = remove_value(root, 2);
+    assert(res == 0);
     assert(root == root_copy);
     printf("Subtest 9 passed.\n");
 
     root_copy = root;
-    remove_value(root, -1);
+    res = remove_value(root, -1);
+    assert(res == 0);
     assert(root == root_copy);
     delete_tree(root);
     printf("Subtest 10 passed.\n");
@@ -1027,7 +1037,8 @@ void test_remove(void) {
 
     root = new_tree(ASCENDING_ARRAY, 5);
     root_copy = copy_tree(root);
-    remove_value(root_copy, -1);
+    res = remove_value(root_copy, -1);
+    assert(res == 0);
     control = new_tree(ASCENDING_ARRAY, 5);
     assert(tree_valid(root_copy) == 1);
     assert(trees_equal(root_copy, control) == 1);
@@ -1035,7 +1046,8 @@ void test_remove(void) {
     printf("Subtest 11 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, 6);
+    res = remove_value(root_copy, 6);
+    assert(res == 0);
     assert(tree_valid(root_copy) == 1);
     assert(trees_equal(root_copy, control) == 1);
     delete_tree(root_copy);
@@ -1048,7 +1060,8 @@ void test_remove(void) {
     root = new_tree(BIG_ARRAY, sizeof(BIG_ARRAY) / sizeof(long));
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, 1);
+    res = remove_value(root_copy, 1);
+    assert(res == 1);
     assert(tree_valid(root_copy) == 1);
     long control_array1[] = {-3564, -8, -2, 4, 18, 83, 245, 573, 1463, 1746, 9005};
     long *res_array = tree_to_array(root_copy);
@@ -1061,7 +1074,8 @@ void test_remove(void) {
     printf("Subtest 13 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, 245);
+    res = remove_value(root_copy, 245);
+    assert(res == 1);
     assert(tree_valid(root_copy) == 1);
     long control_array2[] = {-3564, -8, -2, 1, 4, 18, 83, 573, 1463, 1746, 9005};
     res_array = tree_to_array(root_copy);
@@ -1073,7 +1087,8 @@ void test_remove(void) {
     printf("Subtest 14 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, 1746);
+    res = remove_value(root_copy, 1746);
+    assert(res == 1);
     assert(tree_valid(root_copy) == 1);
     long control_array3[] = {-3564, -8, -2, 1, 4, 18, 83, 245, 573, 1463, 9005};
     res_array = tree_to_array(root_copy);
@@ -1086,7 +1101,8 @@ void test_remove(void) {
 
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, -3564);
+    res = remove_value(root_copy, -3564);
+    assert(res == 1);
     assert(tree_valid(root_copy) == 1);
     long control_array4[] = {-8, -2, 1, 4, 18, 83, 245, 573, 1463, 1746, 9005};
     res_array = tree_to_array(root_copy);
@@ -1098,7 +1114,8 @@ void test_remove(void) {
     printf("Subtest 16 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, 4);
+    res = remove_value(root_copy, 4);
+    assert(res == 1);
     assert(tree_valid(root_copy) == 1);
     long control_array5[] = {-3564, -8, -2, 1, 18, 83, 245, 573, 1463, 1746, 9005};
     res_array = tree_to_array(root_copy);
@@ -1113,7 +1130,8 @@ void test_remove(void) {
     long control_array6[] = {-3564, -8, -2, 1, 4, 18, 83, 245, 573, 1463, 1746, 9005};
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, 100);
+    res = remove_value(root_copy, 100);
+    assert(res == 0);
     assert(tree_valid(root_copy) == 1);
     res_array = tree_to_array(root_copy);
     for (i = 0; i < sizeof(control_array6) / sizeof(long); i++) {
@@ -1124,7 +1142,8 @@ void test_remove(void) {
     printf("Subtest 18 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, 10000);
+    res = remove_value(root_copy, 10000);
+    assert(res == 0);
     assert(tree_valid(root_copy) == 1);
     res_array = tree_to_array(root_copy);
     for (i = 0; i < sizeof(control_array6) / sizeof(long); i++) {
@@ -1135,7 +1154,8 @@ void test_remove(void) {
     printf("Subtest 19 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, -1000);
+    res = remove_value(root_copy, -1000);
+    assert(res == 0);
     assert(tree_valid(root_copy) == 1);
     res_array = tree_to_array(root_copy);
     for (i = 0; i < sizeof(control_array6) / sizeof(long); i++) {
@@ -1146,7 +1166,8 @@ void test_remove(void) {
     printf("Subtest 20 passed.\n");
 
     root_copy = copy_tree(root);
-    remove_value(root_copy, -4000);
+    res = remove_value(root_copy, -4000);
+    assert(res == 0);
     assert(tree_valid(root_copy) == 1);
     res_array = tree_to_array(root_copy);
     for (i = 0; i < sizeof(control_array6) / sizeof(long); i++) {

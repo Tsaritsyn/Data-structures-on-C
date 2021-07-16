@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "stdlib.h"
 #include "stdarg.h"
+#include "../common.h"
 
 typedef struct bs_node Tree;
 typedef struct bs_node* Tree_ptr;
@@ -63,11 +64,11 @@ void delete_tree(Tree_ptr root);
  * @param value value to be put
  * @return 1 if the value has been added and 0 otherwise
  */
-int put_value(Tree_ptr root, long value);
+int tree_insert_value(Tree_ptr root, long value);
 
 
 /**
- * Searches for the node that contains the given value in the valid tree. If the tree is not valid, the result may not
+ * Searches for the node that set_contains the given value in the valid tree. If the tree is not valid, the result may not
  * be correct. <br>
  * <br>
  * Example: <br>
@@ -111,8 +112,9 @@ Tree_ptr find_node(Tree_ptr_c root, long value, long get_parent, ...);
  *
  * @param root pointer to the root of the tree
  * @param value value to be deleted
+ * @return 1 if the value has been removed and 0 otherwise
  */
-void remove_value(Tree_ptr root, long value);
+int remove_value(Tree_ptr root, long value);
 
 
 /**
@@ -141,8 +143,8 @@ char trees_equal(Tree_ptr_c root1, Tree_ptr_c root2);
 
 
 /**
- * We call a BS tree valid if any node's left subtree, if exists, contains smaller values than the node itself, while
- * right subtree, if exists, contains bigger values than the node itself. Moreover, each value in the tree must be
+ * We call a BS tree valid if any node's left subtree, if exists, set_contains smaller values than the node itself, while
+ * right subtree, if exists, set_contains bigger values than the node itself. Moreover, each value in the tree must be
  * unique. <br>
  * NOTE that NULL is a valid tree.
  *
@@ -208,5 +210,13 @@ Tree_ptr max_node_general(Tree_ptr_c root);
  * @return pointer to the new root of the tree (since it may change)
  */
 Tree_ptr balance_tree(Tree_ptr root);
+
+
+/// @return the maximum value stored in the valid BS tree or LONG_MIN if the tree is empty
+long max_tree_value(Tree_ptr_c root);
+
+
+/// @return the minimum value stored in the valid BS tree or LONG_MAX if the tree is empty
+long min_tree_value(Tree_ptr_c root);
 
 #endif //MY_CLIB_BS_TREE_H

@@ -4,14 +4,8 @@
 
 #include "tests/test_bs_tree.h"
 
-// CHECK THAT YOU USE THE DEBUG CONFIGURATION BEFORE RUNNING THESE TESTS!
-// Since assert() statements do nothing in release configuration, these tests will always pass in this case.
-int main() {
-    if (!DEBUG_CONF) {
-        printf("Error: it is not the debug configuration, tests will have no effect.\n");
-        return -1;
-    }
 
+void full_tree_test_set() {
     print_tree_size();
     test_node_creation();
     test_find_node();
@@ -28,6 +22,17 @@ int main() {
     test_remove();
     test_equivalency();
     test_balancing();
+}
+
+// CHECK THAT YOU USE THE DEBUG CONFIGURATION BEFORE RUNNING THESE TESTS!
+// Since assert() statements do nothing in release configuration, these tests will always pass in this case.
+int main() {
+    if (!DEBUG_CONF) {
+        printf("Error: it is not the debug configuration, tests will have no effect.\n");
+        return -1;
+    }
+
+    full_tree_test_set();
 
     return 0;
 }

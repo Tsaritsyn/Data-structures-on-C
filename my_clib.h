@@ -1,7 +1,7 @@
 #ifndef MY_CLIB_MY_CLIB_H
 #define MY_CLIB_MY_CLIB_H
 
-#include "tree/BS_tree.h"
+#include "data_structures/BS_tree.h"
 
 void hello(void);
 
