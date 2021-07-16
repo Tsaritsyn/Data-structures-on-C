@@ -139,7 +139,11 @@ int set_is_included(Set_long_ptr_c set1, Set_long_ptr_c set2) {
 
 
 int set_is_equal(Set_long_ptr_c set1, Set_long_ptr_c set2) {
-    //    consider knowingly false cases
+//    all empty sets are always equal to each other
+    if (set_is_empty(set1) && set_is_empty(set2))
+        return 1;
+
+//    consider knowingly false cases
     if (set1->min_element != set2->min_element ||
         set1->max_element != set2->max_element ||
         set1->size >= set2->size)
@@ -175,17 +179,10 @@ Set_long_ptr get_union(Set_long_ptr_c set1, Set_long_ptr_c set2) {
 
 //    create a new set and fill it with the values from the given sets
     Set_long_ptr res = create_set();
-
-    long *elements1 = tree_to_array(set1->tree);
-    long *elements2 = tree_to_array(set2->tree);
-    size_t i;
-    for (i = 0; i < set1->size; i++)
-        set_insert_element(res, elements1[i]);
-    for (i = 0; i < set2->size; i++)
-        set_insert_element(res, elements2[i]);
-
-    free(elements1);
-    free(elements2);
+    res->tree = merge_balanced_trees(set1->tree, set2->tree);
+    res->size = tree_size(res->tree);
+    res->max_element = MAX(set1->max_element, set2->max_element);
+    res->min_element = MIN(set1->min_element, set2->min_element);
     return res;
 }
 
