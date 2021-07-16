@@ -215,7 +215,7 @@ long* tree_to_array(Tree_ptr_c root) {
 }
 
 
-Tree_ptr copy_tree(Tree_ptr src) {
+Tree_ptr copy_tree(Tree_ptr_c src) {
     if (src == NULL)
         return NULL;
 
@@ -482,4 +482,86 @@ long min_tree_value(Tree_ptr_c root) {
         return LONG_MAX;
 
     return min_node->value;
+}
+
+
+/**
+ * Merges two given arrays into a new one. If the arrays are sorted in the ascending order, the new one will be sorted,
+ * too. The size of the resulting array is the sum of input sizes, because repeated values are preserved.
+ *
+ * @param a1 pointer to the first array
+ * @param size1 size of the first array
+ * @param a2 pointer to the second array
+ * @param size2 size of the second array
+ * @return pointer to the resulting array
+ */
+static long* merge_sorted_arrays(const long *a1, size_t size1, const long *a2, size_t size2) {
+    size_t i = 0, j = 0, k = 0;
+
+    long *res = malloc(sizeof(long) * (size1 + size2));
+//    the algo is the following: each step we choose from the current values of two arrays the smallest one, write it
+//    into the resulting one and then move to the next value in the array from where we took it
+    while (i < size1 || j < size2) {
+        if (i < size1 && j < size2) {
+            if (a1[i] < a2[j])
+                res[k++] = a1[i++];
+            else
+                res[k++] = a2[j++];
+        }
+//        once we reach the end of one of the arrays, we don't have to choose anymore
+        else if (i == size1)
+            res[k++] = a2[j++];
+        else
+            res[k++] = a1[i++];
+    }
+
+    return res;
+}
+
+
+Tree_ptr new_balanced_tree(const long *values, size_t size) {
+    if (values == NULL || size == 0)
+        return NULL;
+
+    Tree_ptr root = new_node(values[size / 2]);
+    if (size == 1)
+        return root;
+
+//    we ensure that the value we've put in the root will never be taken again
+//    TODO: implement it via binary search
+    size_t left_end = size / 2;
+    while (left_end > 0 && (values[left_end] == root->value))
+        left_end--;
+
+    size_t right_begin = size / 2 + 1;
+    while (right_begin < size && values[right_begin] == root->value) {
+        right_begin++;
+    }
+
+    root->left = new_balanced_tree(values, left_end + 1);
+    root->right = new_balanced_tree(values + right_begin, size - right_begin);
+    return root;
+}
+
+
+Tree_ptr merge_balanced_trees(Tree_ptr_c root1, Tree_ptr_c root2) {
+    if (root1 == NULL && root2 == NULL)
+        return NULL;
+
+    if (root1 == NULL)
+        return copy_tree(root2);
+
+    if (root2 == NULL)
+        return copy_tree(root1);
+
+    size_t size1 = tree_size(root1), size2 = tree_size(root2);
+    long *values1 = tree_to_array(root1);
+    long *values2 = tree_to_array(root2);
+    long *values_common = merge_sorted_arrays(values1, size1, values2, size2);
+    Tree_ptr res = new_balanced_tree(values_common, size1 + size2);
+
+    free(values1);
+    free(values2);
+    free(values_common);
+    return res;
 }

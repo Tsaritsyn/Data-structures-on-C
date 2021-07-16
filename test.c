@@ -22,6 +22,8 @@ void full_tree_test_set() {
     test_remove();
     test_equivalency();
     test_balancing();
+    test_creating_balanced_tree();
+    test_merging_balanced_trees();
 }
 
 // CHECK THAT YOU USE THE DEBUG CONFIGURATION BEFORE RUNNING THESE TESTS!

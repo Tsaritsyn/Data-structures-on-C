@@ -124,7 +124,7 @@ int remove_value(Tree_ptr root, long value);
  * @param src the tree to be copied
  * @return the pointer to the root of a copy of the given tree with preserved structure and values
  */
-Tree_ptr copy_tree(Tree_ptr src);
+Tree_ptr copy_tree(Tree_ptr_c src);
 
 
 /**
@@ -218,5 +218,26 @@ long max_tree_value(Tree_ptr_c root);
 
 /// @return the minimum value stored in the valid BS tree or LONG_MAX if the tree is empty
 long min_tree_value(Tree_ptr_c root);
+
+
+/**
+ * Constructs a balanced tree from sorted array. If the array is not sorted in the ascending order, the resulting tree
+ * will not be a valid BS tree.
+ *
+ * @param values pointer to the array of values
+ * @param size size of the array (size of the tree may be less)
+ * @return pointer to a valid balanced BS tree containing all the values of the given array
+ */
+Tree_ptr new_balanced_tree(const long *values, size_t size);
+
+
+/**
+ * Merges two balanced trees into a new one. It is not checked that they are balanced and valid, so if it's not the
+ * case, the result is not guaranteed!
+ *
+ * @return balanced tree containing elements from both given ones; it occupies its own memory and needs to be deleted
+ *  separately
+ */
+Tree_ptr merge_balanced_trees(Tree_ptr_c root1, Tree_ptr_c root2);
 
 #endif //MY_CLIB_BS_TREE_H

@@ -1337,5 +1337,77 @@ void test_balancing(void) {
 }
 
 
+void test_creating_balanced_tree() {
+    printf("\nBalanced tree creation test started.\n");
+
+    Tree_ptr root = new_balanced_tree(NULL, 10);
+    assert(root == NULL);
+    printf("Subtest 1 passed.\n");
+
+    root = new_balanced_tree(ASCENDING_ARRAY, 0);
+    assert(root == NULL);
+    printf("Subtest 2 passed.\n");
+
+    root = new_balanced_tree(ASCENDING_ARRAY, 5);
+    assert(root != NULL);
+    assert(tree_valid(root) == 1);
+    assert(tree_size(root) == 5);
+    assert(tree_depth(root) == 3);
+    long *values = tree_to_array(root);
+    size_t i;
+    for (i = 0; i < 5; i++)
+        assert(values[i] == ASCENDING_ARRAY[i]);
+    free(values);
+    delete_tree(root);
+    printf("Subtest 3 passed.\n");
+
+    printf("Test passed.\n");
+}
+
+
+void test_merging_balanced_trees() {
+    printf("\nBalanced trees merging test started.\n");
+
+    Tree_ptr root = merge_balanced_trees(NULL, NULL);
+    assert(root == NULL);
+    printf("Subtest 1 passed.\n");
+
+    Tree_ptr root2 = new_balanced_tree(ASCENDING_ARRAY, 5);
+    root = merge_balanced_trees(NULL, root2);
+    assert(root != NULL);
+    assert(trees_equivalent(root, root2));
+    delete_tree(root);
+    printf("Subtest 2 passed.\n");
+
+    root = merge_balanced_trees(root2, NULL);
+    assert(root != NULL);
+    assert(trees_equivalent(root, root2));
+    delete_tree(root);
+    printf("Subtest 3 passed.\n");
+
+    long arr[] = {-5, -4, -3, -2, -1};
+    root = new_balanced_tree(arr, 5);
+    Tree_ptr res1 = merge_balanced_trees(root, root2);
+    assert(res1 != NULL);
+    assert(tree_valid(res1) == 1);
+    assert(tree_size(res1) == 10);
+    assert(tree_depth(res1) == 4);
+    printf("Subtest 4 passed.\n");
+
+    Tree_ptr res2 = merge_balanced_trees(root2, root);
+    assert(res2 != NULL);
+    assert(tree_valid(res2) == 1);
+    assert(tree_size(res2) == 10);
+    assert(tree_depth(res2) == 4);
+    assert(trees_equivalent(res1, res2));
+    printf("Subtest 5 passed.\n");
+
+    delete_tree(root);
+    delete_tree(root2);
+    delete_tree(res1);
+    delete_tree(res2);
+    printf("Test passed.\n");
+}
+
 
 #endif //MY_CLIB_TEST_BS_TREE_H
