@@ -2,8 +2,8 @@
 // Created by Mikhail Tsaritsyn on 14.07.2021.
 //
 
-#include "tests/test_bs_tree.h"
-#include "tests/test_set_long.h"
+#include "tests/data_structures/test_bs_tree.h"
+#include "tests/data_structures/test_set_long.h"
 
 
 void full_tree_test_set() {

@@ -11,7 +11,8 @@
 #include <stdio.h>
 #include "stdlib.h"
 #include "stdarg.h"
-#include "../common.h"
+
+#include "common.h"
 
 typedef struct bs_node Tree;
 typedef struct bs_node* Tree_ptr;

@@ -2,7 +2,7 @@
 // Created by Mikhail Tsaritsyn on 14.07.2021.
 //
 
-#include "../data_structures/BS_tree.h"
+#include "data_structures/BS_tree.h"
 #include "limits.h"
 
 

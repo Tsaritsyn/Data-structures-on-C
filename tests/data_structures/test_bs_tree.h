@@ -15,7 +15,7 @@ const char DEBUG_CONF = 0;
 #include "assert.h"
 #include "stdlib.h"
 
-#include "../my_clib.h"
+#include "../../my_clib.h"
 
 
 const long BIG_ARRAY[] = {1, 4, 18, 573, -2, 573, -3564, 1, -8, 9005, 4, 1463, -8, 1746, -8, 4, 245, 83, -8};

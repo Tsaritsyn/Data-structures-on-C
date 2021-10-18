@@ -11,7 +11,7 @@
 #include "BS_tree.h"
 #include "stdlib.h"
 #include "limits.h"
-#include "../common.h"
+#include "common.h"
 
 typedef struct {
     Tree_ptr tree;

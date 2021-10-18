@@ -6,7 +6,7 @@
 #define MY_CLIB_TEST_SET_LONG_H
 
 
-#include "../data_structures/set_long.h"
+#include "data_structures/set_long.h"
 
 
 int test_set_creation() {

@@ -2,7 +2,7 @@
 // Created by Mikhail Tsaritsyn on 16.07.2021.
 //
 
-#include "../data_structures/set_long.h"
+#include "data_structures/set_long.h"
 
 
 Set_long_ptr create_set(void) {
