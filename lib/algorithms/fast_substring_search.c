@@ -4,11 +4,12 @@
 
 #include "algorithms/fast_substring_search.h"
 
-unsigned long find_substrings(const_string str, const_string substr, unsigned long** result) {
+unsigned long find_substrings(const_string_ptr str, const_string_ptr substr, unsigned long** result) {
+//    TODO: implement via array
     char rare_symbol = '`';
 
-//    construct a string substr + rare_symbol + str
-    string_object *temp = copy_string(substr);
+//    construct a string_ptr substr + rare_symbol + str
+    string *temp = copy_string(substr);
     string_append(temp, rare_symbol);
     string_concat_to(temp, str);
 
@@ -20,6 +21,7 @@ unsigned long find_substrings(const_string str, const_string substr, unsigned lo
         if (p_functions[i] == substr->length)
             num_substr_found++;
 
+//    TODO: replace with array appending (will be faster if allocate extra memory)
     unsigned long* positions = malloc(sizeof(unsigned long) * num_substr_found);
     unsigned long k = 0;
     for (i = substr->length + 1; i < temp->length; i++)
@@ -32,7 +34,7 @@ unsigned long find_substrings(const_string str, const_string substr, unsigned lo
     return num_substr_found;
 }
 
-unsigned long* get_prefix_functions(const_string s) {
+unsigned long* get_prefix_functions(const_string_ptr s) {
     unsigned long* result = malloc(sizeof(unsigned long) * s->length);
     unsigned long i;
     unsigned long init_value = s->length + 1;

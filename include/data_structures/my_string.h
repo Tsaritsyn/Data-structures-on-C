@@ -16,65 +16,65 @@ typedef struct {
     unsigned long length;
     /// the real size of the allocated memory will always be this value + 1 to account for the terminating symbol
     unsigned long allocated_size;
-} string_object;
-typedef string_object* string;
-#define const_string const string_object*
+} string;
+typedef string* string_ptr;
+#define const_string_ptr const string*
 
 
 /**
- * Allocates the memory for a new string_object of given size. The resulting string_object remains empty, however
+ * Allocates the memory for a new string of given size. The resulting string remains empty, however
  */
-string new_empty_string(unsigned long);
+string_ptr new_empty_string(unsigned long);
 
 
 /**
- * Allocates the memory for a new string_object and puts the given value into it. The allocation is just enough to fit the
+ * Allocates the memory for a new string and puts the given value into it. The allocation is just enough to fit the
  * value.
  */
-string new_string(const char*);
+string_ptr new_string(const char*);
 
 
-string copy_string(const_string);
-
-
-/**
- * Deallocates the memory chunk of the given string_object.
- */
-void delete_string(string);
-
-
-void print_string(const_string);
+string_ptr copy_string(const_string_ptr);
 
 
 /**
- * Reallocate the memory for the given string to
+ * Deallocates the memory chunk of the given string.
  */
-void resize_string(string, unsigned long);
+void delete_string(string_ptr);
+
+
+void print_string(const_string_ptr);
 
 
 /**
- * @return a new string_object with the value equal to given strings concatenated
+ * Reallocate the memory for the given string_ptr to
  */
-string string_concat(const_string, const_string);
+void resize_string(string_ptr, unsigned long);
 
 
 /**
- * Concatenates the second string_object to the first one.
+ * @return a new string with the value equal to given strings concatenated
  */
-void string_concat_to(string, const_string);
+string_ptr string_concat(const_string_ptr, const_string_ptr);
 
 
 /**
- * Append the given given string_object with the given symbol.
+ * Concatenates the second string to the first one.
  */
-void string_append(string, char);
+void string_concat_to(string_ptr, const_string_ptr);
+
+
+/**
+ * Append the given given string with the given symbol.
+ */
+void string_append(string_ptr, char);
 
 
 /**
  * @return negative number if the first one is less than the second one, positive number if the first one is bigger
  *  and 0 if they are equal
  */
-int string_cmp(const_string, const_string);
+int string_cmp(const_string_ptr, const_string_ptr);
 
 
 #endif //MY_CLIB_MY_STRING_H

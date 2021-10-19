@@ -8,18 +8,18 @@
 #include "data_structures/my_string.h"
 
 /**
- * Searches for all occurrences of the second string_object in the first one. Writes their starting positions into the given
+ * Searches for all occurrences of the second string in the first one. Writes their starting positions into the given
  * array.
  *
  * @return number of substring occurrences
  */
-unsigned long find_substrings(const_string, const_string, unsigned long**);
+unsigned long find_substrings(const_string_ptr, const_string_ptr, unsigned long**);
 
 /**
  * For each substring computes the maximal length of its prefix that is at the same time its suffix.
  *
  * @return array of the values for each substring, ith value corresponds to the substring ending on the ith position
  */
-unsigned long* get_prefix_functions(const_string);
+unsigned long* get_prefix_functions(const_string_ptr);
 
 #endif //MY_CLIB_FAST_SUBSTRING_SEARCH_H

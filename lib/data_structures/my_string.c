@@ -4,11 +4,9 @@
 
 #include "data_structures/my_string.h"
 
-/// maximum extra number of bytes to be appended during concatenation
-const unsigned long MAX_APPEND_CHUNK = 1024;
 
-string new_empty_string(unsigned long size) {
-    string result = malloc(sizeof(string_object));
+string_ptr new_empty_string(unsigned long size) {
+    string_ptr result = malloc(sizeof(string));
     result->c_string = malloc(size + 1);
     result->c_string[0] = '\0';
     result->length = 0;
@@ -17,8 +15,8 @@ string new_empty_string(unsigned long size) {
 }
 
 
-string new_string(const char* value) {
-    string result = new_empty_string(strlen(value));
+string_ptr new_string(const char* value) {
+    string_ptr result = new_empty_string(strlen(value));
     unsigned long i;
     for (i = 0; (result->c_string[i] = value[i]) != '\0'; i++);
     result->c_string[i] = '\0';
@@ -27,8 +25,8 @@ string new_string(const char* value) {
 }
 
 
-string copy_string(const_string src) {
-    string result = malloc(sizeof(string_object));
+string_ptr copy_string(const_string_ptr src) {
+    string_ptr result = malloc(sizeof(string));
     result->c_string = malloc(src->allocated_size + 1);
     strcpy(result->c_string, src->c_string);
     result->length = src->length;
@@ -37,57 +35,56 @@ string copy_string(const_string src) {
 }
 
 
-void delete_string(string s) {
+void delete_string(string_ptr s) {
     free(s->c_string);
     free(s);
 }
 
 
-void print_string(const_string s) {
+void print_string(const_string_ptr s) {
     printf("%s\n", s->c_string);
 }
 
 
-void resize_string(string s, unsigned long new_size) {
+void resize_string(string_ptr s, unsigned long new_size) {
     if (new_size == s->allocated_size)
         return;
 
-    char* new_c_str = realloc(s->c_string, new_size + 1);
+    s->c_string = realloc(s->c_string, new_size + 1);
     if (new_size < s->allocated_size) {
-        new_c_str[new_size] = '\0';
+        s->c_string[new_size] = '\0';
         s->length = new_size;
     }
-    s->c_string = new_c_str;
     s->allocated_size = new_size;
 }
 
 
-string string_concat(const_string s1, const_string s2) {
-    string dst = new_empty_string(s1->length + s2->length);
+string_ptr string_concat(const_string_ptr s1, const_string_ptr s2) {
+    string_ptr dst = new_empty_string(s1->length + s2->length);
     string_concat_to(dst, s1);
     string_concat_to(dst, s2);
     return dst;
 }
 
 
-void string_concat_to(string dst, const_string src) {
+void string_concat_to(string_ptr dst, const_string_ptr src) {
     if (dst->length + src->length > dst->allocated_size)
-        resize_string(dst, MAX(dst->length + src->length, MIN(dst->length * 2, MAX_APPEND_CHUNK)));
+        resize_string(dst, MAX(dst->length + src->length, MIN(dst->length * 2, MAX_APPEND_LENGTH)));
     strcpy(dst->c_string + dst->length, src->c_string);
     dst->length += src->length;
 }
 
 
-void string_append(string s, char c) {
+void string_append(string_ptr s, char c) {
     if (s->length + 1 > s->allocated_size)
-        resize_string(s, MAX(s->length + 1, MIN(s->length * 2, MAX_APPEND_CHUNK)));
+        resize_string(s, MAX(s->length + 1, MIN(s->length * 2, MAX_APPEND_LENGTH)));
     s->c_string[s->length] = c;
     s->length++;
     s->c_string[s->length] = '\0';
 }
 
 
-int string_cmp(const_string s1, const_string s2) {
+int string_cmp(const_string_ptr s1, const_string_ptr s2) {
     return strcmp(s1->c_string, s2->c_string);
 }
 

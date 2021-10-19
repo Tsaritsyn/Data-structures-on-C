@@ -5,7 +5,7 @@
 #include "algorithms/levenstein_distance.h"
 
 
-unsigned long get_levenstein_distance(const_string s1, const_string s2) {
+unsigned long get_levenstein_distance(const_string_ptr s1, const_string_ptr s2) {
 //    TODO: implement using arrays
 //    TODO: implement via switching two arrays to save memory
 //    allocate the matrix of intermediate results

@@ -8,6 +8,6 @@
 #include "data_structures/my_string.h"
 #include "common.h"
 
-unsigned long get_levenstein_distance(const_string, const_string);
+unsigned long get_levenstein_distance(const_string_ptr, const_string_ptr);
 
 #endif //MY_CLIB_LEVENSTEIN_DISTANCE_H

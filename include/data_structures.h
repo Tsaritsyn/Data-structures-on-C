@@ -8,5 +8,6 @@
 #include "data_structures/BS_tree.h"
 #include "data_structures/set_long.h"
 #include "data_structures/my_string.h"
+#include "data_structures/array.h"
 
 #endif //MY_CLIB_DATA_STRUCTURES_H
