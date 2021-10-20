@@ -21,6 +21,9 @@ typedef array_##type* array_##type##_ptr; \
 array_##type##_ptr new_empty_array_##type(unsigned long size); \
                             \
                             \
+array_##type##_ptr new_constant_array_##type(unsigned long size, type value);\
+                            \
+                            \
 array_##type##_ptr new_array_##type(type c_arr[], unsigned long size);          \
                             \
                             \
@@ -40,7 +43,9 @@ void fill_array_##type##_with(array_##type##_ptr arr, type value);        \
                             \
                             \
 void revert_array_##type(array_##type##_ptr);          \
-
+                            \
+                            \
+int are_arrays_##type##_equal(const array_##type* arr1, const array_##type* arr2);         \
 
 
 declare_array(int)

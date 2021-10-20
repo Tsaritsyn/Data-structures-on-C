@@ -24,19 +24,12 @@ int validate_positive_test_case(const char *s, const char *sub,
     delete_string(str);
     delete_string(substr);
 
-    if (validate_u_long_value(found_positions->length, target_value, testcase_num) == 0)
-        return 0;
-
-    unsigned long i;
-    for (i = 0; i < found_positions->length; i++) {
-        if (validate_u_long_value(found_positions->elements[i], target_array[i], testcase_num) == 0) {
-            delete_array_u_long(found_positions);
-            return 0;
-        }
-    }
+    array_u_long_ptr target_arr = new_array_u_long(target_array, target_value);
+    int passed = are_arrays_u_long_equal(found_positions, target_arr);
 
     delete_array_u_long(found_positions);
-    return 1;
+    delete_array_u_long(target_arr);
+    return passed;
 }
 
 

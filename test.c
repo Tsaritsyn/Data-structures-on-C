@@ -58,6 +58,7 @@ int main() {
 //    full_set_testset();
 
     full_substring_search_testset();
+    full_levenstein_distance_test_set();
 
     return 0;
 }

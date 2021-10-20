@@ -32,5 +32,4 @@ int test_correct_search(void);
 int full_substring_search_testset(void);
 
 
-
 #endif //MY_CLIB_TEST_SUBSTRING_SEARCH_H

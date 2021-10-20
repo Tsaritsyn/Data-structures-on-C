@@ -6,39 +6,54 @@
 
 
 unsigned long get_levenstein_distance(const_string_ptr s1, const_string_ptr s2) {
-//    TODO: implement using arrays
-//    TODO: implement via switching two arrays to save memory
-//    allocate the matrix of intermediate results
-    unsigned long **temp = malloc(sizeof(unsigned long*) * (s1->length + 1));
-    unsigned long i;
-    for (i = 0; i <= s1->length; i++)
-        temp[i] = malloc(sizeof(unsigned long) * (s2->length + 1));
+    if (s1->length == 0)
+        return s2->length;
+    if (s2->length == 0)
+        return s1->length;
 
-//    assign the distances to empty strings
-    for (i = 0; i <= s1->length; i++)
-        temp[i][0] = i;
-    for (i = 0; i <= s2->length; i++)
-        temp[0][i] = i;
-
-    unsigned long j;
-//    here we count i and j from 1, so when accessing the strings, we need to subtract 1
-    for (i = 1; i <= s1->length; i++)
-        for (j = 1; j <= s2->length; j++)
-            if (s1->c_string[i-1] == s2->c_string[j-1])
-                temp[i][j] = temp[i-1][j-1];
-            else
-                temp[i][j] = 1 + MIN3(temp[i-1][j], temp[i-1][j-1], temp[i][j-1]);
-
-    for (i = 0; i <= s1->length; i++) {
-        for (j = 0; j <= s2->length; j++)
-            printf("%lu, ", temp[i][j]);
-        printf("\n");
+//    we will allocate temporary arrays of the length of the shortest string to save memory
+    string_ptr str_short, str_long;
+    if (s1->length < s2->length) {
+        str_short = s1;
+        str_long = s2;
+    }
+    else {
+        str_short = s2;
+        str_long = s1;
     }
 
-    unsigned long result = temp[s1->length][s2->length];
-    for (i = 0; i <= s1->length; i++)
-        free(temp[i]);
-    free(temp);
+//    these arrays will be swapped on each iteration
+    array_u_long_ptr previous_results = new_empty_array_u_long(str_short->length + 1);
+    array_u_long_ptr current_results = new_constant_array_u_long(str_short->length + 1, 0);
+
+//    initialize the distances for an empty second string
+    unsigned long i;
+    for (i = 0; i <= str_short->length; i++)
+        array_u_long_append(previous_results, i);
+
+    unsigned int j;
+    for (i = 1; i <= str_long->length; i++) {
+//        the case of empty first string
+        current_results->elements[0] = i;
+        for (j = 1; j <= str_short->length; j++)
+            if (str_short->c_string[j-1] == str_long->c_string[i-1])
+                current_results->elements[j] = previous_results->elements[j-1];
+            else
+//                minimum of dist(str1[:j-1], str2[:j]), dist(str1[:j], str2[:j-1]) and dist(str1[:j-1], str2[:j-1])
+                current_results->elements[j] = 1 + MIN3(previous_results->elements[j],
+                                                        previous_results->elements[j-1],
+                                                        current_results->elements[j-1]);
+
+//        swap the arrays, so current results will be used as the previous ones on the next iteration
+        array_u_long_ptr temp = previous_results;
+        previous_results = current_results;
+        current_results = temp;
+    }
+
+//    remember, that the arrays have been swapped, so the last results are in the previous_results
+    unsigned long result = previous_results->elements[previous_results->length - 1];
+    delete_array_u_long(current_results);
+    delete_array_u_long(previous_results);
     return result;
 }
 

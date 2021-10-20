@@ -7,6 +7,7 @@
 
 #include "data_structures/my_string.h"
 #include "common.h"
+#include "data_structures/array.h"
 
 unsigned long get_levenstein_distance(const_string_ptr, const_string_ptr);
 
