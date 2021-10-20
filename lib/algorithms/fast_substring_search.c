@@ -8,6 +8,9 @@ unsigned long find_substrings(const_string_ptr str, const_string_ptr substr, uns
 //    TODO: implement via array
     char rare_symbol = '`';
 
+    if (str->length == 0 || substr->length == 0)
+        return 0;
+
 //    construct a string_ptr substr + rare_symbol + str
     string *temp = copy_string(substr);
     string_append(temp, rare_symbol);
@@ -17,7 +20,7 @@ unsigned long find_substrings(const_string_ptr str, const_string_ptr substr, uns
 
     unsigned long num_substr_found = 0;
     unsigned long i;
-    for (i = substr->length + 2; i < temp->length; i++)
+    for (i = substr->length + 1; i < temp->length; i++)
         if (p_functions[i] == substr->length)
             num_substr_found++;
 
@@ -27,10 +30,13 @@ unsigned long find_substrings(const_string_ptr str, const_string_ptr substr, uns
     for (i = substr->length + 1; i < temp->length; i++)
         if (p_functions[i] == substr->length)
             positions[k++] = i - 2 * substr->length;
-    result[0] = positions;
+
+    if (result != NULL)
+        *result = positions;
 
     delete_string(temp);
     free(p_functions);
+
     return num_substr_found;
 }
 

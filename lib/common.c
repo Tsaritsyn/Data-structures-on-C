@@ -45,3 +45,13 @@ print_value(u_short)
 print_value(u_char)
 print_value(u_long)
 
+
+char* strupr(const char* s) {
+    unsigned long len_s = strlen(s);
+    char* res = malloc(len_s + 1);
+    unsigned long i;
+    for (i = 0; i < len_s; i++)
+        res[i] = toupper(s[i]);
+    res[i] = '\0';
+    return res;
+}

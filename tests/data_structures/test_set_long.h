@@ -9,7 +9,7 @@
 #include "data_structures/set_long.h"
 
 
-int test_set_creation() {
+int test_set_creation(void) {
 
     printf("\nSet creation test started.\n");
 

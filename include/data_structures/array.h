@@ -17,6 +17,7 @@ typedef struct { \
 } array_##type;             \
 typedef array_##type* array_##type##_ptr; \
                             \
+                            \
 array_##type##_ptr new_empty_array_##type(unsigned long size); \
                             \
                             \

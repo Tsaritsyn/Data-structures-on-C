@@ -8,6 +8,8 @@
 #include <string.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 
 #define MAX(a, b) ((a > b) ? a : b)
@@ -64,5 +66,6 @@ declare_print_value(u_char)
 declare_print_value(u_long)
 
 
+char* strupr(const char*);
 
 #endif //MY_CLIB_COMMON_H

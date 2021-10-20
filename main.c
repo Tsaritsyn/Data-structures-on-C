@@ -59,8 +59,7 @@ void test_arrays(){
 }
 
 
-int main() {
-
+void test_gcs() {
     int a[] = {0, 1, 5, 9, 11, 7, -2, 0, 4};
     array_int_ptr arr1 = new_array_int(a, sizeof(a) / sizeof(a[0]));
 
@@ -76,6 +75,12 @@ int main() {
     delete_array_int(arr1);
     delete_array_int(arr2);
     delete_array_int(gcs);
+}
+
+
+int main() {
+
+
 
     return 0;
 }
