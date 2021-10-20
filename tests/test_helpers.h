@@ -11,7 +11,7 @@
 #include "common.h"
 
 
-int validate_long_value(long value, long target_value, unsigned int cur_check);
+int validate_u_long_value(unsigned long value, unsigned long target_value, unsigned int cur_check);
 
 
 void print_test_series_start_message(const char* test_series_name);

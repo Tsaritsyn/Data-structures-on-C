@@ -68,6 +68,9 @@ string_ptr string_concat(const_string_ptr s1, const_string_ptr s2) {
 
 
 void string_concat_to(string_ptr dst, const_string_ptr src) {
+    if (src->length == 0)
+        return;
+
     if (dst->length + src->length > dst->allocated_size)
         resize_string(dst, MAX(dst->length + src->length, MIN(dst->length * 2, MAX_APPEND_LENGTH)));
     strcpy(dst->c_string + dst->length, src->c_string);

@@ -12,7 +12,7 @@ void test_substrings() {
 
     string_ptr substr = new_string("cabafabacabad");
     unsigned long* positions = NULL;
-    unsigned long num_of_occurrences = find_substrings(s, substr, &positions);
+    unsigned long num_of_occurrences = find_substrings(s, substr);
     printf("%lu occurrences found:\n", num_of_occurrences);
     for (i = 0; i < num_of_occurrences; i++)
         printf("%lu ", positions[i]);

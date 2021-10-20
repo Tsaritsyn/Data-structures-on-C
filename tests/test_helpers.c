@@ -5,7 +5,7 @@
 #include "test_helpers.h"
 
 
-int validate_long_value(long value, long target_value, unsigned int cur_check) {
+int validate_u_long_value(unsigned long value, unsigned long target_value, unsigned int cur_check) {
     if (value == target_value)
         return 1;
     else {

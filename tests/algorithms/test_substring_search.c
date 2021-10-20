@@ -7,10 +7,12 @@
 
 int validate_negative_test_case(const char *s, const char *sub, unsigned int testcase_num) {
     string_ptr str = new_string(s), substr = new_string(sub);
-    unsigned long substr_num = find_substrings(str, substr, NULL);
+    array_u_long_ptr found_positions = find_substrings(str, substr);
+    unsigned long num_substr_found = found_positions->length;
     delete_string(str);
     delete_string(substr);
-    return validate_long_value(substr_num, 0, testcase_num);
+    delete_array_u_long(found_positions);
+    return validate_u_long_value(num_substr_found, 0, testcase_num);
 }
 
 
@@ -18,21 +20,22 @@ int validate_positive_test_case(const char *s, const char *sub,
                                 unsigned long target_value, unsigned long target_array[],
                                 unsigned int testcase_num) {
     string_ptr str = new_string(s), substr = new_string(sub);
-    unsigned long * result = NULL;
-    unsigned long substr_num = find_substrings(str, substr, &result);
+    array_u_long_ptr found_positions = find_substrings(str, substr);
     delete_string(str);
     delete_string(substr);
 
-    if (validate_long_value(substr_num, target_value, testcase_num) == 0)
+    if (validate_u_long_value(found_positions->length, target_value, testcase_num) == 0)
         return 0;
 
     unsigned long i;
-    for (i = 0; i < substr_num; i++) {
-        if (validate_long_value(result[i], target_array[i], testcase_num) == 0)
+    for (i = 0; i < found_positions->length; i++) {
+        if (validate_u_long_value(found_positions->elements[i], target_array[i], testcase_num) == 0) {
+            delete_array_u_long(found_positions);
             return 0;
+        }
     }
 
-    free(result);
+    delete_array_u_long(found_positions);
     return 1;
 }
 

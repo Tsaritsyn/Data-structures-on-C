@@ -4,60 +4,49 @@
 
 #include "algorithms/fast_substring_search.h"
 
-unsigned long find_substrings(const_string_ptr str, const_string_ptr substr, unsigned long** result) {
-//    TODO: implement via array
+array_u_long_ptr find_substrings(const_string_ptr str, const_string_ptr substr) {
     char rare_symbol = '`';
 
     if (str->length == 0 || substr->length == 0)
-        return 0;
+        return new_empty_array_u_long(0);
 
 //    construct a string_ptr substr + rare_symbol + str
-    string *temp = copy_string(substr);
+    string_ptr temp = copy_string(substr);
     string_append(temp, rare_symbol);
     string_concat_to(temp, str);
 
-    unsigned long* p_functions = get_prefix_functions(temp);
+    array_u_long_ptr p_functions = get_prefix_functions(temp);
 
-    unsigned long num_substr_found = 0;
+    array_u_long_ptr result = new_empty_array_u_long(0);
     unsigned long i;
-    for (i = substr->length + 1; i < temp->length; i++)
-        if (p_functions[i] == substr->length)
-            num_substr_found++;
-
-//    TODO: replace with array appending (will be faster if allocate extra memory)
-    unsigned long* positions = malloc(sizeof(unsigned long) * num_substr_found);
-    unsigned long k = 0;
-    for (i = substr->length + 1; i < temp->length; i++)
-        if (p_functions[i] == substr->length)
-            positions[k++] = i - 2 * substr->length;
-
-    if (result != NULL)
-        *result = positions;
+    for (i = 0; i < p_functions->length; i++)
+        if (p_functions->elements[i] == substr->length)
+            array_u_long_append(result, i - 2 * substr->length);
 
     delete_string(temp);
-    free(p_functions);
+    delete_array_u_long(p_functions);
 
-    return num_substr_found;
+    return result;
 }
 
-unsigned long* get_prefix_functions(const_string_ptr s) {
-    unsigned long* result = malloc(sizeof(unsigned long) * s->length);
+array_u_long_ptr get_prefix_functions(const_string_ptr s) {
+    array_u_long_ptr result = new_empty_array_u_long(s->length);
     unsigned long i;
     unsigned long init_value = s->length + 1;
-    result[0] = 0;
+    array_u_long_append(result, 0);
 
     for (i = 1; i < s->length; i++) {
-        unsigned long p = result[i-1];
+        unsigned long p = result->elements[i-1];
         do {
             if (s->c_string[i] == s->c_string[p]) {
                 p++;
                 break;
             }
             else {
-                p = (p != 0) ? result[p-1] : 0;
+                p = (p != 0) ? result->elements[p-1] : 0;
             }
         } while (p != 0);
-        result[i] = p;
+        array_u_long_append(result, p);
     }
 
     return result;
