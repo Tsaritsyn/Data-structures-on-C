@@ -59,6 +59,7 @@ int main() {
 
     full_substring_search_testset();
     full_levenstein_distance_test_set();
+    full_gcs_test_set();
 
     return 0;
 }

@@ -12,15 +12,8 @@ unsigned long get_levenstein_distance(const_string_ptr s1, const_string_ptr s2) 
         return s1->length;
 
 //    we will allocate temporary arrays of the length of the shortest string to save memory
-    string_ptr str_short, str_long;
-    if (s1->length < s2->length) {
-        str_short = s1;
-        str_long = s2;
-    }
-    else {
-        str_short = s2;
-        str_long = s1;
-    }
+    const_string_ptr str_short = (s1->length < s2->length) ? s1 : s2;
+    const_string_ptr str_long = (s1->length < s2->length) ? s2 : s1;
 
 //    these arrays will be swapped on each iteration
     array_u_long_ptr previous_results = new_empty_array_u_long(str_short->length + 1);

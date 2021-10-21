@@ -66,7 +66,7 @@ void test_gcs() {
     int b[] = {2, 0, -3, 10, 5, 9, 8, 7, 6, 10, 0, -2, 1};
     array_int_ptr arr2 = new_array_int(b, sizeof(b) / sizeof(b[0]));
 
-    array_int_ptr gcs = greatest_common_subsequence(arr1, arr2);
+    array_int_ptr gcs = greatest_common_int_subsequence(arr1, arr2);
 
     print_array_int(arr1);
     print_array_int(arr2);

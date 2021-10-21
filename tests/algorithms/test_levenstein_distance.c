@@ -23,7 +23,7 @@ int test_empty_string(void) {
 }
 
 
-int test_symmetry(void) {
+int test_distance_symmetry(void) {
     unsigned int checks_total = 0, checks_passed = 0;
     checks_passed += validate_test_case("abcdef", "bcd", 3, checks_total++);
     checks_passed += validate_test_case("bcd", "abcdef", 3, checks_total++);
@@ -59,7 +59,7 @@ int full_levenstein_distance_test_set(void) {
     num_passed += test_empty_string();
     num_total++;
 
-    num_passed += test_symmetry();
+    num_passed += test_distance_symmetry();
     num_total++;
 
     num_passed += test_equal_strings();

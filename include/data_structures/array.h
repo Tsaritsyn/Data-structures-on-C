@@ -24,7 +24,7 @@ array_##type##_ptr new_empty_array_##type(unsigned long size); \
 array_##type##_ptr new_constant_array_##type(unsigned long size, type value);\
                             \
                             \
-array_##type##_ptr new_array_##type(type c_arr[], unsigned long size);          \
+array_##type##_ptr new_array_##type(const type c_arr[], unsigned long size);          \
                             \
                             \
 void delete_array_##type(array_##type##_ptr arr);      \

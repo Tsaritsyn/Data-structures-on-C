@@ -10,70 +10,75 @@
 #define UP_LEFT 2
 
 
-array_int_ptr greatest_common_subsequence(const array_int* arr1, const array_int* arr2) {
-//    TODO: replace temp with two switching arrays
-//    create a matrix for temporary results
-    unsigned long **temp = malloc(sizeof(unsigned long*) * (arr1->length + 1));
-    unsigned int i, j;
-    for (i = 0; i <= arr1->length; i++)
-        temp[i] = malloc(sizeof(unsigned long) * (arr2->length + 1));
-
-//    initialize it with border values, given that if any of the arrays is empty, the common sequence is empty as well
-    for (i = 0; i <= arr1->length; i++)
-        temp[i][0] = 0;
-    for (j = 0; j <= arr2->length; j++)
-        temp[0][j] = 0;
-
-//    creating a temporary matrix for transitions
-//    we do not initialize its border values, because we will stop when reach them, so they do not matter
-    short **trans = malloc(sizeof(short*) * (arr1->length + 1));
-    for (i = 0; i <= arr1->length; i++)
-        trans[i] = malloc(sizeof(short) * (arr2->length + 1));
-
-//    start the algorithm
-    for (i = 1; i <= arr1->length; i++)
-        for (j = 1; j <= arr2->length; j++)
-            if (arr1->elements[i - 1] == arr2->elements[j - 1]) {
-                temp[i][j] = temp[i - 1][j - 1] + 1;
-                trans[i][j] = UP_LEFT;
-            } else if (temp[i - 1][j] >= temp[i][j - 1]) {
-                temp[i][j] = temp[i - 1][j];
-                trans[i][j] = UP;
-            } else {
-                temp[i][j] = temp[i][j - 1];
-                trans[i][j] = LEFT;
-            }
-
-    i = arr1->length;
-    j = arr2->length;
-    unsigned long resulting_length = temp[i][j];
-    array_int_ptr result = new_empty_array_int(resulting_length);
-    while(i > 0 && j > 0) {
-        switch (trans[i][j]) {
-            case UP_LEFT:
-                assert(arr1->elements[i-1] == arr2->elements[j-1]);
-                array_int_append(result, arr1->elements[i-1]);
-                i--; j--;
-                break;
-            case UP:
-                i--;
-                break;
-            case LEFT:
-                j--;
-                break;
-            default:
-                break;
-        }
-    }
-
-    revert_array_int(result);
-
-    for (i = 0; i <= arr1->length; i++) {
-        free(temp[i]);
-        free(trans[i]);
-    }
-    free(temp);
-    free(trans);
-
-    return result;
+//    TODO: replace trans with 2d array
+#define implement_gcs_search(type) \
+array_##type##_ptr greatest_common_##type##_subsequence(const array_##type* arr1, const array_##type* arr2) { \
+    const array_##type* short_array = (arr1->length < arr2->length) ? arr1 : arr2;                       \
+    const array_##type* long_array = (arr1->length < arr2->length) ? arr2 : arr1;                        \
+                                   \
+    array_##type##_ptr previous_results = new_constant_array_##type(short_array->length + 1, 0);              \
+    array_##type##_ptr current_results = new_constant_array_##type(short_array->length + 1, 0);               \
+                                   \
+    char **trans = malloc(sizeof(char*) * (long_array->length + 1));                                   \
+    unsigned long i, j;             \
+    for (i = 0; i <= long_array->length; i++)                                                            \
+        trans[i] = malloc(sizeof(char) * (short_array->length + 1));                                    \
+                                   \
+    for (i = 1; i <= long_array->length; i++) {                                                          \
+        for (j = 1; j <= short_array->length; j++)                                                       \
+            if (long_array->elements[i - 1] == short_array->elements[j - 1]) {                           \
+                current_results->elements[j] = 1 + previous_results->elements[j - 1];                    \
+                trans[i][j] = UP_LEFT;                                                                   \
+            } else if (previous_results->elements[j] >= current_results->elements[j - 1]) {              \
+                current_results->elements[j] = previous_results->elements[j];                            \
+                trans[i][j] = UP;  \
+            } else {               \
+                current_results->elements[j] = current_results->elements[j - 1];                         \
+                trans[i][j] = LEFT;\
+            }                      \
+                                   \
+        array_##type##_ptr temp = previous_results;                                                           \
+        previous_results = current_results;                                                              \
+        current_results = temp;    \
+    }                              \
+                                   \
+    unsigned long resulting_length = previous_results->elements[previous_results->length - 1];           \
+    delete_array_##type(previous_results);                                                                  \
+    delete_array_##type(current_results);                                                                   \
+                                   \
+    array_##type##_ptr result = new_empty_array_##type(resulting_length);                                        \
+    i = long_array->length;        \
+    j = short_array->length;       \
+    while(i > 0 && j > 0) {        \
+        switch (trans[i][j]) {     \
+            case UP_LEFT:          \
+                assert(long_array->elements[i-1] == short_array->elements[j-1]);                         \
+                array_##type##_append(result, long_array->elements[i-1]);                                     \
+                i--; j--;          \
+                break;             \
+            case UP:               \
+                i--;               \
+                break;             \
+            case LEFT:             \
+                j--;               \
+                break;             \
+            default:               \
+                break;             \
+        }                          \
+    }                              \
+    free(trans);                   \
+                                   \
+    revert_array_##type(result);      \
+    return result;                 \
 }
+
+implement_gcs_search(int)
+implement_gcs_search(short)
+implement_gcs_search(char)
+implement_gcs_search(long)
+implement_gcs_search(float)
+implement_gcs_search(double)
+implement_gcs_search(u_int)
+implement_gcs_search(u_short)
+implement_gcs_search(u_char)
+implement_gcs_search(u_long)

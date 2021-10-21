@@ -7,5 +7,6 @@
 
 #include "algorithms/test_substring_search.h"
 #include "algorithms/test_levenstein_distance.h"
+#include "algorithms/test_subsequence_search.h"
 
 #endif //MY_CLIB_ALGORITHMS_TESTS_H

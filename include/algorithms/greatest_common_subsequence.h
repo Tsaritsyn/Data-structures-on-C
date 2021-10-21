@@ -12,6 +12,18 @@
 /**
  * @return the longest common subsequence of two given arrays
  */
-array_int_ptr greatest_common_subsequence(const array_int*, const array_int*);
+#define declare_gcs_search(type) \
+array_##type##_ptr greatest_common_##type##_subsequence(const array_##type *arr1, const array_##type *arr2);
+
+declare_gcs_search(int)
+declare_gcs_search(short)
+declare_gcs_search(char)
+declare_gcs_search(long)
+declare_gcs_search(float)
+declare_gcs_search(double)
+declare_gcs_search(u_int)
+declare_gcs_search(u_short)
+declare_gcs_search(u_char)
+declare_gcs_search(u_long)
 
 #endif //MY_CLIB_GREATEST_COMMON_SUBSEQUENCE_H

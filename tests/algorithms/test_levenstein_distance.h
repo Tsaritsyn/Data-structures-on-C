@@ -15,7 +15,7 @@ int validate_test_case(const char *s1, const char* s2, unsigned long target_valu
 int test_empty_string(void);
 
 
-int test_symmetry(void);
+int test_distance_symmetry(void);
 
 
 int test_equal_strings(void);

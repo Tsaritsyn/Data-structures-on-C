@@ -76,7 +76,7 @@ void revert_array_##type(array_##type##_ptr arr) {        \
 }                             \
                               \
                               \
-array_##type##_ptr new_array_##type(type c_arr[], unsigned long size) {  \
+array_##type##_ptr new_array_##type(const type c_arr[], unsigned long size) {  \
     unsigned long i;           \
     array_##type##_ptr result = new_empty_array_##type(size);           \
     for (i = 0; i < size; i++)\
