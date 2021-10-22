@@ -18,24 +18,26 @@
 #define MIN3(a, b, c) (a < MIN(b, c) ? a : MIN(b, c))
 #define MAX3(a, b, c) (a > MAX(b, c) ? a : MAX(b, c))
 
+#define SWAP(type, a, b) type temp = a; a = b; b = temp;
+
 
 /// maximum extra number of elements to be appended during concatenation
 extern const unsigned long MAX_APPEND_LENGTH;
 
 
 /// template function for numeric value comparison
-#define declare_comparison_finction(type) int compare_##type(const type*, const type*);
+#define declare_comparison_function(type) int compare_##type(type, type);
 
-declare_comparison_finction(int)
-declare_comparison_finction(short)
-declare_comparison_finction(char)
-declare_comparison_finction(long)
-declare_comparison_finction(float)
-declare_comparison_finction(double)
-declare_comparison_finction(u_int)
-declare_comparison_finction(u_short)
-declare_comparison_finction(u_char)
-declare_comparison_finction(u_long)
+declare_comparison_function(int)
+declare_comparison_function(short)
+declare_comparison_function(char)
+declare_comparison_function(long)
+declare_comparison_function(float)
+declare_comparison_function(double)
+declare_comparison_function(u_int)
+declare_comparison_function(u_short)
+declare_comparison_function(u_char)
+declare_comparison_function(u_long)
 
 
 /// formatting strings for all numeric values

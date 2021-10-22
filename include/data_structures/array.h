@@ -10,10 +10,11 @@
 
 
 #define declare_array(type) \
+                            \
 typedef struct { \
     unsigned long length, allocated_size; \
     type *elements;                  \
-    int (*compare_elements)(const type*, const type*); \
+    int (*compare_elements)(const type, const type); \
 } array_##type;             \
 typedef array_##type* array_##type##_ptr; \
                             \

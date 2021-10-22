@@ -47,6 +47,7 @@ int test_empty_arrays(void) {
     checks_passed += validate_array_int_test_case(arr1, arr2, empty_target_array, checks_total++);
     delete_array_int(arr1);
     delete_array_int(arr2);
+    delete_array_int(empty_target_array);
 
     return validate_test("empty array subsequence", checks_total, checks_passed);
 }
@@ -70,6 +71,7 @@ int test_for_swapped_arrays(void) {
     checks_passed += validate_array_int_test_case(arr1, arr2, target_array, checks_total++);
     delete_array_int(arr1);
     delete_array_int(arr2);
+    delete_array_int(target_array);
 
     return validate_test("subsequence for swapped arrays", checks_total, checks_passed);
 }
@@ -85,6 +87,7 @@ int test_equal_arrays(void) {
     checks_passed += validate_array_int_test_case(arr1, arr2, target_array, checks_total++);
     delete_array_int(arr1);
     delete_array_int(arr2);
+    delete_array_int(target_array);
 
     return validate_test("subsequence for equal arrays", checks_total, checks_passed);
 }
@@ -109,6 +112,7 @@ int test_array_with_no_common_elements(void) {
     checks_passed += validate_array_int_test_case(arr1, arr2, empty_target_array, checks_total++);
     delete_array_int(arr1);
     delete_array_int(arr2);
+    delete_array_int(empty_target_array);
 
     return validate_test("subsequence for arrays with no common elements", checks_total, checks_passed);
 }
@@ -138,6 +142,8 @@ int test_correct_arrays(void) {
     checks_passed += validate_array_char_test_case(arr3, arr4, target_array_c, checks_total++);
     delete_array_char(arr3);
     delete_array_char(arr4);
+    delete_array_int(target_array);
+    delete_array_int(target_array_c);
 
     return validate_test("subsequence for swapped arrays", checks_total, checks_passed);
 }

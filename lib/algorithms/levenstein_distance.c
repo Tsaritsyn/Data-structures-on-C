@@ -38,9 +38,7 @@ unsigned long get_levenstein_distance(const_string_ptr s1, const_string_ptr s2) 
                                                         current_results->elements[j-1]);
 
 //        swap the arrays, so current results will be used as the previous ones on the next iteration
-        array_u_long_ptr temp = previous_results;
-        previous_results = current_results;
-        current_results = temp;
+        SWAP(array_u_long_ptr, previous_results, current_results)
     }
 
 //    remember, that the arrays have been swapped, so the last results are in the previous_results

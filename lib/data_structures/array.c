@@ -91,7 +91,7 @@ int are_arrays_##type##_equal(const array_##type* arr1, const array_##type* arr2
                               \
     unsigned long i;          \
     for (i = 0; i < arr1->length; i++)                          \
-        if (arr1->elements[i] != arr2->elements[i])             \
+        if (arr1->compare_elements(arr1->elements[i], arr2->elements[i]) != 0)             \
             return 0;         \
     return 1;                 \
 }                             \

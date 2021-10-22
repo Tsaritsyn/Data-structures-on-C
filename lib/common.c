@@ -10,9 +10,9 @@ const unsigned long MAX_APPEND_LENGTH = 1024;
 
 /// template function for numeric value comparison
 #define numeric_comparison_function(type) \
-int compare_##type(const type* a, const type* b) { \
-    if (*a > *b) return 1; \
-    else if (*a < *b) return -1; \
+int compare_##type(const type a, const type b) { \
+    if (a > b) return 1; \
+    else if (a < b) return -1; \
     else return 0; \
 }
 
