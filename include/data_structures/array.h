@@ -5,6 +5,8 @@
 #ifndef MY_CLIB_ARRAY_H
 #define MY_CLIB_ARRAY_H
 
+#include <math.h>
+
 #include "common.h"
 #include "my_string.h"
 
@@ -46,7 +48,13 @@ void fill_array_##type##_with(array_##type##_ptr arr, type value);        \
 void revert_array_##type(array_##type##_ptr);          \
                             \
                             \
-int are_arrays_##type##_equal(const array_##type* arr1, const array_##type* arr2);         \
+int are_arrays_##type##_equal(const array_##type* arr1, const array_##type* arr2);    \
+                            \
+                            \
+int compare_array_##type(const array_##type* arr1, const array_##type* arr2);\
+\
+\
+array_##type##_ptr new_range_##type(type start, type end, type step);\
 
 
 declare_array(int)

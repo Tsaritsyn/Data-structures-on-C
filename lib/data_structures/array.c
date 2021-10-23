@@ -95,7 +95,69 @@ int are_arrays_##type##_equal(const array_##type* arr1, const array_##type* arr2
             return 0;         \
     return 1;                 \
 }                             \
-
+                              \
+                              \
+int compare_array_##type(const array_##type* arr1, const array_##type* arr2) {          \
+    unsigned int i;           \
+    int element_relation;     \
+    for (i = 0; i < MIN(arr1->length, arr2->length); i++) {     \
+        element_relation = arr1->compare_elements(arr1->elements[i], arr2->elements[i]);   \
+        if (element_relation != 0)                              \
+            return element_relation;                            \
+    }                         \
+                              \
+    if (arr1->length < arr2->length)                            \
+        return -1;            \
+    else if (arr1->length > arr2->length)                       \
+        return 1;             \
+    else                      \
+        return 0;             \
+}\
+\
+\
+array_##type##_ptr new_range_##type(type start, type _end, type step) {\
+    if (step == 0) {\
+        printf("Cannot create a range with step 0\n");\
+        return new_empty_array_##type(0);\
+    }\
+    \
+    array_##type##_ptr result = new_empty_array_##type(0);\
+    type value = start;\
+    if (step > 0) {\
+        if (_end < start) {\
+            printf("Cannot create a range from ");\
+            print_##type(start);\
+            printf(" to ");\
+            print_##type(_end);\
+            printf(" with step ");\
+            print_##type(step);\
+            printf("\n");\
+            return result;\
+        }\
+\
+        while (value < _end) {\
+            array_##type##_append(result, value);               \
+            value += step;                          \
+        }                          \
+}\
+    else \
+        if (_end > start) {\
+            printf("Cannot create a range from ");\
+            print_##type(start);\
+            printf(" to ");\
+            print_##type(_end);\
+            printf(" with step ");\
+            print_##type(step);\
+            printf("\n");\
+            return result;\
+        }\
+\
+        while (value > _end) {\
+            array_##type##_append(result, value);               \
+            value -= step;                          \
+        }\
+    return result;\
+}
 
 implement_array(int)
 implement_array(short)
