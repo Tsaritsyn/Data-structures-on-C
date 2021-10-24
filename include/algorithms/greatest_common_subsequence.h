@@ -5,8 +5,11 @@
 #ifndef MY_CLIB_GREATEST_COMMON_SUBSEQUENCE_H
 #define MY_CLIB_GREATEST_COMMON_SUBSEQUENCE_H
 
-#include "data_structures/array.h"
+
 #include <assert.h>
+
+#include "data_structures/array.h"
+#include "data_structures/matrix.h"
 
 
 /**

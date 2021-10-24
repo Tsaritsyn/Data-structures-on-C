@@ -23,40 +23,44 @@ array_int_ptr greatest_common_int_subsequence(const array_int* arr1, const array
 
 //    auxiliary transition matrix that will help us to restore the subsequences themselves by keeping the link
 //    to the previous item
-    char **trans = malloc(sizeof(char*) * (long_array->length + 1));
-    unsigned long i, j;
-    for (i = 0; i <= long_array->length; i++)
-        trans[i] = malloc(sizeof(char) * (short_array->length + 1));
+    matrix_char_ptr trans = new_empty_matrix_char(long_array->length + 1);
+    matrix_char_append_row(trans, new_constant_array_char(short_array->length + 1, -1));
 
 //    the main loop
+    unsigned long i, j;
     for (i = 1; i <= long_array->length; i++) {
+        array_char_ptr cur_trans = new_empty_array_char(short_array->length + 1);
+        array_char_append(cur_trans, -1);
         for (j = 1; j <= short_array->length; j++)
 //            if the current elements of the given arrays are equal, we will include them in the gcs
 //            in this case, the gcs consists of this value plus the gcs of the subarrays up to these elements
             if (long_array->elements[i - 1] == short_array->elements[j - 1]) {
                 current_results->elements[j] = 1 + previous_results->elements[j - 1];
-                trans[i][j] = UP_LEFT;
+                array_char_append(cur_trans, UP_LEFT);
 //            otherwise, the current gcs is the longest of two: if we remove the last element from the first array or
 //            from the second one
             } else if (previous_results->elements[j] >= current_results->elements[j - 1]) {
                 current_results->elements[j] = previous_results->elements[j];
-                trans[i][j] = UP;
+                array_char_append(cur_trans, UP);
             } else {
                 current_results->elements[j] = current_results->elements[j - 1];
-                trans[i][j] = LEFT;
+                array_char_append(cur_trans, LEFT);
             }
-        SWAP(array_int_ptr, previous_results, current_results)                                                 \
+        matrix_char_append_row(trans, cur_trans);
+        SWAP(array_int_ptr, previous_results, current_results)
     }
 
-//    restore the gcs from the transition matrix
+//    get the length of the resulting gcs
     unsigned long resulting_length = previous_results->elements[previous_results->length - 1];
     delete_array(previous_results);
     delete_array(current_results);
+
+//    restore the gcs from the transition matrix
     array_int_ptr result = new_empty_array_int(resulting_length);                                        \
     i = long_array->length;
     j = short_array->length;
     while(i > 0 && j > 0) {
-        switch (trans[i][j]) {
+        switch (trans->rows[i]->elements[j]) {
 //            this is the case when we had two equal elements, and now we add this value to the gcs
             case UP_LEFT:
                 assert(long_array->elements[i-1] == short_array->elements[j-1]);
@@ -75,9 +79,7 @@ array_int_ptr greatest_common_int_subsequence(const array_int* arr1, const array
         }
     }
 
-    for (i = 0; i <= long_array->length; i++)
-        free(trans[i]);
-    free(trans);
+    delete_matrix(trans);
 
 //    now the gsc is written in the reversed order, so we revert it
     revert_array_int(result);
@@ -94,26 +96,28 @@ array_##type##_ptr greatest_common_##type##_subsequence(const array_##type* arr1
     array_##type##_ptr previous_results = new_constant_array_##type(short_array->length + 1, 0);              \
     array_##type##_ptr current_results = new_constant_array_##type(short_array->length + 1, 0);               \
                                    \
-    char **trans = malloc(sizeof(char*) * (long_array->length + 1));                                   \
+    matrix_char_ptr trans = new_empty_matrix_char(long_array->length + 1);\
+    matrix_char_append_row(trans, new_constant_array_char(short_array->length + 1, -1));                      \
+    \
     unsigned long i, j;             \
-    for (i = 0; i <= long_array->length; i++)                                                            \
-        trans[i] = malloc(sizeof(char) * (short_array->length + 1));                                    \
-                                   \
-    for (i = 1; i <= long_array->length; i++) {                                                          \
-        for (j = 1; j <= short_array->length; j++)                                                       \
-            if (long_array->elements[i - 1] == short_array->elements[j - 1]) {                           \
-                current_results->elements[j] = 1 + previous_results->elements[j - 1];                    \
-                trans[i][j] = UP_LEFT;                                                                   \
-            } else if (previous_results->elements[j] >= current_results->elements[j - 1]) {              \
-                current_results->elements[j] = previous_results->elements[j];                            \
-                trans[i][j] = UP;  \
-            } else {               \
-                current_results->elements[j] = current_results->elements[j - 1];                         \
-                trans[i][j] = LEFT;\
+    for (i = 1; i <= long_array->length; i++) {\
+        array_char_ptr cur_trans = new_empty_array_char(short_array->length + 1);\
+        array_char_append(cur_trans, -1);\
+        for (j = 1; j <= short_array->length; j++) {\
+            if (long_array->elements[i - 1] == short_array->elements[j - 1]) {\
+                current_results->elements[j] = 1 + previous_results->elements[j - 1];\
+                array_char_append(cur_trans, UP_LEFT);\
+            } else if (previous_results->elements[j] >= current_results->elements[j - 1]) {\
+                current_results->elements[j] = previous_results->elements[j];\
+                array_char_append(cur_trans, UP);\
+            } else {\
+                current_results->elements[j] = current_results->elements[j - 1];\
+                array_char_append(cur_trans, LEFT);\
             }                      \
-                                   \
-        SWAP(array_##type##_ptr, previous_results, current_results)                                                 \
-    }                              \
+        }                       \
+        matrix_char_append_row(trans, cur_trans);\
+        SWAP(array_##type##_ptr, previous_results, current_results)\
+    }\
                                    \
     unsigned long resulting_length = previous_results->elements[previous_results->length - 1];           \
     delete_array(previous_results);                                                                  \
@@ -123,7 +127,7 @@ array_##type##_ptr greatest_common_##type##_subsequence(const array_##type* arr1
     i = long_array->length;        \
     j = short_array->length;       \
     while(i > 0 && j > 0) {        \
-        switch (trans[i][j]) {     \
+        switch (trans->rows[i]->elements[j]) {     \
             case UP_LEFT:          \
                 assert(long_array->elements[i-1] == short_array->elements[j-1]);                         \
                 array_##type##_append(result, long_array->elements[i-1]);                                     \
@@ -139,9 +143,7 @@ array_##type##_ptr greatest_common_##type##_subsequence(const array_##type* arr1
                 break;             \
         }                          \
     }                              \
-    for (i = 0; i <= long_array->length; i++)                                                                 \
-        free(trans[i]);            \
-    free(trans);                   \
+    delete_matrix(trans);                 \
                                    \
     revert_array_##type(result);      \
     return result;                 \
