@@ -24,7 +24,7 @@ array_u_long_ptr find_substrings(const_string_ptr str, const_string_ptr substr) 
             array_u_long_append(result, i - 2 * substr->length);
 
     delete_string(temp);
-    delete_array_u_long(p_functions);
+    delete_array(p_functions);
 
     return result;
 }

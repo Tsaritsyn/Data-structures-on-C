@@ -74,7 +74,7 @@ int matrix_int_append_column(matrix_int_ptr M, array_int_ptr column);
 /**
  * Deallocates the memory.
  */
-void delete_matrix_int(matrix_int_ptr);
+void delete_matrix(void*);
 
 
 /**
@@ -130,9 +130,6 @@ int matrix_##type##_append_row(matrix_##type##_ptr M, array_##type##_ptr row);\
 \
 \
 int matrix_##type##_append_column(matrix_##type##_ptr M, array_##type##_ptr column);\
-\
-\
-void delete_matrix_##type(matrix_##type##_ptr);\
 \
 \
 void print_matrix_##type(const matrix_##type*);\

@@ -40,7 +40,7 @@ void resize_matrix_int(matrix_int_ptr M, size_t new_height, size_t new_width) {
     if (new_height != M->height) {
         if (new_height < M->height)
             for (i = new_height; i < M->height; i++)
-                delete_array_int(M->rows[i]);
+                delete_array(M->rows[i]);
 
         M->rows = realloc(M->rows, sizeof(array_int_ptr) * new_height);
         M->allocated_height = new_height;
@@ -87,11 +87,13 @@ int matrix_int_append_column(matrix_int_ptr M, array_int_ptr column) {
 }
 
 
-void delete_matrix_int(matrix_int_ptr M) {
+void delete_matrix(void* M) {
     size_t i;
-    for (i = 0; i < M->height; i++)
-        delete_array_int(M->rows[i]);
-    free(M->rows);
+//    it actually does not matter to matrix of which type to cast, because all of them have fields in the same order
+//    and of the same size
+    for (i = 0; i < ((matrix_int_ptr)M)->height; i++)
+        delete_array(((matrix_int_ptr)M)->rows[i]);
+    free(((matrix_int_ptr)M)->rows);
     free(M);
 }
 
@@ -171,7 +173,7 @@ void resize_matrix_##type(matrix_##type##_ptr M, size_t new_height, size_t new_w
     if (new_height != M->height) {\
         if (new_height < M->height)\
             for (i = new_height; i < M->height; i++)\
-                delete_array_##type(M->rows[i]);\
+                delete_array(M->rows[i]);\
 \
         M->rows = realloc(M->rows, sizeof(array_##type##_ptr) * new_height);\
         M->allocated_height = new_height;\
@@ -214,15 +216,6 @@ int matrix_##type##_append_column(matrix_##type##_ptr M, array_##type##_ptr colu
     M->width++;\
     M->allocated_width = M->rows[0]->allocated_size;\
     return 1;\
-}\
-\
-\
-void delete_matrix_##type(matrix_##type##_ptr M) {\
-    size_t i;\
-    for (i = 0; i < M->height; i++)\
-        delete_array_##type(M->rows[i]);\
-    free(M->rows);\
-    free(M);\
 }\
 \
 \

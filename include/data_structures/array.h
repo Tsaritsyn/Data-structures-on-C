@@ -28,9 +28,6 @@ array_##type##_ptr new_constant_array_##type(unsigned long size, type value);\
                             \
                             \
 array_##type##_ptr new_array_##type(const type c_arr[], unsigned long size);          \
-                            \
-                            \
-void delete_array_##type(array_##type##_ptr arr);      \
                            \
                            \
 void print_array_##type(const array_##type* arr);      \
@@ -67,6 +64,9 @@ declare_array(u_int)
 declare_array(u_short)
 declare_array(u_char)
 declare_array(u_long)
+
+
+void delete_array(void*);
 
 
 

@@ -43,8 +43,8 @@ unsigned long get_levenstein_distance(const_string_ptr s1, const_string_ptr s2) 
 
 //    remember, that the arrays have been swapped, so the last results are in the previous_results
     unsigned long result = previous_results->elements[previous_results->length - 1];
-    delete_array_u_long(current_results);
-    delete_array_u_long(previous_results);
+    delete_array(current_results);
+    delete_array(previous_results);
     return result;
 }
 

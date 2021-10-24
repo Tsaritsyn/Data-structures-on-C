@@ -50,8 +50,8 @@ array_int_ptr greatest_common_int_subsequence(const array_int* arr1, const array
 
 //    restore the gcs from the transition matrix
     unsigned long resulting_length = previous_results->elements[previous_results->length - 1];
-    delete_array_int(previous_results);
-    delete_array_int(current_results);
+    delete_array(previous_results);
+    delete_array(current_results);
     array_int_ptr result = new_empty_array_int(resulting_length);                                        \
     i = long_array->length;
     j = short_array->length;
@@ -116,8 +116,8 @@ array_##type##_ptr greatest_common_##type##_subsequence(const array_##type* arr1
     }                              \
                                    \
     unsigned long resulting_length = previous_results->elements[previous_results->length - 1];           \
-    delete_array_##type(previous_results);                                                                  \
-    delete_array_##type(current_results);                                                                   \
+    delete_array(previous_results);                                                                  \
+    delete_array(current_results);                                                                   \
                                    \
     array_##type##_ptr result = new_empty_array_##type(resulting_length);                                        \
     i = long_array->length;        \

@@ -11,7 +11,7 @@ int validate_negative_test_case(const char *s, const char *sub, unsigned int tes
     unsigned long num_substr_found = found_positions->length;
     delete_string(str);
     delete_string(substr);
-    delete_array_u_long(found_positions);
+    delete_array(found_positions);
     return validate_u_long_value(num_substr_found, 0, testcase_num);
 }
 
@@ -27,8 +27,8 @@ int validate_positive_test_case(const char *s, const char *sub,
     array_u_long_ptr target_arr = new_array_u_long(target_array, target_value);
     int passed = are_arrays_u_long_equal(found_positions, target_arr);
 
-    delete_array_u_long(found_positions);
-    delete_array_u_long(target_arr);
+    delete_array(found_positions);
+    delete_array(target_arr);
     return passed;
 }
 

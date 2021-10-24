@@ -27,12 +27,6 @@ array_##type##_ptr new_constant_array_##type(unsigned long size, type value) { \
 }                             \
                            \
                            \
-void delete_array_##type(array_##type##_ptr arr) {   \
-    free(arr->elements);   \
-    free(arr);             \
-}                          \
-                           \
-                           \
 void print_array_##type(const array_##type* arr) {           \
     unsigned long i;        \
     printf("[");           \
@@ -171,4 +165,10 @@ implement_array(u_char)
 implement_array(u_long)
 
 
+void delete_array(void* arr) {
+//    it actually does not matter to array of which type to cast, because all of them have fields in the same order
+//    and of the same size
+    free(((array_int_ptr)arr)->elements);
+    free(arr);
+}
 

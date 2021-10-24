@@ -23,8 +23,8 @@ int main() {
     printf("%lu, %lu\n", M->allocated_height, M->allocated_width);
     printf("%lu, %lu\n", transposed->allocated_height, transposed->allocated_width);
 
-    delete_matrix_int(M);
-    delete_matrix_int(transposed);
+    delete_matrix(M);
+    delete_matrix(transposed);
 
 
     matrix_float_ptr Mf = new_empty_matrix_float(10);
@@ -42,8 +42,8 @@ int main() {
     printf("%lu, %lu\n", Mf->allocated_height, Mf->allocated_width);
     printf("%lu, %lu\n", transposed_f->allocated_height, transposed_f->allocated_width);
 
-    delete_matrix_float(Mf);
-    delete_matrix_float(transposed_f);
+    delete_matrix(Mf);
+    delete_matrix(transposed_f);
 
     return 0;
 }
