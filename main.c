@@ -7,17 +7,43 @@
 
 
 int main() {
-    array_int_ptr a = new_range_int(0, -10, 1);
-    array_int_ptr b = new_range_int(1, 4, 2);
+    matrix_int_ptr M = new_empty_matrix_int(10);
+    print_matrix_int(M);
 
-    print_array_int(a);
-    printf("%lu, %lu\n", a->length, a->allocated_size);
-    print_array_int(b);
+    size_t i;
+    for (i = 0; i < 10; i++)
+        matrix_int_append_row(M, new_range_int(0, 10, 1));
+    print_matrix_int(M);
 
-    printf("%d\n", compare_array_int(a, b));
+    transpose_square_matrix_int(M);
+    print_matrix_int(M);
 
-    delete_array_int(a);
-    delete_array_int(b);
+    matrix_int_ptr transposed = get_transposed_matrix_int(M);
+    print_matrix_int(transposed);
+    printf("%lu, %lu\n", M->allocated_height, M->allocated_width);
+    printf("%lu, %lu\n", transposed->allocated_height, transposed->allocated_width);
+
+    delete_matrix_int(M);
+    delete_matrix_int(transposed);
+
+
+    matrix_float_ptr Mf = new_empty_matrix_float(10);
+    print_matrix_float(Mf);
+
+    for (i = 0; i < 10; i++)
+        matrix_float_append_row(Mf, new_range_float(0, 10, 1));
+    print_matrix_float(Mf);
+
+    transpose_square_matrix_float(Mf);
+    print_matrix_float(Mf);
+
+    matrix_float_ptr transposed_f = get_transposed_matrix_float(Mf);
+    print_matrix_float(transposed_f);
+    printf("%lu, %lu\n", Mf->allocated_height, Mf->allocated_width);
+    printf("%lu, %lu\n", transposed_f->allocated_height, transposed_f->allocated_width);
+
+    delete_matrix_float(Mf);
+    delete_matrix_float(transposed_f);
 
     return 0;
 }

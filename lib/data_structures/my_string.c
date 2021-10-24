@@ -72,7 +72,7 @@ void string_concat_to(string_ptr dst, const_string_ptr src) {
         return;
 
     if (dst->length + src->length > dst->allocated_size)
-        resize_string(dst, MAX(dst->length + src->length, MIN(dst->length * 2, MAX_APPEND_LENGTH)));
+        resize_string(dst, MAX(dst->length + src->length, dst->length + MIN(dst->length, MAX_APPEND_LENGTH) + 1));
     strcpy(dst->c_string + dst->length, src->c_string);
     dst->length += src->length;
 }
@@ -80,7 +80,7 @@ void string_concat_to(string_ptr dst, const_string_ptr src) {
 
 void string_append(string_ptr s, char c) {
     if (s->length + 1 > s->allocated_size)
-        resize_string(s, MAX(s->length + 1, MIN(s->length * 2, MAX_APPEND_LENGTH)));
+        resize_string(s, s->length + MIN(s->length, MAX_APPEND_LENGTH) + 1);
     s->c_string[s->length] = c;
     s->length++;
     s->c_string[s->length] = '\0';

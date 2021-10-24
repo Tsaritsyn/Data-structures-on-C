@@ -44,16 +44,16 @@ void print_array_##type(const array_##type* arr) {           \
 }                          \
                            \
                            \
-void resize_array_##type(array_##type##_ptr arr, unsigned long new_size) { \
-    arr->elements = realloc(arr->elements, new_size);  \
+void resize_array_##type(array_##type##_ptr arr, unsigned long new_size) {     \
+    arr->elements = realloc(arr->elements, sizeof(type) * new_size);           \
     arr->allocated_size = new_size;       \
     arr->length = MIN(arr->length, arr->allocated_size);  \
 }                          \
                            \
                            \
 void array_##type##_append(array_##type##_ptr arr, type value) { \
-    if (arr->length + 1 > arr->allocated_size) {       \
-        resize_array_##type(arr, MAX(MAX_APPEND_LENGTH, arr->allocated_size * 2)); \
+    if (arr->length + 1 > arr->allocated_size) {                \
+        resize_array_##type(arr, MIN(arr->length + MAX_APPEND_LENGTH, arr->length * 2) + 1); \
     }                      \
     arr->elements[arr->length++] = value; \
 }                          \

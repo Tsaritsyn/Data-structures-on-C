@@ -18,7 +18,7 @@
 #define MIN3(a, b, c) (a < MIN(b, c) ? a : MIN(b, c))
 #define MAX3(a, b, c) (a > MAX(b, c) ? a : MAX(b, c))
 
-#define SWAP(type, a, b) type temp = a; a = b; b = temp;
+#define SWAP(type, a, b) {type temp = a; a = b; b = temp;}
 
 
 /// maximum extra number of elements to be appended during concatenation
