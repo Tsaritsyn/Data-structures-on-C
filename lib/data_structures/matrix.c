@@ -104,8 +104,9 @@ void print_matrix_int(const matrix_int* M) {
     for (i = 0; i < M->height; i++) {
         printf("\t");
         print_array_int(M->rows[i]);
+        printf("%s", (i == M->height - 1) ? "\n" : ",\n");
     }
-    printf("]\n");
+    printf("]");
 }
 
 
@@ -224,9 +225,10 @@ void print_matrix_##type(const matrix_##type* M) {\
     printf("[\n");\
     for (i = 0; i < M->height; i++) {\
         printf("\t");\
-        print_array_##type(M->rows[i]);\
+        print_array_##type(M->rows[i]);                     \
+        printf("%s", (i == M->height - 1) ? "\n" : ",\n");\
     }\
-    printf("]\n");\
+    printf("]");\
 }\
 \
 \

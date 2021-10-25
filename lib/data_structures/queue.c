@@ -62,5 +62,5 @@ void print_queue(const Queue* queue) {
         printf("%s", (node->next == NULL) ? "" : ", ");
         node = node->next;
     }
-    printf(")\n");
+    printf(")");
 }

@@ -34,7 +34,7 @@ void print_array_##type(const array_##type* arr) {           \
         print_##type(arr->elements[i]);      \
         printf("%s", (i + 1 < arr->length) ? ", " : "");  \
     }                      \
-    printf("]\n");         \
+    printf("]");         \
 }                          \
                            \
                            \

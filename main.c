@@ -9,11 +9,13 @@
 int main() {
     Queue* queue = new_empty_queue(&print_array_int, &delete_array);
     print_queue(queue);
+    printf("\n");
 
     size_t i;
     for (i = 0; i < 10; i++)
         queue_push(queue, new_empty_array_int(10));
     print_queue(queue);
+    printf("\n");
 
     delete_queue(queue);
 

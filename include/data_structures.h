@@ -12,5 +12,8 @@
 #include "data_structures/matrix.h"
 #include "data_structures/linked_list.h"
 #include "data_structures/queue.h"
+#include "data_structures/graph.h"
+#include "data_structures/dictionary.h"
+#include "data_structures/KV_tree.h"
 
 #endif //MY_CLIB_DATA_STRUCTURES_H
