@@ -10,5 +10,7 @@
 #include "data_structures/my_string.h"
 #include "data_structures/array.h"
 #include "data_structures/matrix.h"
+#include "data_structures/linked_list.h"
+#include "data_structures/queue.h"
 
 #endif //MY_CLIB_DATA_STRUCTURES_H
