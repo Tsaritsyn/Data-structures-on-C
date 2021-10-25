@@ -5,10 +5,12 @@
 #include "data_structures/queue.h"
 
 
-Queue* new_empty_queue(void) {
+Queue* new_empty_queue(void (*print_data)(void*), void (*delete_data)(size_t)) {
     Queue* queue = malloc(sizeof(Queue));
     queue->head = NULL;
     queue->tail = queue->head;
+    queue->print_data = print_data;
+    queue->delete_data = delete_data;
     return queue;
 }
 
@@ -43,20 +45,20 @@ size_t queue_pop(Queue* queue) {
 }
 
 
-void delete_queue(Queue* queue, void (*delete_data)(size_t)) {
+void delete_queue(Queue* queue) {
     while (!is_queue_empty(queue)) {
         size_t data = queue_pop(queue);
-        delete_data(data);
+        queue->delete_data(data);
     }
     free(queue);
 }
 
 
-void print_queue(const Queue* queue, void (*print_data)(void*)) {
+void print_queue(const Queue* queue) {
     list_node* node = queue->head;
     printf("queue(");
     while (node != NULL) {
-        print_data((void *) node->data);
+        queue->print_data((void *) node->data);
         printf("%s", (node->next == NULL) ? "" : ", ");
         node = node->next;
     }

@@ -12,13 +12,17 @@
 
 typedef struct {
     list_node *head, *tail;
+    void (*print_data)(void*);
+    void (*delete_data)(size_t);
 } Queue;
 
 
 /**
+ * @param print_data function that will print the structure pointed at by the data
+ * @param delete_data function that will delete the structure pointed at by the data and free its memory
  * @return a pointer to an empty queue
  */
-Queue* new_empty_queue(void);
+Queue* new_empty_queue(void (*print_data)(void*), void (*delete_data)(size_t));
 
 
 /**
@@ -44,15 +48,13 @@ size_t queue_pop(Queue* queue);
 /**
  * Deletes the queue with all the data stored within.
  */
-void delete_queue(Queue* queue, void (*delete_data)(size_t));
+void delete_queue(Queue* queue);
 
 
 /**
  * Displays the content of the given queue from the first element to the last one;
- *
- * @param print_data function that will print the structure pointed at by the data
  */
-void print_queue(const Queue* queue, void (*print_data)(void*));
+void print_queue(const Queue* queue);
 
 
 #endif //MY_CLIB_QUEUE_H
