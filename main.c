@@ -6,18 +6,23 @@
 #include "stdio.h"
 
 
+void delete_long(size_t x) {}
+
+
 int main() {
-    Queue* queue = new_empty_queue(&print_array_int, &delete_array);
-    print_queue(queue);
-    printf("\n");
 
-    size_t i;
-    for (i = 0; i < 10; i++)
-        queue_push(queue, new_empty_array_int(10));
-    print_queue(queue);
-    printf("\n");
+    Dict* dict_str_long = new_empty_dict((int (*)(const void *, const void *)) &compare_string,
+                                         (void (*)(const void *)) &print_string,
+                                         (void (*)(const void *)) &print_long,
+                                         (void (*)(void *)) &delete_string,
+                                         (void (*)(void *)) &delete_long);
 
-    delete_queue(queue);
+    add_to_dict(dict_str_long, new_string("Mikhail"), 23);
+    add_to_dict(dict_str_long, new_string("Alex"), 24);
+    add_to_dict(dict_str_long, new_string("Mattia"), 35);
+    print_dict(dict_str_long);
+
+    delete_dict(dict_str_long);
 
     return 0;
 }

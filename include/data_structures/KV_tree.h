@@ -89,13 +89,13 @@ size_t kv_tree_size(const KV_node* tree);
  * @param compare_keys function that will compare the key structures given pointers to them
  * @return new root of the tree
  */
-KV_node* balance_kv_tree(KV_node* tree, int (*compare_keys)(const void*, const void*));
+KV_node *balance_kv_tree(KV_node *tree);
 
 
 /**
  * @return array of pointers to the tree nodes sorted by their key values
  */
-array_u_long_ptr linearize_kv_tree(const KV_node* tree);
+array_size_t_ptr linearize_kv_tree(const KV_node* tree);
 
 
 #endif //MY_CLIB_KV_TREE_H

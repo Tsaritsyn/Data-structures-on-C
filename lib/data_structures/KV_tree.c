@@ -129,7 +129,7 @@ static KV_node* turn_right(KV_node* node) {
 }
 
 
-KV_node* balance_kv_tree(KV_node* tree, int (*compare_keys)(const void*, const void*)) {
+KV_node *balance_kv_tree(KV_node *tree) {
     if (tree == NULL)
         return NULL;
 
@@ -153,25 +153,25 @@ KV_node* balance_kv_tree(KV_node* tree, int (*compare_keys)(const void*, const v
             ld++;
         }
 
-    tree->left = balance_kv_tree(tree->left, compare_keys);
-    tree->right = balance_kv_tree(tree->right, compare_keys);
+    tree->left = balance_kv_tree(tree->left);
+    tree->right = balance_kv_tree(tree->right);
 
     return tree;
 }
 
 
-static void extract_values(const KV_node* root, array_u_long_ptr array) {
+static void extract_values(const KV_node* root, array_size_t_ptr array) {
     if (root == NULL)
         return;
 
     extract_values(root->left, array);
-    array_u_long_append(array, (u_long) root);
+    array_size_t_append(array, (u_long) root);
     extract_values(root->right, array);
 }
 
 
-array_u_long_ptr linearize_kv_tree(const KV_node* tree) {
-    array_u_long_ptr result = new_empty_array_u_long(kv_tree_size(tree));
+array_size_t_ptr linearize_kv_tree(const KV_node* tree) {
+    array_size_t_ptr result = new_empty_array_size_t(kv_tree_size(tree));
     extract_values(tree, result);
     return result;
 }

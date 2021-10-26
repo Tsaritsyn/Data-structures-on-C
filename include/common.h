@@ -12,11 +12,11 @@
 #include <stdlib.h>
 
 
-#define MAX(a, b) ((a > b) ? a : b)
-#define MIN(a, b) ((a < b) ? a : b)
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
-#define MIN3(a, b, c) (a < MIN(b, c) ? a : MIN(b, c))
-#define MAX3(a, b, c) (a > MAX(b, c) ? a : MAX(b, c))
+#define MIN3(a, b, c) (((a) < MIN(b, c)) ? (a) : MIN(b, c))
+#define MAX3(a, b, c) (((a) > MAX(b, c)) ? (a) : MAX(b, c))
 
 #define SWAP(type, a, b) {type temp = a; a = b; b = temp;}
 
@@ -38,6 +38,7 @@ declare_comparison_function(u_int)
 declare_comparison_function(u_short)
 declare_comparison_function(u_char)
 declare_comparison_function(u_long)
+declare_comparison_function(size_t)
 
 
 /// formatting strings for all numeric values
@@ -51,6 +52,7 @@ declare_comparison_function(u_long)
 #define format_u_long "%lu"
 #define format_float "%f"
 #define format_double "%lf"
+#define format_size_t "%lu"
 
 
 /// template function for printing numeric values
@@ -66,6 +68,7 @@ declare_print_value(u_int)
 declare_print_value(u_short)
 declare_print_value(u_char)
 declare_print_value(u_long)
+declare_print_value(size_t)
 
 
 char* strupr(const char*);

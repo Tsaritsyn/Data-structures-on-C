@@ -163,6 +163,7 @@ implement_array(u_int)
 implement_array(u_short)
 implement_array(u_char)
 implement_array(u_long)
+implement_array(size_t)
 
 
 void delete_array(void* arr) {

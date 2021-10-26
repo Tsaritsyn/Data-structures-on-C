@@ -12,7 +12,7 @@
 
 typedef struct {
     list_node *head, *tail;
-    void (*print_data)(void*);
+    void (*print_data)(const void *);
     void (*delete_data)(size_t);
 } Queue;
 
@@ -22,7 +22,7 @@ typedef struct {
  * @param delete_data function that will delete the structure pointed at by the data and free its memory
  * @return a pointer to an empty queue
  */
-Queue* new_empty_queue(void (*print_data)(void*), void (*delete_data)(size_t));
+Queue* new_empty_queue(void (*print_data)(const void *), void (*delete_data)(size_t));
 
 
 /**

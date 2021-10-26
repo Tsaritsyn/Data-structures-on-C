@@ -348,7 +348,7 @@ int remove_value(Tree_ptr root, long value) {
         if (parent == NULL)
             return 0;
 
-//        otherwise it's simply a leaf
+//        otherwise, it's simply a leaf
         delete_tree(node);
         if (value < parent->value)
             parent->left = NULL;
@@ -368,7 +368,7 @@ int remove_value(Tree_ptr root, long value) {
         min_right->right = NULL;
         delete_tree(min_right);
     }
-//        if the node has only one children, replace the node with it
+//        if the node has only one child, replace the node with it
     else {
         if (node->left != NULL)
             replace_with(node, node->left);

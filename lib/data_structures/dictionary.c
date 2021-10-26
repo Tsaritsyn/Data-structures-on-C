@@ -26,6 +26,7 @@ Dict* new_empty_dict(
 
 void delete_dict(Dict* dict) {
     delete_kv_tree(dict->tree, dict->delete_key, dict->delete_data);
+    free(dict);
 }
 
 
@@ -35,8 +36,16 @@ int is_dict_empty(const Dict* dict) {
 
 
 void add_to_dict(Dict* dict, void* key, void* value) {
-    insert_to_kv_tree(dict->tree, key, value, dict->compare_keys);
-    balance_kv_tree(dict->tree, dict->compare_keys);
+    if (dict->tree == NULL) {
+        dict->tree = new_kv_node(key, value);
+    }
+    else {
+        void* old_data = insert_to_kv_tree(dict->tree, key, value, dict->compare_keys);
+        dict->tree = balance_kv_tree(dict->tree);
+
+        if (old_data != NULL)
+            dict->delete_data(old_data);
+    }
     dict->size++;
 }
 
@@ -51,7 +60,7 @@ void* get_from_dict(const Dict* dict, const void* key) {
 
 
 void print_dict(const Dict* dict) {
-    array_u_long_ptr linearized = linearize_kv_tree(dict->tree);
+    array_size_t_ptr linearized = linearize_kv_tree(dict->tree);
     size_t i;
     printf("dict(\n");
     for (i = 0; i < linearized->length; i++) {
@@ -62,6 +71,7 @@ void print_dict(const Dict* dict) {
         printf("%s", (i == linearized->length - 1) ? "\n" : ",\n");
     }
     printf(")");
+    delete_array(linearized);
 }
 
 

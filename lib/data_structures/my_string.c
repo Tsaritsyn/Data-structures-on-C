@@ -42,7 +42,7 @@ void delete_string(string_ptr s) {
 
 
 void print_string(const_string_ptr s) {
-    printf("%s\n", s->c_string);
+    printf("%s", s->c_string);
 }
 
 
@@ -87,7 +87,7 @@ void string_append(string_ptr s, char c) {
 }
 
 
-int string_cmp(const_string_ptr s1, const_string_ptr s2) {
+int compare_string(const string *s1, const string *s2) {
     return strcmp(s1->c_string, s2->c_string);
 }
 

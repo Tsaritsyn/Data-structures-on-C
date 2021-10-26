@@ -26,6 +26,7 @@ numeric_comparison_function(u_int)
 numeric_comparison_function(u_short)
 numeric_comparison_function(u_char)
 numeric_comparison_function(u_long)
+numeric_comparison_function(size_t)
 
 
 /// template function for printing numeric values
@@ -44,6 +45,7 @@ print_value(u_int)
 print_value(u_short)
 print_value(u_char)
 print_value(u_long)
+print_value(size_t)
 
 
 char* strupr(const char* s) {

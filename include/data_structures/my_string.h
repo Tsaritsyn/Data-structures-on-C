@@ -74,7 +74,7 @@ void string_append(string_ptr, char);
  * @return negative number if the first one is less than the second one, positive number if the first one is bigger
  *  and 0 if they are equal
  */
-int string_cmp(const_string_ptr, const_string_ptr);
+int compare_string(const string *s1, const string *s2);
 
 
 #endif //MY_CLIB_MY_STRING_H

@@ -64,6 +64,7 @@ declare_array(u_int)
 declare_array(u_short)
 declare_array(u_char)
 declare_array(u_long)
+declare_array(size_t)
 
 
 void delete_array(void*);

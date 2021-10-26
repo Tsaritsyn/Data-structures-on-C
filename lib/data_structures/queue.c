@@ -5,7 +5,7 @@
 #include "data_structures/queue.h"
 
 
-Queue* new_empty_queue(void (*print_data)(void*), void (*delete_data)(size_t)) {
+Queue* new_empty_queue(void (*print_data)(const void *), void (*delete_data)(size_t)) {
     Queue* queue = malloc(sizeof(Queue));
     queue->head = NULL;
     queue->tail = queue->head;
