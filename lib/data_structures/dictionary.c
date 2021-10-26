@@ -51,11 +51,16 @@ void add_to_dict(Dict* dict, void* key, void* value) {
 
 
 void* get_from_dict(const Dict* dict, const void* key) {
-    KV_node *node = find_in_kv_tree(dict->tree, key, dict->compare_keys);
-    if (node == NULL)
-        return NULL;
+//    KV_node *node = find_in_kv_tree(dict->tree, key, dict->compare_keys);
+    Pair* pair = find_in_kv_tree(dict->tree, key, dict->compare_keys);
+
+    void* data;
+    if (pair->first == NULL)
+        data = NULL;
     else
-        return node->data;
+        data = ((KV_node*)pair->first)->data;
+    free(pair);
+    return data;
 }
 
 
@@ -75,5 +80,28 @@ void print_dict(const Dict* dict) {
 }
 
 
+int remove_from_dict(Dict* dict, const void* key) {
+    if (dict->size == 0)
+        return 0;
+
+    if (dict->size == 1) {
+        if (dict->compare_keys(dict->tree->key, key) == 0) {
+            delete_kv_tree(dict->tree, dict->delete_key, dict->delete_data);
+            dict->tree = NULL;
+        }
+        else
+            return 0;
+    }
+    else {
+        int result = remove_from_kv_tree(dict->tree, key, dict->compare_keys, dict->delete_key, dict->delete_data);
+        if (result != 1)
+            return result;
+
+//        we need to re-balance the tree only if the item has been removed successfully
+        balance_kv_tree(dict->tree);
+    }
+    dict->size--;
+    return 1;
+}
 
 

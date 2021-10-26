@@ -58,4 +58,15 @@ void* get_from_dict(const Dict* dict, const void* key);
 void print_dict(const Dict* dict);
 
 
+/**
+ * Removes the item corresponding to the given key from the dictionary. The copy of the data and the key stored in the
+ * dictionary will be destroyed.
+ *
+ * @param dict
+ * @param key
+ * @return 0 if there was no such element, 1 if removed successfully and -1 if an error occurred
+ */
+int remove_from_dict(Dict* dict, const void* key);
+
+
 #endif //MY_CLIB_DICTIONARY_H

@@ -17,11 +17,19 @@ int main() {
                                          (void (*)(void *)) &delete_string,
                                          (void (*)(void *)) &delete_long);
 
+    string* key = new_string("Alex");
     add_to_dict(dict_str_long, new_string("Mikhail"), 23);
-    add_to_dict(dict_str_long, new_string("Alex"), 24);
+    add_to_dict(dict_str_long, copy_string(key), 24);
     add_to_dict(dict_str_long, new_string("Mattia"), 35);
     print_dict(dict_str_long);
+    printf("\n");
+    printf("%lu\n", get_from_dict(dict_str_long, key));
 
+    remove_from_dict(dict_str_long, key);
+    print_dict(dict_str_long);
+    printf("\n");
+
+    delete_string(key);
     delete_dict(dict_str_long);
 
     return 0;

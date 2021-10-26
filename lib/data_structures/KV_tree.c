@@ -25,6 +25,30 @@ void delete_kv_node(KV_node* node, void (*delete_key)(void*), void (*delete_data
 }
 
 
+KV_node* copy_kv_node(const KV_node* src) {
+    if (src == NULL)
+        return NULL;
+
+    KV_node* node = new_kv_node(src->key, src->data);
+    node->left = src->left;
+    node->right = src->right;
+    return node;
+}
+
+
+void replace_kv_node(KV_node* dst, const KV_node *src, void (*delete_key)(void*), void (*delete_data)(void*)) {
+    if (dst == NULL)
+        return;
+
+    delete_data(dst->data);
+    delete_key(dst->key);
+    dst->data = src->data;
+    dst->key = src->key;
+    dst->left = src->left;
+    dst->right = src->right;
+}
+
+
 void delete_kv_tree(KV_node* tree, void (*delete_key)(void*), void (*delete_data)(void*)) {
     if (tree == NULL)
         return;
@@ -59,26 +83,6 @@ void* insert_to_kv_tree(KV_node* tree, void* key, void* data, int (*compare_keys
         tree->data = data;
         return old_data;
     }
-}
-
-
-KV_node* find_in_kv_tree(const KV_node* tree, const void *key, int (*compare_keys)(const void*, const void*)) {
-    int key_relation = compare_keys(key, tree->key);
-
-    if (key_relation > 0) {
-        if (tree->right == NULL)
-            return NULL;
-        else
-            return find_in_kv_tree(tree->right, key, compare_keys);
-    }
-    else if (key_relation < 0) {
-        if (tree->left == NULL)
-            return NULL;
-        else
-            return find_in_kv_tree(tree->left, key, compare_keys);
-    }
-    else
-        return tree;
 }
 
 
@@ -175,6 +179,97 @@ array_size_t_ptr linearize_kv_tree(const KV_node* tree) {
     extract_values(tree, result);
     return result;
 }
+
+
+Pair* find_in_kv_tree(const KV_node* tree, const void *key, int (*compare_keys)(const void*, const void*)) {
+    if (tree == NULL)
+        return new_pair(NULL, NULL);
+
+    int key_relation = compare_keys(key, tree->key);
+//    search in the right subtree
+    if (key_relation > 0) {
+        if (tree->right == NULL)
+            return new_pair(NULL, tree);
+
+        if (compare_keys(key, tree->right->key) == 0)
+            return new_pair(tree->right, tree);
+        else
+            return find_in_kv_tree(tree->right, key, compare_keys);
+    }
+//    search in the left subtree
+    else if (key_relation < 0) {
+        if (tree->left == NULL)
+            return new_pair(NULL, tree);
+
+        if (compare_keys(key, tree->left->key) == 0)
+            return new_pair(tree->left, tree);
+        else
+            return find_in_kv_tree(tree->left, key, compare_keys);
+    }
+//    it may happen only when the root was passed, in all the other cases the key of the tree has been already checked
+    else
+        return new_pair(tree, NULL);
+}
+
+
+static KV_node* find_min_kv_node(const KV_node* tree) {
+    if (tree == NULL)
+        return NULL;
+
+    if (tree->left == NULL)
+        return tree;
+    else
+        return find_min_kv_node(tree->left);
+}
+
+
+int remove_from_kv_tree(KV_node *tree, const void *key, int (*compare_keys)(const void *, const void *),
+                        void (*delete_key)(void *), void (*delete_data)(void *)) {
+    if (tree == NULL)
+        return 0;
+
+    Pair* pair = find_in_kv_tree(tree, key, compare_keys);
+    KV_node* node = pair->first;
+    KV_node* parent = pair->second;
+    free(pair);
+
+//    if there is no such value, do nothing
+    if (node == NULL)
+        return 0;
+
+//    if the node has no children, just remove it
+    if (node->left == NULL && node->right == NULL) {
+        delete_kv_tree(node, delete_key, delete_data);
+        if (parent != NULL) {
+//            replace the deleted node with NULL in his parent
+            if (parent->right == node)
+                parent->right = NULL;
+            else if (parent->left == node)
+                parent->left = NULL;
+            else {
+                printf("None of the parent's children is equal to the given node, it cannot be");
+                return -1;
+            }
+        }
+    }
+//    if both children are present, replace the node with the minimal node of its right subtree
+    else if (node->left != NULL && node->right != NULL) {
+        KV_node* min_right = find_min_kv_node(node->right);
+        replace_kv_node(node, min_right, delete_key, delete_data);
+
+//        delete the former minimum successor
+        free(min_right);
+    }
+//    if the node has only one child, replace the node with it
+    else {
+        KV_node* child_to_replace = (node->left != NULL) ? node->left : node->right;
+        replace_kv_node(node, child_to_replace, delete_key, delete_data);
+        free(child_to_replace);
+    }
+
+    return 1;
+}
+
 
 
 
