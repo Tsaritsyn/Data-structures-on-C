@@ -235,7 +235,7 @@ char trees_equal(Tree_ptr_c root1, Tree_ptr_c root2) {
     if (root1 == NULL && root2 != NULL || root1 != NULL && root2 == NULL)
         return 0;
 
-//    now that we know both trees are not NULL, compare their values
+//    now that we know both trees are not NULL, compare_numerical their values
     if (root1->value != root2->value)
         return 0;
 

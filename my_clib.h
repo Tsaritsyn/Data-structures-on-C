@@ -3,6 +3,7 @@
 
 #include "data_structures.h"
 #include "algorithms.h"
+#include "common.h"
 
 void hello(void);
 

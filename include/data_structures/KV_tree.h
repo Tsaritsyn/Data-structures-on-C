@@ -82,7 +82,7 @@ void delete_kv_tree(KV_node* tree, void (*delete_key)(void*), void (*delete_data
  * @param tree pointer to a tree to insert into
  * @param key pointer to the key structure
  * @param data pointer to the data structure
- * @param compare_keys function that will compare the key structures to put the pair into the right place
+ * @param compare_keys function that will compare_numerical the key structures to put the pair into the right place
  * @return if the given key existed, returns the pointer to the data it stored, otherwise NULL
  */
 void* insert_to_kv_tree(KV_node* tree, void* key, void* data, int (*compare_keys)(const void*, const void*));
@@ -97,7 +97,7 @@ size_t kv_tree_size(const KV_node* tree);
 /**
  * Balances the tree.
  *
- * @param compare_keys function that will compare the key structures given pointers to them
+ * @param compare_keys function that will compare_numerical the key structures given pointers to them
  * @return new root of the tree
  */
 KV_node *balance_kv_tree(KV_node *tree);
@@ -112,7 +112,7 @@ array_size_t_ptr linearize_kv_tree(const KV_node* tree);
 /**
  * @param tree pointer to the tree from where to take the values
  * @param key pointer to the desired key structure
- * @param compare_keys function that will compare the key structures given pointers to them
+ * @param compare_keys function that will compare_numerical the key structures given pointers to them
  * @return a pair containing first a pointer to the node with given key (if NULL, then this key does not exist) and
  * second pointer to its parent (if NULL, it's the root)
  */

@@ -41,6 +41,19 @@ declare_comparison_function(u_long)
 declare_comparison_function(size_t)
 
 
+/**
+ * Comparison of any values for which the operators <, >, == are defined.
+ *
+ * @return 1 if a > b, -1 if a < b and 0 if a == b
+ */
+#define compare_numerical(a, b) (((a) > (b)) ? 1 : ((a) < (b) ? -1 : 0))
+
+#define compare(a, b) _Generic(a, \
+string*: compare_string(a, b),\
+default: compare_numerical(a, b)  \
+)
+
+
 /// formatting strings for all numeric values
 #define format_int "%d"
 #define format_u_int "%u"
@@ -69,6 +82,30 @@ declare_print_value(u_short)
 declare_print_value(u_char)
 declare_print_value(u_long)
 declare_print_value(size_t)
+
+
+/**
+ * Prints the given value based on its type.
+ *
+ * @param _end will be put to the end of the print
+ */
+#define print(x, _end) printf(_Generic (x, \
+short: "%hd",         \
+int: "%d",         \
+long: "%ld",       \
+long long: "%lld", \
+unsigned short: "%hu",\
+unsigned int: "%u",   \
+unsigned long: "%lu", \
+unsigned long long: "%llu", \
+char: "%c",      \
+unsigned char: "%c",\
+float: "%f",     \
+double: "%lf",   \
+long double: "%Lf",   \
+char*: "%s"\
+), x);\
+printf("%s", _end)
 
 
 char* strupr(const char*);

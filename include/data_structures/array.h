@@ -70,5 +70,10 @@ declare_array(size_t)
 void delete_array(void*);
 
 
+#define print_array(array_ptr, _end) _Generic(array_ptr, \
+array_int*: print_array_int,                        \
+array_float*: print_array_float\
+)(array_ptr);                                            \
+printf("%s", _end)
 
 #endif //MY_CLIB_ARRAY_H

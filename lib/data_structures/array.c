@@ -136,13 +136,10 @@ array_##type##_ptr new_range_##type(type start, type _end, type step) {\
 }\
     else \
         if (_end > start) {\
-            printf("Cannot create a range from ");\
-            print_##type(start);\
-            printf(" to ");\
-            print_##type(_end);\
-            printf(" with step ");\
-            print_##type(step);\
-            printf("\n");\
+            printf("Cannot create a range from ");              \
+            print(start, " to ");                               \
+            print(_end, " with step ");                         \
+            print(step, "\n");                  \
             return result;\
         }\
 \
