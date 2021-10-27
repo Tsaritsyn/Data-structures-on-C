@@ -20,6 +20,10 @@
 
 #define SWAP(type, a, b) {type temp = a; a = b; b = temp;}
 
+typedef long long l_long;
+typedef unsigned long long ul_long;
+typedef long double l_double;
+
 
 /// maximum extra number of elements to be appended during concatenation
 extern const unsigned long MAX_APPEND_LENGTH;

@@ -27,12 +27,11 @@ array_##type##_ptr new_constant_array_##type(unsigned long size, type value) { \
 }                             \
                            \
                            \
-void print_array_##type(const array_##type* arr) {           \
+void print_array_##type(const array_##type* arr, const char* sep) {           \
     unsigned long i;        \
     printf("[");           \
     for (i = 0; i < arr->length; i++) {   \
-        print_##type(arr->elements[i]);      \
-        printf("%s", (i + 1 < arr->length) ? ", " : "");  \
+        print(arr->elements[i], (i + 1 < arr->length) ? sep : "");      \
     }                      \
     printf("]");         \
 }                          \
@@ -133,8 +132,8 @@ array_##type##_ptr new_range_##type(type start, type _end, type step) {\
             array_##type##_append(result, value);               \
             value += step;                          \
         }                          \
-}\
-    else \
+    }\
+    else {\
         if (_end > start) {\
             printf("Cannot create a range from ");              \
             print(start, " to ");                               \
@@ -145,8 +144,9 @@ array_##type##_ptr new_range_##type(type start, type _end, type step) {\
 \
         while (value > _end) {\
             array_##type##_append(result, value);               \
-            value -= step;                          \
-        }\
+            value += step;                          \
+        }                     \
+    }                         \
     return result;\
 }
 
@@ -166,7 +166,7 @@ implement_array(size_t)
 void delete_array(void* arr) {
 //    it actually does not matter to array of which type to cast, because all of them have fields in the same order
 //    and of the same size
-    free(((array_int_ptr)arr)->elements);
+    free(((array_int*)arr)->elements);
     free(arr);
 }
 
