@@ -16,10 +16,10 @@ int main() {
     print_array(arr1, " ", "\n");
     print_array(arr2, " ", "\n");
 
-    append_array(arr, 10);
+    append_to_array(arr, 10);
     print_array(arr, " ", "\n");
 
-    append_array(arr, 3.14);
+    append_to_array(arr, 3.14);
     print_array(arr, " ", "\n");
 
     revert_array(arr);

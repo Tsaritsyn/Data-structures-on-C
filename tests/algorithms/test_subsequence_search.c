@@ -21,7 +21,6 @@ implement_test_case_validation(float)
 implement_test_case_validation(double)
 implement_test_case_validation(u_int)
 implement_test_case_validation(u_short)
-implement_test_case_validation(u_char)
 implement_test_case_validation(u_long)
 
 

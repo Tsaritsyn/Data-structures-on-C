@@ -26,7 +26,6 @@ declare_gcs_search(float)
 declare_gcs_search(double)
 declare_gcs_search(u_int)
 declare_gcs_search(u_short)
-declare_gcs_search(u_char)
 declare_gcs_search(u_long)
 
 #endif //MY_CLIB_GREATEST_COMMON_SUBSEQUENCE_H

@@ -22,7 +22,7 @@ unsigned long get_levenstein_distance(const_string_ptr s1, const_string_ptr s2) 
 //    initialize the distances for an empty second string
     unsigned long i;
     for (i = 0; i <= str_short->length; i++)
-        array_u_long_append(previous_results, i);
+        append_to_array(previous_results, i);
 
     unsigned int j;
     for (i = 1; i <= str_long->length; i++) {

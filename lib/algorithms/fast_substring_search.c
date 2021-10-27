@@ -21,7 +21,7 @@ array_u_long_ptr find_substrings(const_string_ptr str, const_string_ptr substr) 
     unsigned long i;
     for (i = 0; i < p_functions->length; i++)
         if (p_functions->elements[i] == substr->length)
-            array_u_long_append(result, i - 2 * substr->length);
+            append_to_array(result, i - 2 * substr->length);
 
     delete_string(temp);
     delete_array(p_functions);
@@ -32,8 +32,7 @@ array_u_long_ptr find_substrings(const_string_ptr str, const_string_ptr substr) 
 array_u_long_ptr get_prefix_functions(const_string_ptr s) {
     array_u_long_ptr result = new_empty_array_u_long(s->length);
     unsigned long i;
-    unsigned long init_value = s->length + 1;
-    array_u_long_append(result, 0);
+    append_to_array(result, 0);
 
     for (i = 1; i < s->length; i++) {
         unsigned long p = result->elements[i-1];
@@ -46,7 +45,7 @@ array_u_long_ptr get_prefix_functions(const_string_ptr s) {
                 p = (p != 0) ? result->elements[p-1] : 0;
             }
         } while (p != 0);
-        array_u_long_append(result, p);
+        append_to_array(result, p);
     }
 
     return result;

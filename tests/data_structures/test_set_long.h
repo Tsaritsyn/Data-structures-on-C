@@ -32,10 +32,12 @@ int test_set_creation(void) {
 
     if (checks_passed == checks_total) {
         printf("Test passed.\n");
+        delete_set(set);
         return 1;
     }
     else {
         printf("Test failed (%u/%u checks passed).", checks_passed, checks_total);
+        delete_set(set);
         return 0;
     }
 }

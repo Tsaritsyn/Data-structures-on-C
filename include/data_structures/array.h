@@ -139,7 +139,7 @@ array_size_t*: resize_array_size_t\
  * reallocated. If the value type is not the same as the type of the array elements, the value will be casted to the
  * necessary type.
  */
-#define append_array(arr, value) _Generic(arr,\
+#define append_to_array(arr, value) _Generic(arr,\
 array_short*: array_short_append,                        \
 array_int*: array_int_append,                         \
 array_long*: array_long_append,                         \
