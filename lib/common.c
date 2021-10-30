@@ -5,6 +5,10 @@
 #include "common.h"
 
 
+extern const u_int64_t max_possible_value = 18446744073709551615;
+extern const char* max_short_literal = "18446744073709551615";
+
+
 const unsigned long MAX_APPEND_LENGTH = 1024;
 
 
@@ -56,4 +60,22 @@ char* strupr(const char* s) {
         res[i] = toupper(s[i]);
     res[i] = '\0';
     return res;
+}
+
+
+int is_int_literal(const char* literal) {
+    if (literal == NULL) return 0;
+
+//    empty string is not a valid literal
+    if (*literal == '\0') return 0;
+
+    if (*literal == '-' || *literal == '+') literal++;
+
+//    string consisting only of a sign is not a valid literal
+    if (*literal == '\0') return 0;
+
+    char c;
+    while ((c = *(literal++)) != '\0')
+        if (c < '0' || c > '9') return 0;
+    return 1;
 }

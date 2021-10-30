@@ -54,13 +54,15 @@ int full_set_testset() {
 // Since assert() statements do nothing in release configuration, these tests will always pass in this case.
 int main() {
 
-    full_tree_test_set();
-    full_set_testset();
+//    full_tree_test_set();
+//    full_set_testset();
+//
+//    full_substring_search_testset();
+//    full_levenstein_distance_test_set();
+//    full_gcs_test_set();
+//    full_sorting_test_set();
 
-    full_substring_search_testset();
-    full_levenstein_distance_test_set();
-    full_gcs_test_set();
-    full_sorting_test_set();
+    full_long_arithmetic_test_set();
 
     return 0;
 }

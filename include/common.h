@@ -12,6 +12,10 @@
 #include <stdlib.h>
 
 
+extern const u_int64_t max_possible_value;
+extern const char* max_short_literal;
+
+
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
@@ -51,11 +55,6 @@ declare_comparison_function(size_t)
  * @return 1 if a > b, -1 if a < b and 0 if a == b
  */
 #define compare_numerical(a, b) (((a) > (b)) ? 1 : ((a) < (b) ? -1 : 0))
-
-#define compare(a, b) _Generic(a, \
-string*: compare_string(a, b),\
-default: compare_numerical(a, b)  \
-)
 
 
 /// formatting strings for all numeric values
@@ -107,11 +106,18 @@ unsigned char: "%c",\
 float: "%f",     \
 double: "%lf",   \
 long double: "%Lf",   \
-char*: "%s"\
+char*: "%s",                               \
+const char*: "%s"\
 ), x);\
 printf("%s", _end)
 
 
 char* strupr(const char*);
+
+
+/**
+ * @return 1 if the given string consists only of decimal digits with possible leading '+' or '-', 0 otherwise
+ */
+int is_int_literal(const char* literal);
 
 #endif //MY_CLIB_COMMON_H

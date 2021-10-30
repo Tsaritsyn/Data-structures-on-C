@@ -77,4 +77,7 @@ void string_append(string_ptr, char);
 int compare_string(const string *s1, const string *s2);
 
 
+void revert_string(string* s);
+
+
 #endif //MY_CLIB_MY_STRING_H

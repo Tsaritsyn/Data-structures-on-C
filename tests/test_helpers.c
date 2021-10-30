@@ -33,6 +33,21 @@ implement_numeric_value_validation(u_char)
 implement_numeric_value_validation(u_long)
 
 
+int validate_long_int_value(const LongNum* value, const LongNum* target_value, unsigned int cur_check) {
+    int relation = compare_long_num(value, target_value);
+//    print_long_num(value);
+//    printf(", ");
+//    print_long_num(target_value);
+//    printf(" %d, \n", relation);
+    if (relation == 0)
+        return 1;
+    else {
+        print_validation_error(long_num, target_value, value);
+        return 0;
+    }
+}
+
+
 #define implement_array_validation(type) \
 int validate_array_##type(const array_##type* arr, const array_##type* target_arr, unsigned int cur_check) { \
     if (arr->length != target_arr->length) {                                                                         \

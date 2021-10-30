@@ -92,3 +92,10 @@ int compare_string(const string *s1, const string *s2) {
 }
 
 
+void revert_string(string* s) {
+    size_t i;
+    for (i = 0; i < s->length / 2; i++)
+        SWAP(char, s->c_string[i], s->c_string[s->length - 1 - i]);
+}
+
+

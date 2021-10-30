@@ -27,6 +27,9 @@ declare_numeric_value_validation(u_char)
 declare_numeric_value_validation(u_long)
 
 
+int validate_long_int_value(const LongNum* value, const LongNum* target_value, unsigned int cur_check);
+
+
 #define declare_array_validation(array_type) \
 int validate_##array_type(const array_type* arr, const array_type* target_arr, unsigned int cur_check);
 
