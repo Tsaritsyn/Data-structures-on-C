@@ -11,7 +11,7 @@
 /**
  * This structure denotes a tree-based dictionary allowing usage of arbitrary structures as keys and values.
  */
-typedef struct {
+typedef struct Dict {
     KV_node* tree;
     size_t size;
     int (*compare_keys)(const void*, const void*);

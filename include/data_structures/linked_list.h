@@ -12,11 +12,11 @@
 /**
  * The data stored inside is a size_t value, which allows to interpret it as a pointer to some complex structure.
  */
-struct list_node {
+typedef struct list_node {
     struct list_node* next;
     size_t data;
-};
-typedef struct list_node list_node;
+} list_node;
+
 
 /**
  * Creates a list node with NULL pointer to next and given data stored.

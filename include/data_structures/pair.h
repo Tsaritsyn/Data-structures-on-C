@@ -11,7 +11,7 @@
 /**
  * This structure keeps a pair of pointers.
  */
-typedef struct {
+typedef struct Pair {
     void *first, *second;
 } Pair;
 

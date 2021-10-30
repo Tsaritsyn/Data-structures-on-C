@@ -11,7 +11,7 @@
 
 #include "common.h"
 
-typedef struct {
+typedef struct string {
     char* c_string;
     unsigned long length;
     /// the real size of the allocated memory will always be this value + 1 to account for the terminating symbol

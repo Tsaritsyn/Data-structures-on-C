@@ -13,7 +13,7 @@
 
 #define declare_array(type) \
                             \
-typedef struct { \
+typedef struct array_##type { \
     unsigned long length, allocated_size; \
     type *elements;                  \
     int (*compare_elements)(const type, const type); \

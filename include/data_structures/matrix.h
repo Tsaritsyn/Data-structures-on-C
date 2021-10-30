@@ -9,7 +9,7 @@
 
 #include "array.h"
 
-typedef struct {
+typedef struct matrix_int {
     size_t height, width;
     size_t allocated_height, allocated_width;
     array_int** rows;
@@ -110,7 +110,7 @@ matrix_int_ptr get_transposed_matrix_int(const matrix_int*);
  * Here goes the template matrix definition for different numerical types. It must be kept the same as for integer.
  */
 #define declare_matrix(type) \
-typedef struct {\
+typedef struct matrix_##type {\
     size_t height, width;\
     size_t allocated_height, allocated_width;\
     array_##type** rows;\

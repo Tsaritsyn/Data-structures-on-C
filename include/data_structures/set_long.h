@@ -13,7 +13,7 @@
 #include "limits.h"
 #include "common.h"
 
-typedef struct {
+typedef struct Set_long {
     Tree_ptr tree;
     size_t size;
     long min_element, max_element;

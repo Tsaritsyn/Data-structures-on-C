@@ -11,7 +11,7 @@
 /**
  * Structure describing unweighted graph. Whether it is ordered or unordered, does not matter.
  */
-typedef struct {
+typedef struct UnweightedGraph {
     array_size_t_ptr vertices;     /// array of pointers to vertex IDs (if they are not numerical)
     Dict* connections;
 } UnweightedGraph;

@@ -10,7 +10,7 @@
 #include "linked_list.h"
 
 
-typedef struct {
+typedef struct Queue {
     list_node *head, *tail;
     void (*print_data)(const void *);
     void (*delete_data)(size_t);
