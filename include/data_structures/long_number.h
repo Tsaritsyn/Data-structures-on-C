@@ -2,8 +2,8 @@
 // Created by Mikhail Tsaritsyn on 27.10.2021.
 //
 
-#ifndef MY_CLIB_LONG_ARITHMETICS_H
-#define MY_CLIB_LONG_ARITHMETICS_H
+#ifndef MY_CLIB_LONG_NUMBER_H
+#define MY_CLIB_LONG_NUMBER_H
 
 #include <assert.h>
 
@@ -146,4 +146,4 @@ int is_long_zero(const LongNum* lnum);
 int is_long_one(const LongNum* lnum);
 
 
-#endif //MY_CLIB_LONG_ARITHMETICS_H
+#endif //MY_CLIB_LONG_NUMBER_H

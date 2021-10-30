@@ -16,6 +16,6 @@
 #include "data_structures/dictionary.h"
 #include "data_structures/KV_tree.h"
 #include "data_structures/pair.h"
-#include "data_structures/long_arithmetics.h"
+#include "data_structures/long_number.h"
 
 #endif //MY_CLIB_DATA_STRUCTURES_H

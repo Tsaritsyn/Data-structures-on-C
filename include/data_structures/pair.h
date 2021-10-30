@@ -22,4 +22,7 @@ typedef struct Pair {
 Pair* new_pair(void* first, void* second);
 
 
+void delete_pair(Pair* pair, void (*delete_first)(void*), void (*delete_second)(void*));
+
+
 #endif //MY_CLIB_PAIR_H

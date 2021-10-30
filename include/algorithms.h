@@ -8,5 +8,6 @@
 #include "algorithms/fast_substring_search.h"
 #include "algorithms/levenstein_distance.h"
 #include "algorithms/greatest_common_subsequence.h"
+#include "algorithms/long_arithmetics.h"
 
 #endif //MY_CLIB_ALGORITHMS_H

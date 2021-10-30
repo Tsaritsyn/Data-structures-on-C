@@ -2,7 +2,7 @@
 // Created by Mikhail Tsaritsyn on 27.10.2021.
 //
 
-#include "data_structures/long_arithmetics.h"
+#include "data_structures/long_number.h"
 
 
 /**

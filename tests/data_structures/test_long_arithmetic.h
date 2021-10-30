@@ -5,7 +5,7 @@
 #ifndef MY_CLIB_TEST_LONG_ARITHMETIC_H
 #define MY_CLIB_TEST_LONG_ARITHMETIC_H
 
-#include "data_structures/long_arithmetics.h"
+#include "data_structures/long_number.h"
 #include "../test_helpers.h"
 
 

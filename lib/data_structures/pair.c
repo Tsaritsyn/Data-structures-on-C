@@ -11,3 +11,10 @@ Pair* new_pair(void* first, void* second) {
     pair->second = second;
     return pair;
 }
+
+
+void delete_pair(Pair* pair, void (*delete_first)(void*), void (*delete_second)(void*)) {
+    delete_first(pair->first);
+    delete_second(pair->second);
+    free(pair);
+}
