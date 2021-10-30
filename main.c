@@ -9,21 +9,11 @@
 
 int main() {
 
-    LongNum* lnum1 = new_long_num_from_string("123456789123456789");
-    LongNum* lnum2 = new_long_num_from_string("987654321");
+    Decimal* decimal = new_decimal_inf(-1);
 
-    LongNum* gcd = gcd_long_num(lnum1, lnum2);
-    printf("gcd = ");
-    print_long_num(gcd);
-    printf("\n");
-    LongNum* lcm = lcm_long_num(lnum1, lnum2);
-    printf("lcm = ");
-    print_long_num(lcm);
-    printf("\n");
+    print_decimal(decimal);
 
-    delete_long_num(lnum1);
-    delete_long_num(lnum2);
-    delete_long_num(gcd);
+    delete_decimal(decimal);
 
     return 0;
 }

@@ -17,5 +17,6 @@
 #include "data_structures/KV_tree.h"
 #include "data_structures/pair.h"
 #include "data_structures/long_number.h"
+#include "data_structures/decimal.h"
 
 #endif //MY_CLIB_DATA_STRUCTURES_H

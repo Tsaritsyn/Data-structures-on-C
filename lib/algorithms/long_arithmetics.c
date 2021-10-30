@@ -44,3 +44,18 @@ LongNum* lcm_long_num(const LongNum* lnum1, const LongNum* lnum2) {
     delete_long_num(temp);
     return lcm;
 }
+
+
+Pair* gcd_lcm_long_num(const LongNum* lnum1, const LongNum* lnum2) {
+    const LongNum *greater = (compare_long_num(lnum1, lnum2) > 0) ? lnum1 : lnum2;
+    const LongNum *smaller = (compare_long_num(lnum1, lnum2) > 0) ? lnum2 : lnum1;
+
+    LongNum *gcd = gcd_long_num(lnum1, lnum2);
+//    we divide the smaller number, because if it the gcd, we will get 1 here and the following multiplication will
+//    become really simple
+    LongNum *temp = div_long_num(smaller, gcd);
+
+    LongNum *lcm = mul_long_num(greater, temp);
+    delete_long_num(temp);
+    return new_pair(gcd, lcm);
+}

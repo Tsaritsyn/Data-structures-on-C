@@ -21,4 +21,10 @@ LongNum* gcd_long_num(const LongNum* lnum1, const LongNum* lnum2);
 LongNum* lcm_long_num(const LongNum* lnum1, const LongNum* lnum2);
 
 
+/**
+ * @return pair of pointer to GCD in the first, to LCM in the second
+ */
+Pair* gcd_lcm_long_num(const LongNum* lnum1, const LongNum* lnum2);
+
+
 #endif //MY_CLIB_LONG_ARITHMETICS_H
