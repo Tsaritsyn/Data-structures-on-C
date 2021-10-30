@@ -8,6 +8,7 @@
 #include <assert.h>
 
 #include "array.h"
+#include "pair.h"
 
 #define BASE 1000000000
 #define BASE_LENGTH 9
@@ -26,11 +27,10 @@ enum {MINUS = -1, PLUS = 1, ZERO = 0};
  *
  * The digits are stored in a big-endian format, meaning that the first digit corresponds to 0th power of BASE.
  */
-struct LongNum {
+typedef struct LongNum {
     int sign;
     array_u_int* digits;
-};
-typedef struct LongNum LongNum;
+} LongNum;
 
 
 /**
@@ -93,6 +93,15 @@ LongNum* div_long_num(const LongNum* nom, const LongNum* denom);
  * @return remainder of the integer division of two long numbers
  */
 LongNum* mod_long_num(const LongNum* nom, const LongNum* denom);
+
+
+/**
+ * Computes the result of the integer division of the two given long numbers along with the modulo value.
+ *
+ * @return pair containing the pointer to the division result in the first field, and the pointer to the modulo in the
+ *  second one
+ */
+Pair* divmod_long_num(const LongNum* nom, const LongNum* denom);
 
 
 /**
