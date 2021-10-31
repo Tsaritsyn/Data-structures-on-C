@@ -81,6 +81,11 @@ void print_decimal(const Decimal* decimal) {
         return;
     }
 
+    if (is_decimal_nan(decimal)) {
+        printf("Nan");
+        return;
+    }
+
     printf("Decimal(");
     print_long_num(decimal->nom);
     printf(", ");
@@ -270,6 +275,126 @@ Decimal* div_decimal(const Decimal *nom, const Decimal *denom) {
 }
 
 
+void print_decimal_as_float(const Decimal *decimal, size_t max_precision) {
+    if (decimal == NULL) {
+        printf("NULL");
+        return;
+    }
+
+    if (is_decimal_inf(decimal)) {
+        printf("%cInf", (decimal->nom->sign == MINUS) ? '-' : '+');
+        return;
+    }
+
+    if (is_decimal_nan(decimal)) {
+        printf("Nan");
+        return;
+    }
+
+    if (is_decimal_zero(decimal)) {
+        printf("0.");
+        return;
+    }
+
+//    if the denominator is 1, then it is in fact an integer number equal to its nominator
+    if (is_long_one(decimal->denom)) {
+        print_long_num(decimal->nom);
+        printf(".");
+        return;
+    }
+
+    Pair* div_mod = NULL;
+    if (decimal->nom->sign == PLUS)
+        div_mod = divmod_long_num(decimal->nom, decimal->denom);
+    else {
+        LongNum *nom_abs = copy_long_num(decimal->nom);
+        nom_abs->sign = PLUS;
+        div_mod = divmod_long_num(nom_abs, decimal->denom);
+        delete_long_num(nom_abs);
+    }
+
+    LongNum *before_dot = div_mod->first;
+    if (decimal->nom->sign == MINUS) printf("-");
+    print_long_num(before_dot);
+    printf(".");
+
+//    to represent the fractional part we have to do essentially the same thing as for long number division
+//    although, now we will always take zero as the next nominator digit
+
+    string* after_dot = new_empty_string(10);
+
+    LongNum* cur_mod = copy_long_num(div_mod->second);
+    int is_periodic = 0;
+    string* one_digit_literal = new_empty_string(BASE_LENGTH + 1);
+    one_digit_literal->length = BASE_LENGTH;
+    while (1) {
+        long_shift_left(&cur_mod, 1);
+        cur_mod->digits->elements[0] = 0;
+
+        int relation = compare_long_num(cur_mod, decimal->denom);
+        unsigned int mult = 0;
+//        if the window is less than denom, set 0 to the current digit's div_result and continue extracting nom's digits
+        if (relation < 0) {}
+//        if at some point we get a zero division remainder, than the fraction can be represented in decimal notation
+//        precisely
+        else if (relation == 0) break;
+//        otherwise, determine the maximum multiplier that being multiplied with the denom gives value less than the
+//        window, but being increased by 1 gives value greater than the window
+//        effectively, here we reassign the window to itself modulo denom
+        else {
+            unsigned int left = 0, right = BASE - 1;
+            mult = right;
+            LongNum* multiplied_denom = NULL;
+//            we determine the multiplier via the binary search
+            while (1) {
+                delete_long_num(multiplied_denom);
+                multiplied_denom = mul_long_num_and_positive_int(decimal->denom, mult);
+                multiplied_denom->sign = PLUS;
+                int temp_relation = compare_long_num(multiplied_denom, cur_mod);
+
+                if (temp_relation == 0) break;
+                else if (temp_relation < 0) {
+                    if (right - left == 1) break;
+                    else left = mult;
+                }
+                else right = mult;
+                mult = (left + right) / 2;
+            }
+
+//            this multiplier will be the current digit of the div_result
+//            append_to_array(after_dot, mult);
+            multiplied_denom->sign = PLUS;
+            sub_from_long_num(&cur_mod, multiplied_denom);
+            delete_long_num(multiplied_denom);
+        }
+
+        sprintf(one_digit_literal->c_string, "%0*u", BASE_LENGTH, mult);
+        string_concat_to(after_dot, one_digit_literal);
+        if (after_dot->length > max_precision) break;
+
+//        search if this digit has already appeared, which will mean that the fraction is periodic
+        array_u_long *pos = find_substrings(after_dot, one_digit_literal);
+        size_t num_found = pos->length;
+        delete_array(pos);
+        if (num_found > 1) {
+            is_periodic = 1;
+            break;
+        }
+    }
+
+//    remove trailing zeros
+    while (after_dot->c_string[after_dot->length - 1] == '0')
+        after_dot->c_string[--after_dot->length] = '\0';
+    print_string(after_dot);
+    if (is_periodic) printf("...");
+
+    delete_long_num(cur_mod);
+    delete_string(one_digit_literal);
+    delete_string(after_dot);
+    delete_pair(div_mod, &delete_long_num, &delete_long_num);
+}
+
+
 //*********************************************************//
 // Internal helper functions that are not part of the API. //
 //*********************************************************//
@@ -283,6 +408,10 @@ static void normalize_decimal(Decimal *decimal) {
         return;
     }
 
+    int resulting_sign = decimal->nom->sign * decimal->denom->sign;
+    decimal->nom->sign = PLUS;
+    decimal->denom->sign = PLUS;
+
     LongNum *gcd = gcd_long_num(decimal->nom, decimal->denom);
     if (!is_long_one(gcd)) {
         reset_long_num(&decimal->nom, div_long_num(decimal->nom, gcd));
@@ -290,14 +419,10 @@ static void normalize_decimal(Decimal *decimal) {
     }
     delete_long_num(gcd);
 
-    if (decimal->nom->sign * decimal->denom->sign == MINUS) {
-        decimal->nom->sign = MINUS;
-        decimal->denom->sign = PLUS;
-    }
-    else {
-        decimal->nom->sign = PLUS;
-        decimal->denom->sign = PLUS;
-    }
+    decimal->nom->sign = (resulting_sign == MINUS) ? MINUS : PLUS;
+
+//    print_decimal(decimal);
+//    printf("\n");
 }
 
 

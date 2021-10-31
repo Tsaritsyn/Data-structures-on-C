@@ -182,13 +182,12 @@ void print_long_num(const LongNum* lnum) {
     }
 
     if (lnum->sign == MINUS) printf("-");
-    else if (lnum->sign == ZERO) printf("0x");
     printf("%d", lnum->digits->elements[lnum->digits->length - 1]);
 
     size_t i;
 //    the second condition will catch overflow when subtract from unsigned 0
     for (i = lnum->digits->length - 2; i >= 0 && i < lnum->digits->length; i--)
-        printf("_%0*d", BASE_LENGTH, lnum->digits->elements[i]);
+        printf("_%0*u", BASE_LENGTH, lnum->digits->elements[i]);
 }
 
 

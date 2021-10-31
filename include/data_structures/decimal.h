@@ -7,6 +7,8 @@
 
 #include "long_number.h"
 #include "algorithms/long_arithmetics.h"
+#include "string.h"
+#include "algorithms/fast_substring_search.h"
 
 
 typedef struct Decimal {
@@ -66,6 +68,17 @@ Decimal* mul_decimal(const Decimal *decimal1, const Decimal *decimal2);
 
 
 Decimal* div_decimal(const Decimal *nom, const Decimal *denom);
+
+
+/**
+ * Print decimal number in floating point notation. If the decimal fraction is periodic, the print will stop as soon as
+ * the period is detected and "..." will be printed at the end of it.
+ *
+ * The last digit of the number is not rounded, but printed without taking the next one into account
+ *
+ * @param max_precision if the length of the part after the dot exceeds this limit, the print will stop
+ */
+void print_decimal_as_float(const Decimal *decimal, size_t max_precision);
 
 
 #endif //MY_CLIB_DECIMAL_H

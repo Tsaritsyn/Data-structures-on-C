@@ -9,12 +9,20 @@
 
 int main() {
 
-    DataList *fib = get_all_fibonacci(1000);
+    Decimal *decimal = new_decimal_from_strings("9", "12");
 
-    print_datalist(fib);
+    print_decimal_as_float(decimal, 200);
     printf("\n");
 
-    delete_datalist(fib);
+    delete_decimal(decimal);
+
+
+//    decimal = new_decimal_from_strings("987654321987654321", "-12345");
+//
+//    print_decimal_as_float(decimal);
+//    printf("\n");
+//
+//    delete_decimal(decimal);
 
     return 0;
 }
