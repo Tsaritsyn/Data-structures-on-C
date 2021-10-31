@@ -23,7 +23,7 @@ Pair* new_pair(void* first, void* second);
 
 
 /**
- * Deallocates the memory of the given pair. The containing structures will be destroyed.
+ * Deallocates the memory of the given pair. The containing elements will be destroyed.
  */
 void delete_pair(Pair* pair, void (*delete_first)(void*), void (*delete_second)(void*));
 

@@ -9,7 +9,7 @@
 
 
 /**
- * This structure denotes a tree-based dictionary allowing usage of arbitrary structures as keys and values.
+ * This structure denotes a tree-based dictionary allowing usage of arbitrary elements as keys and values.
  */
 typedef struct Dict {
     KV_node* tree;

@@ -170,3 +170,63 @@ void delete_array(void* arr) {
     free(arr);
 }
 
+
+//******************************//
+// DataList methods description //
+//******************************//
+
+
+DataList* new_empty_datalist(size_t size,
+                             void (*print_element)(const void*),
+                             void (*delete_element)(void*),
+                             int (*compare_elements)(const void*, const void*)) {
+    DataList *dataList = malloc(sizeof(DataList));
+    dataList->allocated_size = size;
+    dataList->elements = malloc(sizeof(void*) * size);
+    dataList->length = 0;
+    dataList->print_element = print_element;
+    dataList->compare_elements = compare_elements;
+    dataList->delete_element = delete_element;
+    return dataList;
+}
+
+
+void delete_datalist(DataList *datalist) {
+    size_t i;
+    for (i = 0; i < datalist->length; i++)
+        datalist->delete_element(datalist->elements[i]);
+    free(datalist->elements);
+    free(datalist);
+}
+
+
+void print_datalist(const DataList *dataList) {
+    printf("DataList(");
+    size_t i;
+    for (i = 0; i < dataList->length; i++) {
+        dataList->print_element(dataList->elements[i]);
+        printf("%s", (i < dataList->length - 1) ? ", " : "");
+    }
+    printf(")");
+}
+
+
+void resize_datalist(DataList *dataList, size_t new_size) {
+    if (new_size < dataList->length) {
+        size_t i;
+        for (i = new_size; i < dataList->length; i++)
+            dataList->delete_element(dataList->elements[i]);
+    }
+
+    dataList->elements = realloc(dataList->elements, sizeof(void*) * new_size);
+    dataList->allocated_size = new_size;
+    dataList->length = MIN(dataList->length, dataList->allocated_size);
+}
+
+
+void append_to_datalist(DataList *dataList, void* structure) {
+    if (dataList->length + 1 > dataList->allocated_size) {                \
+        resize_datalist(dataList, MIN(dataList->length + MAX_APPEND_LENGTH, dataList->length * 2) + 1); \
+    }                      \
+    dataList->elements[dataList->length++] = structure;
+}

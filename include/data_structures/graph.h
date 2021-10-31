@@ -23,7 +23,7 @@ typedef struct UnweightedGraph {
 UnweightedGraph* new_empty_uw_graph();
 
 /**
- * Deallocates the memory occupied by the graph. Deletes all the structures served as vertex IDs.
+ * Deallocates the memory occupied by the graph. Deletes all the elements served as vertex IDs.
  */
 void delete_uw_graph(UnweightedGraph* graph, void (*delete_vertex)(void*));
 

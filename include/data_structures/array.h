@@ -245,4 +245,32 @@ double: new_range_double,                         \
 l_double: new_range_l_double                         \
 )(start, end, step)
 
+
+typedef struct DataList {
+    size_t length, allocated_size;
+    void** elements;
+    void (*print_element)(const void*);
+    void (*delete_element)(void*);
+    int (*compare_elements)(const void*, const void*);
+} DataList;
+
+
+DataList* new_empty_datalist(size_t size,
+                             void (*print_element)(const void*),
+                             void (*delete_element)(void*),
+                             int (*compare_elements)(const void*, const void*));
+
+
+void delete_datalist(DataList *datalist);
+
+
+void print_datalist(const DataList *dataList);
+
+
+void resize_datalist(DataList *dataList, size_t new_size);
+
+
+void append_to_datalist(DataList *dataList, void* structure);
+
+
 #endif //MY_CLIB_ARRAY_H
