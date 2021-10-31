@@ -201,13 +201,13 @@ void delete_datalist(DataList *datalist) {
 
 
 void print_datalist(const DataList *dataList) {
-    printf("DataList(");
+    printf("[");
     size_t i;
     for (i = 0; i < dataList->length; i++) {
         dataList->print_element(dataList->elements[i]);
         printf("%s", (i < dataList->length - 1) ? ", " : "");
     }
-    printf(")");
+    printf("]");
 }
 
 

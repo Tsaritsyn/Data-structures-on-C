@@ -9,11 +9,12 @@
 
 int main() {
 
-    Decimal* decimal = new_decimal_inf(-1);
+    DataList *fib = get_all_fibonacci(1000);
 
-    print_decimal(decimal);
+    print_datalist(fib);
+    printf("\n");
 
-    delete_decimal(decimal);
+    delete_datalist(fib);
 
     return 0;
 }
