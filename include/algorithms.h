@@ -9,6 +9,6 @@
 #include "algorithms/levenstein_distance.h"
 #include "algorithms/greatest_common_subsequence.h"
 #include "algorithms/long_arithmetics.h"
-#include "algorithms/fibonacci.h"
+#include "algorithms/long_fibonacci.h"
 
 #endif //MY_CLIB_ALGORITHMS_H

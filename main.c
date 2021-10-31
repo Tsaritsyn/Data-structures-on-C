@@ -9,20 +9,15 @@
 
 int main() {
 
-    Decimal *decimal = new_decimal_from_strings("9", "12");
-
-    print_decimal_as_float(decimal, 200);
-    printf("\n");
-
-    delete_decimal(decimal);
-
-
-//    decimal = new_decimal_from_strings("987654321987654321", "-12345");
-//
-//    print_decimal_as_float(decimal);
+//    LongNum *fact = long_factorial(1000);
+//    print_long_num(fact);
 //    printf("\n");
-//
-//    delete_decimal(decimal);
+//    delete_long_num(fact);
+
+    LongNum* cnk = newton_binome(100, 50);
+    print_long_num(cnk);
+    printf("\n");
+    delete_long_num(cnk);
 
     return 0;
 }

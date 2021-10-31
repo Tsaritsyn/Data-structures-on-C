@@ -275,7 +275,7 @@ Decimal* div_decimal(const Decimal *nom, const Decimal *denom) {
 }
 
 
-void print_decimal_as_float(const Decimal *decimal, size_t max_precision) {
+void print_decimal_as_float(const Decimal *decimal, size_t max_precision, int consider_period) {
     if (decimal == NULL) {
         printf("NULL");
         return;
@@ -372,13 +372,15 @@ void print_decimal_as_float(const Decimal *decimal, size_t max_precision) {
         string_concat_to(after_dot, one_digit_literal);
         if (after_dot->length > max_precision) break;
 
+        if (consider_period) {
 //        search if this digit has already appeared, which will mean that the fraction is periodic
-        array_u_long *pos = find_substrings(after_dot, one_digit_literal);
-        size_t num_found = pos->length;
-        delete_array(pos);
-        if (num_found > 1) {
-            is_periodic = 1;
-            break;
+            array_u_long *pos = find_substrings(after_dot, one_digit_literal);
+            size_t num_found = pos->length;
+            delete_array(pos);
+            if (num_found > 1) {
+                is_periodic = 1;
+                break;
+            }
         }
     }
 

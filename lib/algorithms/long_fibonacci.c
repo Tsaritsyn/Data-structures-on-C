@@ -2,7 +2,7 @@
 // Created by Mikhail Tsaritsyn on 31.10.2021.
 //
 
-#include "algorithms/fibonacci.h"
+#include "algorithms/long_fibonacci.h"
 
 
 DataList* get_all_fibonacci(size_t n) {

@@ -27,4 +27,15 @@ LongNum* lcm_long_num(const LongNum* lnum1, const LongNum* lnum2);
 Pair* gcd_lcm_long_num(const LongNum* lnum1, const LongNum* lnum2);
 
 
+LongNum* long_factorial(size_t n);
+
+
+/**
+ * Computes the number of combinations of k elements out of n.
+ *
+ * @return n! / k! / (n-k)! if k <= n, otherwise 0
+ */
+LongNum* newton_binome(size_t n, size_t k);
+
+
 #endif //MY_CLIB_LONG_ARITHMETICS_H

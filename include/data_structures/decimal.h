@@ -71,14 +71,14 @@ Decimal* div_decimal(const Decimal *nom, const Decimal *denom);
 
 
 /**
- * Print decimal number in floating point notation. If the decimal fraction is periodic, the print will stop as soon as
- * the period is detected and "..." will be printed at the end of it.
- *
- * The last digit of the number is not rounded, but printed without taking the next one into account
+ * Print decimal number in floating point notation. The last digit of the number is not rounded, but printed without
+ * taking the next one into account
  *
  * @param max_precision if the length of the part after the dot exceeds this limit, the print will stop
+ * @param consider_period if 1, then if the decimal fraction is periodic, the print will stop as soon as
+ *  the period is detected and "..." will be printed at the end of it
  */
-void print_decimal_as_float(const Decimal *decimal, size_t max_precision);
+void print_decimal_as_float(const Decimal *decimal, size_t max_precision, int consider_period);
 
 
 #endif //MY_CLIB_DECIMAL_H
