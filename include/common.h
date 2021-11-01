@@ -120,4 +120,7 @@ char* strupr(const char*);
  */
 int is_int_literal(const char* literal);
 
+
+
+
 #endif //MY_CLIB_COMMON_H

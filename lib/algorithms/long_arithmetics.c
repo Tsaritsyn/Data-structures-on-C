@@ -3,40 +3,7 @@
 //
 
 #include "algorithms/long_arithmetics.h"
-
-
-/**
- * Computes the intermediate powers needed to compute the given one.
- *
- * @example
- *  Suppose we need to compute x^15. We can do it in three ways.
- *  1. Just multiply the current result by x in a loop starting from 1
- *  2. Use binary decomposition of the power to reduce the number of multiplications:
- *      x^15 = x^14 * x;
- *      x^14 = x^12 * x^2;
- *      x^12 = x^8 * x^4;
- *      x^8 = x^4 * x^4;
- *      x^4 = x^2 * x^2;
- *      x^2 = x * x.
- *  It allows us to reduce the number of multiplications from 15 for a loop to only 6! However, we will have to store 5
- *  intermediate powers or recompute them every time.
- *  3. Use another decomposition:
- *      x^15 = x^10 * x^5;
- *      x^10 = x^5 * x^5;
- *      x^5 = x^3 * x^2;
- *      x^3 = x^2 * x;
- *      x^2 = x * x.
- *  It allows us to reduce the number of multiplications even further: to only 5, while storing the same 5 intermediate
- *  powers!
- *
- *  This function gives the intermediate powers needed for the third method. In our example it will return an array
- *  [1, 2, 3, 5, 10, 15] for an input 15. Note, that the solution is not unique, and [1, 2, 3, 6, 12, 15] is an
- *  equivalent one.
- *
- * @cite See https://www.youtube.com/watch?v=BfNlzdFa_a4 for more details.
- *
- */
-static array_size_t* fast_exponent_path(size_t power);
+#include "algorithms/addition_chain.h"
 
 
 LongNum* gcd_long_num(const LongNum* lnum1, const LongNum* lnum2) {
@@ -58,7 +25,7 @@ LongNum* gcd_long_num(const LongNum* lnum1, const LongNum* lnum2) {
         else reset_long_num(&copy2, mod_long_num(copy2, copy1));
     }
 
-    add_to_long_num(&copy1, copy2);
+    add_to_long_num(copy1, copy2);
     delete_long_num(copy2);
     return copy1;
 }
@@ -98,16 +65,11 @@ Pair* gcd_lcm_long_num(const LongNum* lnum1, const LongNum* lnum2) {
 LongNum* long_factorial(size_t n) {
     if (n <= 1) return new_long_num(1);
 
-    LongNum *previous = new_long_num(1);
-    LongNum *result = NULL;
+    LongNum *result = new_long_num(1);
 
     size_t i;
-    for (i = 1; i <= n; i++) {
-        reset_long_num(&result, mul_long_num_and_positive_int(previous, i));
-        reset_long_num(&previous, copy_long_num(result));
-    }
-
-    delete_long_num(previous);
+    for (i = 1; i <= n; i++)
+        mul_long_num_by_positive_int(result, i);
     return result;
 }
 
@@ -121,8 +83,10 @@ LongNum* newton_binome(size_t n, size_t k) {
     LongNum *result = new_long_num(1);
     size_t max = MAX(k, n-k);
     size_t min = MIN(k, n - k);
+
 //    compute n! / max(k, n-k)!
-    for (i = max + 1; i <= n; i++) reset_long_num(&result, mul_long_num_and_positive_int(result, i));
+    for (i = max + 1; i <= n; i++) mul_long_num_by_positive_int(result, i);
+
     LongNum *denom = long_factorial(min);
     reset_long_num(&result, div_long_num(result, denom));
     delete_long_num(denom);
@@ -138,19 +102,19 @@ LongNum* fast_exponent(const LongNum* longNum, size_t power) {
 
     if (is_long_zero(longNum)) return new_long_zero();
 
-//    if the power is too high, it consumes extremely much memory for path search, so we compute the square root first
+//    if the power is too high, it consumes extremely much memory for chain search, so we use the square root approach instead
 //    since memory consumption is sublinear, this division will be more efficient
     if (power > 200) {
         LongNum *result_sqrt = fast_exponent(longNum, power / 2);
         LongNum *result = mul_long_num(result_sqrt, result_sqrt);
 
 //        if the power is odd, we need to multiply with the given number one more time
-        if (power % 2 != 0) reset_long_num(&result, mul_long_num(result, longNum));
+        if (power % 2 != 0) mul_long_num_by(result, longNum); //reset_long_num(&result, mul_long_num(result, longNum));
         delete_long_num(result_sqrt);
         return result;
     }
 
-    array_size_t *intermediate_powers = fast_exponent_path(power);
+    array_size_t *intermediate_powers = addition_chain(power);
 //    print_array(intermediate_powers, ", ", "\n");
     assert(intermediate_powers->elements[0] == 1);
     assert(intermediate_powers->elements[intermediate_powers->length - 1] == power);
@@ -181,40 +145,4 @@ LongNum* fast_exponent(const LongNum* longNum, size_t power) {
 }
 
 
-//*********************************************************//
-// Internal helper functions that are not part of the API. //
-//*********************************************************//
 
-
-static array_size_t* fast_exponent_path(size_t power) {
-    array_size_t *initial_path = new_empty_array_size_t(10);
-    array_size_t_append(initial_path, 1);
-
-    Queue *intermediate_paths = new_empty_queue(&print_array_size_t, &delete_array);
-    queue_push(intermediate_paths, initial_path);
-
-    size_t i;
-    array_size_t *result = NULL;
-    int result_found = 0;
-    while (1) {
-        array_size_t *cur_path = queue_pop(intermediate_paths);
-        for (i = 0; i < cur_path->length; i++) {
-            size_t new_power = cur_path->elements[i] + cur_path->elements[cur_path->length - 1];
-            if (new_power > power) continue;
-
-            array_size_t *new_path = copy_array(cur_path);
-            append_to_array(new_path, new_power);
-
-            if (new_power == power){
-                result_found = 1;
-                result = new_path;
-                break;
-            }
-            else queue_push(intermediate_paths, new_path);
-        }
-        if (result_found) break;
-    }
-
-    delete_queue(intermediate_paths);
-    return result;
-}

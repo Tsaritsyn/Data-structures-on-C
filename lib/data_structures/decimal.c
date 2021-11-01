@@ -191,7 +191,7 @@ Decimal* add_decimal(const Decimal *decimal1, const Decimal *decimal2) {
     delete_long_num(mult2);
     LongNum *temp = mul_long_num(decimal2->nom, mult1);
     delete_long_num(mult1);
-    add_to_long_num(&new_nom, temp);
+    add_to_long_num(new_nom, temp);
     delete_long_num(temp);
 
     return new_decimal(new_nom, new_denom);
@@ -236,7 +236,7 @@ Decimal* sub_decimal(const Decimal *decimal1, const Decimal *decimal2) {
     delete_long_num(mult2);
     LongNum *temp = mul_long_num(decimal2->nom, mult1);
     delete_long_num(mult1);
-    sub_from_long_num(&new_nom, temp);
+    sub_from_long_num(new_nom, temp);
     delete_long_num(temp);
 
     return new_decimal(new_nom, new_denom);
@@ -328,7 +328,7 @@ void print_decimal_as_float(const Decimal *decimal, size_t max_precision, int co
     string* one_digit_literal = new_empty_string(BASE_LENGTH + 1);
     one_digit_literal->length = BASE_LENGTH;
     while (1) {
-        long_shift_left(&cur_mod, 1);
+        long_shift_left(cur_mod, 1);
         cur_mod->digits->elements[0] = 0;
 
         int relation = compare_long_num(cur_mod, decimal->denom);
@@ -364,7 +364,7 @@ void print_decimal_as_float(const Decimal *decimal, size_t max_precision, int co
 //            this multiplier will be the current digit of the div_result
 //            append_to_array(after_dot, mult);
             multiplied_denom->sign = PLUS;
-            sub_from_long_num(&cur_mod, multiplied_denom);
+            sub_from_long_num(cur_mod, multiplied_denom);
             delete_long_num(multiplied_denom);
         }
 
@@ -393,7 +393,7 @@ void print_decimal_as_float(const Decimal *decimal, size_t max_precision, int co
     delete_long_num(cur_mod);
     delete_string(one_digit_literal);
     delete_string(after_dot);
-    delete_pair(div_mod, &delete_long_num, &delete_long_num);
+    delete_pair(div_mod, (void (*)(void *)) &delete_long_num, (void (*)(void *)) &delete_long_num);
 }
 
 

@@ -49,13 +49,13 @@ static unsigned int sub_with_overflow(unsigned int a, unsigned int b, int* overf
 /**
  * Sums the absolute values of the given long numbers and writes the result into the first one.
  */
-static void add_long_int_absolutes(LongNum** lnum1, const LongNum* lnum2);
+static void add_long_int_absolutes(LongNum* lnum1, const LongNum* lnum2);
 
 
 /**
  * Computes the difference between absolute values of two long numbers and writes the result into the first one.
  */
-static void sub_long_int_absolutes(LongNum** lnum1, const LongNum* lnum2);
+static void sub_long_int_absolutes(LongNum *lnum1, const LongNum* lnum2);
 
 
 /**
@@ -81,6 +81,13 @@ LongNum* new_long_zero() {
     append_to_array(lnum->digits, 0);
     lnum->sign = ZERO;
     return lnum;
+}
+
+
+void reset_long_num_to_zero(LongNum *lnum) {
+    resize_array(lnum->digits, 1);
+    lnum->digits->elements[0] = 0;
+    lnum->sign = ZERO;
 }
 
 
@@ -175,6 +182,18 @@ LongNum* copy_long_num(const LongNum* lnum) {
 }
 
 
+void copy_to_long_num(LongNum *dst, const LongNum *src) {
+    if (dst == NULL || src == NULL) return;
+
+    resize_array(dst->digits, src->digits->length);
+    dst->digits->length = src->digits->length;
+    size_t i;
+    for (i = 0; i < dst->digits->length; i++)
+        dst->digits->elements[i] = src->digits->elements[i];
+    dst->sign = src->sign;
+}
+
+
 void print_long_num(const LongNum* lnum) {
     if (lnum == NULL) {
         printf("NULL\n");
@@ -198,7 +217,7 @@ LongNum* add_long_num(const LongNum* lnum1, const LongNum* lnum2) {
 
 //    the only reason to do this is not to repeat the code for add_to_long_num()
     LongNum* result = copy_long_num(lnum1);
-    add_to_long_num(&result, lnum2);
+    add_to_long_num(result, lnum2);
     return result;
 }
 
@@ -214,7 +233,7 @@ LongNum* sub_long_num(const LongNum* lnum1, const LongNum* lnum2) {
 
 //    the only reason to do this is not to repeat the code for sub_from_long_num()
     LongNum* result = copy_long_num(lnum1);
-    sub_from_long_num(&result, lnum2);
+    sub_from_long_num(result, lnum2);
     return result;
 }
 
@@ -259,28 +278,15 @@ LongNum* mul_long_num(const LongNum* lnum1, const LongNum* lnum2) {
     const LongNum* longest = (lnum1->digits->length > lnum2->digits->length) ? lnum1 : lnum2;
     const LongNum* shortest = (lnum1->digits->length > lnum2->digits->length) ? lnum2 : lnum1;
 
-//    if one of the numbers consisit of only one digit, the multiplication can be simplified
+//    if one of the numbers consists of only one digit, the multiplication can be simplified
     if (shortest->digits->length == 1) {
         result = mul_long_num_and_positive_int(longest, shortest->digits->elements[0]);
         result->sign *= shortest->sign;
         return result;
     }
 
-    result = new_long_zero();
-
-//    here we go over all the digits of the shortest number
-//    we multiply the longest number with the current digit of the shortest
-//    then we shift this intermediate result to the left and add it to the overall result
-    size_t i;
-    LongNum* temp;
-    for (i = 0; i < shortest->digits->length; i++) {
-        temp = mul_long_num_and_positive_int(longest, shortest->digits->elements[i]);
-        long_shift_left(&temp, i);
-        add_to_long_num(&result, temp);
-        delete_long_num(temp);
-    }
-
-    result->sign = lnum1->sign * lnum2->sign;
+    result = copy_long_num(longest);
+    mul_long_num_by(result, shortest);
     return result;
 }
 
@@ -350,10 +356,10 @@ LongNum* mod_long_num(const LongNum* nom, const LongNum* denom) {
 
         if (!is_long_zero(result))
             if (nom->sign != denom->sign) {
-                if (denom->sign == MINUS) add_to_long_num(&result, denom);
+                if (denom->sign == MINUS) add_to_long_num(result, denom);
                 else {
                     result->sign = MINUS;
-                    add_to_long_num(&result, denom);
+                    add_to_long_num(result, denom);
                 }
             }
         return result;
@@ -399,10 +405,10 @@ Pair* divmod_long_num(const LongNum* nom, const LongNum* denom) {
 //    process a special case for modulo result
     if (!is_long_zero(((LongNum*)div_mod->second)))
         if (nom->sign != denom->sign) {
-            if (denom->sign == MINUS) add_to_long_num((LongNum **) &div_mod->second, denom);
+            if (denom->sign == MINUS) add_to_long_num((LongNum *) div_mod->second, denom);
             else {
                 ((LongNum*)div_mod->second)->sign = MINUS;
-                add_to_long_num((LongNum **) &div_mod->second, denom);
+                add_to_long_num((LongNum *) div_mod->second, denom);
             }
         }
 
@@ -410,26 +416,25 @@ Pair* divmod_long_num(const LongNum* nom, const LongNum* denom) {
 }
 
 
-void add_to_long_num(LongNum **lnum1, const LongNum* lnum2) {
-    if (lnum1 == NULL || *lnum1 == NULL || lnum2 == NULL) {
+void add_to_long_num(LongNum *lnum1, const LongNum* lnum2) {
+    if (lnum1 == NULL || lnum2 == NULL) {
         printf("A NULL passed to long number addition\n");
         return;
     }
 
-    if (is_long_zero(*lnum1)) {
-        delete_long_num(*lnum1);
-        *lnum1 = copy_long_num(lnum2);
+    if (is_long_zero(lnum1)) {
+        copy_to_long_num(lnum1, lnum2);
         return;
     }
 
     if (is_long_zero(lnum2)) return;
 
-    if ((*lnum1)->sign == lnum2->sign)
+    if (lnum1->sign == lnum2->sign)
         add_long_int_absolutes(lnum1, lnum2);
     else {
-        int former_sign = (*lnum1)->sign;
+        int former_sign = lnum1->sign;
         sub_long_int_absolutes(lnum1, lnum2);
-        (*lnum1)->sign *= former_sign;
+        lnum1->sign *= former_sign;
     }
 }
 
@@ -481,28 +486,27 @@ void add_positive_int_to_long_num(LongNum** lnum, unsigned int num) {
 }
 
 
-void sub_from_long_num(LongNum **lnum1, const LongNum* lnum2) {
-    if (lnum1 == NULL || *lnum1 == NULL || lnum2 == NULL) {
+void sub_from_long_num(LongNum *lnum1, const LongNum* lnum2) {
+    if (lnum1 == NULL || lnum2 == NULL) {
         printf("A NULL passed to long number subtraction\n");
         return;
     }
 
-    if (is_long_zero(*lnum1)) {
-        delete_long_num(*lnum1);
-        *lnum1 = copy_long_num(lnum2);
-        (*lnum1)->sign = -lnum2->sign;
+    if (is_long_zero(lnum1)) {
+        copy_to_long_num(lnum1, lnum2);
+        lnum1->sign = -lnum2->sign;
         return;
     }
 
     if (is_long_zero(lnum2)) return;
 
 //    it is basically the same as for the sum, but the branches are swapped
-    if ((*lnum1)->sign == -lnum2->sign)
+    if (lnum1->sign == -lnum2->sign)
         add_long_int_absolutes(lnum1, lnum2);
     else {
-        int former_sign = (*lnum1)->sign;
+        int former_sign = lnum1->sign;
         sub_long_int_absolutes(lnum1, lnum2);
-        (*lnum1)->sign *= former_sign;
+        lnum1->sign *= former_sign;
     }
 }
 
@@ -554,21 +558,92 @@ void sub_positive_int_from_long_num(LongNum** lnum, unsigned int num) {
 }
 
 
-void long_shift_left(LongNum **lnum, size_t shift) {
-    if (lnum == NULL || *lnum == NULL) {
+void mul_long_num_by(LongNum *lnum1, const LongNum *lnum2) {
+    if (lnum1 == NULL || lnum2 == NULL) return;
+
+    if (lnum1 == lnum2) {
+        printf("mul_long_num_by: both arguments are the same number\n");
+        return;
+    }
+
+    if (is_long_zero(lnum1) || is_long_zero(lnum2)) {
+        reset_long_num_to_zero(lnum1);
+    }
+
+    int resulting_sign = lnum1->sign * lnum2->sign;
+
+    if (is_long_one(lnum1)) {
+        copy_to_long_num(lnum1, lnum2);
+        lnum1->sign = resulting_sign;
+        return;
+    }
+
+    if (is_long_one(lnum2)) {
+        lnum1->sign = resulting_sign;
+        return;
+    }
+
+    if (lnum2->digits->length == 1) {
+        mul_long_num_by_positive_int(lnum1, lnum2->digits->elements[0]);
+        lnum1->sign = resulting_sign;
+        return;
+    }
+
+    LongNum *copy = copy_long_num(lnum1);
+    mul_long_num_by_positive_int(lnum1, lnum2->digits->elements[0]);
+    size_t i;
+    for (i = 1; i < lnum2->digits->length; i++) {
+        LongNum *temp = mul_long_num_and_positive_int(copy, lnum2->digits->elements[i]);
+        long_shift_left(temp, i);
+        add_to_long_num(lnum1, temp);
+        delete_long_num(temp);
+    }
+    lnum1->sign = resulting_sign;
+}
+
+
+void mul_long_num_by_positive_int(LongNum *lnum, unsigned int digit) {
+    if (lnum == NULL) return;
+
+    if (is_long_zero(lnum) || digit == 0) {
+        reset_long_num_to_zero(lnum);
+        return;
+    }
+
+    size_t i;
+    unsigned long overflow = 0;
+    for (i = 0; i < lnum->digits->length; i++)
+        lnum->digits->elements[i] = mul_with_overflow(lnum->digits->elements[i], digit, &overflow);
+    append_value_to_long_int(lnum, overflow);
+
+//    LongNum* result = new_empty_long_num(lnum->digits->length);
+//    result->sign = lnum->sign;
+//
+//    size_t i;
+//    unsigned long overflow = 0;
+//    for (i = 0; i < lnum->digits->length; i++)
+//    append_to_array(result->digits, mul_with_overflow(lnum->digits->elements[i], digit, &overflow));
+//
+//    append_value_to_long_int(result, overflow);
+//    return result;
+}
+
+
+void long_shift_left(LongNum *lnum, size_t shift) {
+    if (lnum == NULL) {
         printf("A NULL passed to long number shift\n");
         return;
     }
 
     if (shift == 0) return;
 
-    resize_array((*lnum)->digits, (*lnum)->digits->length + shift);
-    (*lnum)->digits->length += shift;
+    resize_array(lnum->digits, lnum->digits->length + shift);
+    lnum->digits->length += shift;
     size_t i;
-    for (i = (*lnum)->digits->length - 1; i >= shift; i--)
-        (*lnum)->digits->elements[i] = (*lnum)->digits->elements[i - shift];
+    for (i = lnum->digits->length - 1; i >= shift; i--)
+        lnum->digits->elements[i] = lnum->digits->elements[i - shift];
     for (i = shift - 1; i >= 0 && i < shift; i--)
-        (*lnum)->digits->elements[i] = 0;
+        lnum->digits->elements[i] = 0;
 }
 
 
@@ -698,53 +773,53 @@ static unsigned int sub_with_overflow(unsigned int a, unsigned int b, int* overf
 }
 
 
-static void add_long_int_absolutes(LongNum** lnum1, const LongNum* lnum2) {
+static void add_long_int_absolutes(LongNum* lnum1, const LongNum* lnum2) {
     size_t i;
     int overflow = 0;
 //    if lnum1 is the longest, we must assign its leading digits instead of appending to it
-    if ((*lnum1)->digits->length > lnum2->digits->length) {
+    if (lnum1->digits->length > lnum2->digits->length) {
         for (i = 0; i < lnum2->digits->length; i++)
-            (*lnum1)->digits->elements[i] = add_with_overflow((*lnum1)->digits->elements[i], lnum2->digits->elements[i], &overflow);
-        for (; i < (*lnum1)->digits->length; i++)
-            (*lnum1)->digits->elements[i] = add_with_overflow((*lnum1)->digits->elements[i], 0, &overflow);
+            lnum1->digits->elements[i] = add_with_overflow(lnum1->digits->elements[i], lnum2->digits->elements[i], &overflow);
+        for (; i < lnum1->digits->length; i++)
+            lnum1->digits->elements[i] = add_with_overflow(lnum1->digits->elements[i], 0, &overflow);
     }
     else {
-        for (i = 0; i < (*lnum1)->digits->length; i++)
-            (*lnum1)->digits->elements[i] = add_with_overflow((*lnum1)->digits->elements[i], lnum2->digits->elements[i], &overflow);
+        for (i = 0; i < lnum1->digits->length; i++)
+            lnum1->digits->elements[i] = add_with_overflow(lnum1->digits->elements[i], lnum2->digits->elements[i], &overflow);
         for (; i < lnum2->digits->length; i++)
-        append_to_array((*lnum1)->digits, add_with_overflow(lnum2->digits->elements[i], 0, &overflow));
+        append_to_array(lnum1->digits, add_with_overflow(lnum2->digits->elements[i], 0, &overflow));
     }
 
-    append_value_to_long_int(*lnum1, overflow);
+    append_value_to_long_int(lnum1, overflow);
 }
 
 
-static void sub_long_int_absolutes(LongNum** lnum1, const LongNum* lnum2) {
-    int relation = compare_long_absolutes(*lnum1, lnum2);
+static void sub_long_int_absolutes(LongNum *lnum1, const LongNum* lnum2) {
+    int relation = compare_long_absolutes(lnum1, lnum2);
     if (relation == 0) {
-        reset_long_num(lnum1, new_long_zero());
+        reset_long_num_to_zero(lnum1);
         return;
     }
 
 //    we will always subtract the smallest from the largest
-    const LongNum* small = (relation < 0) ? *lnum1 : lnum2;
-    const LongNum* large = (relation < 0) ? lnum2 : *lnum1;
+    const LongNum* small = (relation < 0) ? lnum1 : lnum2;
+    const LongNum* large = (relation < 0) ? lnum2 : lnum1;
 
     size_t i;
     int overflow = 0;
 //    sum the digits of the numbers until reach the end of the shortest one
     for (i = 0; i < small->digits->length; i++)
-        (*lnum1)->digits->elements[i] = sub_with_overflow(large->digits->elements[i], small->digits->elements[i],
+        lnum1->digits->elements[i] = sub_with_overflow(large->digits->elements[i], small->digits->elements[i],
                                                           &overflow);
 
 //    for the remaining of the longest one we assume the digits of the second number as to be 0
-    resize_array((*lnum1)->digits, large->digits->length);
-    (*lnum1)->digits->length = large->digits->length;
+    resize_array(lnum1->digits, large->digits->length);
+    lnum1->digits->length = large->digits->length;
     for (; i < large->digits->length; i++)
-        (*lnum1)->digits->elements[i] = sub_with_overflow(large->digits->elements[i], 0, &overflow);
+        lnum1->digits->elements[i] = sub_with_overflow(large->digits->elements[i], 0, &overflow);
 
-    remove_leading_zeros(*lnum1);
-    (*lnum1)->sign = (relation < 0) ? MINUS : PLUS;
+    remove_leading_zeros(lnum1);
+    lnum1->sign = (relation < 0) ? MINUS : PLUS;
 }
 
 
@@ -788,7 +863,7 @@ static Pair* div_mod_long_absolutes(const LongNum* nom, const LongNum* denom) {
 
     for (i = denom_len - 1; i < nom_len; i++) {
 //        append the current nominator digit to the end of the sliding window
-        long_shift_left(&mod_result, 1);
+        long_shift_left(mod_result, 1);
         mod_result->digits->elements[0] = nom_reverted->digits->elements[i];
 
         int relation = compare_long_absolutes(mod_result, denom);
@@ -824,7 +899,7 @@ static Pair* div_mod_long_absolutes(const LongNum* nom, const LongNum* denom) {
 //            this multiplier will be the current digit of the div_result
             append_to_array(div_result->digits, mult);
             multiplied_denom->sign = PLUS;
-            sub_from_long_num(&mod_result, multiplied_denom);
+            sub_from_long_num(mod_result, multiplied_denom);
             delete_long_num(multiplied_denom);
         }
     }

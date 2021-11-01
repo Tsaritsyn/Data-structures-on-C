@@ -39,6 +39,9 @@ typedef struct LongNum {
 LongNum* new_long_zero();
 
 
+void reset_long_num_to_zero(LongNum *lnum);
+
+
 /**
  * @return pointer to a new long number equal to a given value
  */
@@ -57,6 +60,9 @@ void reset_long_num(LongNum **dst, LongNum *src);
 
 
 LongNum* copy_long_num(const LongNum* lnum);
+
+
+void copy_to_long_num(LongNum *dst, const LongNum *src);
 
 
 void print_long_num(const LongNum* lnum);
@@ -107,7 +113,7 @@ Pair* divmod_long_num(const LongNum* nom, const LongNum* denom);
 /**
  * In-place addition of two long numbers long integer. The result is written to the first one
  */
-void add_to_long_num(LongNum **lnum1, const LongNum* lnum2);
+void add_to_long_num(LongNum *lnum1, const LongNum* lnum2);
 
 
 void add_positive_int_to_long_num(LongNum** lnum, unsigned int num);
@@ -116,16 +122,28 @@ void add_positive_int_to_long_num(LongNum** lnum, unsigned int num);
 /**
  * In-place subtraction of the second long number from the first one. The result is written to the first one
  */
-void sub_from_long_num(LongNum **lnum1, const LongNum* lnum2);
+void sub_from_long_num(LongNum *lnum1, const LongNum* lnum2);
 
 
 void sub_positive_int_from_long_num(LongNum** lnum, unsigned int num);
 
 
 /**
+ * Computes the product of two long numbers and writes the result into the first one.
+ */
+void mul_long_num_by(LongNum *lnum1, const LongNum *lnum2);
+
+
+/**
+ * In-place multiplication of a long number and an integer.
+ */
+void mul_long_num_by_positive_int(LongNum *lnum, unsigned int digit);
+
+
+/**
  * Multiplies the given long number with BASE^shift.
  */
-void long_shift_left(LongNum **lnum, size_t shift);
+void long_shift_left(LongNum *lnum, size_t shift);
 
 
 /**
