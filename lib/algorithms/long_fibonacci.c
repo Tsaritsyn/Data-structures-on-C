@@ -6,7 +6,7 @@
 
 
 DataList* get_all_fibonacci(size_t n) {
-    DataList *result = new_empty_datalist(n, &print_long_num, &delete_long_num, &compare_long_num);
+    DataList *result = new_empty_datalist(n, &delete_long_num);
     if (n == 0) return result;
 
     append_to_datalist(result, new_long_num(1));

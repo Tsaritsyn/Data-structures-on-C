@@ -11,7 +11,8 @@
 void ascending_sort_array_int(array_int_ptr arr, unsigned long left, unsigned long right);
 
 
-void sort_datalist_ascending(DataList *dataList, size_t left, size_t right);
+void sort_datalist_ascending(DataList *dataList, size_t left, size_t right,
+                             int (*compare_elements)(const void *, const void *));
 
 
 #endif //MY_CLIB_ARRAY_SORTING_H

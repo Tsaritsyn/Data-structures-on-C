@@ -148,7 +148,16 @@ array_##type##_ptr new_range_##type(type start, type _end, type step) {\
         }                     \
     }                         \
     return result;\
-}
+}\
+\
+\
+array_##type##_ptr copy_array_##type(const array_##type* arr) {           \
+    array_##type##_ptr copy = new_empty_array_##type(arr->length);             \
+    size_t i;                 \
+    for (i = 0; i < arr->length; i++)                           \
+        array_##type##_append(copy, arr->elements[i]);          \
+    return copy;\
+}\
 
 implement_array(int)
 implement_array(short)
@@ -176,16 +185,11 @@ void delete_array(void* arr) {
 //******************************//
 
 
-DataList* new_empty_datalist(size_t size,
-                             void (*print_element)(const void*),
-                             void (*delete_element)(void*),
-                             int (*compare_elements)(const void*, const void*)) {
+DataList *new_empty_datalist(size_t size, void (*delete_element)(void *)) {
     DataList *dataList = malloc(sizeof(DataList));
     dataList->allocated_size = size;
     dataList->elements = malloc(sizeof(void*) * size);
     dataList->length = 0;
-    dataList->print_element = print_element;
-    dataList->compare_elements = compare_elements;
     dataList->delete_element = delete_element;
     return dataList;
 }
@@ -200,11 +204,11 @@ void delete_datalist(DataList *datalist) {
 }
 
 
-void print_datalist(const DataList *dataList) {
+void print_datalist(const DataList *dataList, void (*print_element)(const void *)) {
     printf("[");
     size_t i;
     for (i = 0; i < dataList->length; i++) {
-        dataList->print_element(dataList->elements[i]);
+        print_element(dataList->elements[i]);
         printf("%s", (i < dataList->length - 1) ? ", " : "");
     }
     printf("]");

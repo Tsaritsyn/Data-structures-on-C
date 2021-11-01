@@ -51,7 +51,10 @@ int are_arrays_##type##_equal(const array_##type* arr1, const array_##type* arr2
 int compare_array_##type(const array_##type* arr1, const array_##type* arr2);\
 \
 \
-array_##type##_ptr new_range_##type(type start, type end, type step);\
+array_##type##_ptr new_range_##type(type start, type end, type step);        \
+                            \
+                            \
+array_##type##_ptr copy_array_##type(const array_##type* arr);\
 
 
 declare_array(int)
@@ -246,25 +249,37 @@ l_double: new_range_l_double                         \
 )(start, end, step)
 
 
+#define copy_array(arr) _Generic(arr,\
+array_short*: copy_array_short,                        \
+array_int*: copy_array_int,                         \
+array_long*: copy_array_long,                         \
+array_l_long*: copy_array_l_long,                         \
+array_u_short*: copy_array_u_short,                         \
+array_u_int*: copy_array_u_int,                         \
+array_u_long*: copy_array_u_long,                         \
+array_ul_long*: copy_array_ul_long,                         \
+array_char*: copy_array_char,                         \
+array_float*: copy_array_float,                         \
+array_double*: copy_array_double,                         \
+array_l_double*: copy_array_l_double,                         \
+array_size_t*: copy_array_size_t\
+)(arr)
+
+
 typedef struct DataList {
     size_t length, allocated_size;
     void** elements;
-    void (*print_element)(const void*);
     void (*delete_element)(void*);
-    int (*compare_elements)(const void*, const void*);
 } DataList;
 
 
-DataList* new_empty_datalist(size_t size,
-                             void (*print_element)(const void*),
-                             void (*delete_element)(void*),
-                             int (*compare_elements)(const void*, const void*));
+DataList *new_empty_datalist(size_t size, void (*delete_element)(void *));
 
 
 void delete_datalist(DataList *datalist);
 
 
-void print_datalist(const DataList *dataList);
+void print_datalist(const DataList *dataList, void (*print_element)(const void *));
 
 
 void resize_datalist(DataList *dataList, size_t new_size);

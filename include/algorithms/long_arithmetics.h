@@ -7,6 +7,7 @@
 
 
 #include "data_structures/long_number.h"
+#include "data_structures/queue.h"
 
 
 /**
@@ -36,6 +37,15 @@ LongNum* long_factorial(size_t n);
  * @return n! / k! / (n-k)! if k <= n, otherwise 0
  */
 LongNum* newton_binome(size_t n, size_t k);
+
+
+/**
+ * Implements a time-efficient algorithm for exponentiating long numbers. It requires only O(log(power)) multiplications.
+ * However, it is extremely memory-consuming.
+ *
+ * @return the given long number raised to the given power, which must be a positive integer
+ */
+LongNum* fast_exponent(const LongNum* longNum, size_t power);
 
 
 #endif //MY_CLIB_LONG_ARITHMETICS_H

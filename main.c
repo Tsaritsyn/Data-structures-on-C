@@ -9,15 +9,14 @@
 
 int main() {
 
-//    LongNum *fact = long_factorial(1000);
-//    print_long_num(fact);
-//    printf("\n");
-//    delete_long_num(fact);
+    LongNum *longNum = new_long_num_from_string("111111111111111111111111111111111");
 
-    LongNum* cnk = newton_binome(100, 50);
-    print_long_num(cnk);
+    LongNum *pow = fast_exponent(longNum, 100);
+    print_long_num(pow);
     printf("\n");
-    delete_long_num(cnk);
+
+    delete_long_num(longNum);
+    delete_long_num(pow);
 
     return 0;
 }

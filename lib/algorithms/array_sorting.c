@@ -32,7 +32,8 @@ void ascending_sort_array_int(array_int_ptr arr, unsigned long left, unsigned lo
 }
 
 
-void sort_datalist_ascending(DataList *dataList, size_t left, size_t right) {
+void sort_datalist_ascending(DataList *dataList, size_t left, size_t right,
+                             int (*compare_elements)(const void *, const void *)) {
     if (left > dataList->length || right > dataList->length || left > right) {
         printf("Incorrect borders provided: %lu and %lu\n", left, right);
         return;
@@ -45,7 +46,7 @@ void sort_datalist_ascending(DataList *dataList, size_t left, size_t right) {
     unsigned long border_position = left;
     unsigned long i;
     for (i = left + 1; i < right; i++) {
-        if (dataList->compare_elements(dataList->elements[i], reference_value) < 0) {
+        if (compare_elements(dataList->elements[i], reference_value) < 0) {
             SWAP(void*, dataList->elements[i], dataList->elements[border_position])
             border_position++;
         }
@@ -54,6 +55,6 @@ void sort_datalist_ascending(DataList *dataList, size_t left, size_t right) {
     if (border_position == left)
         border_position++;
 
-    sort_datalist_ascending(dataList, left, border_position);
-    sort_datalist_ascending(dataList, border_position, right);
+    sort_datalist_ascending(dataList, left, border_position, compare_elements);
+    sort_datalist_ascending(dataList, border_position, right, compare_elements);
 }
